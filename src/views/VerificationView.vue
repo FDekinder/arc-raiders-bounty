@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { supabase } from '@/lib/supabase'
 import type { BountyClaim, Bounty } from '@/lib/supabase'
 import { CheckCircle, XCircle, Clock, ExternalLink } from 'lucide-vue-next'
+import { useToast } from '@/composables/useToast' // Add this line
 
 interface ClaimWithBounty extends BountyClaim {
   bounty?: Bounty
@@ -12,6 +13,7 @@ const claims = ref<ClaimWithBounty[]>([])
 const loading = ref(true)
 const filter = ref<'all' | 'pending' | 'approved' | 'rejected'>('pending')
 const processingId = ref<string | null>(null)
+const { success, error: showError } = useToast() // Add this line after the other refs
 
 // For POC - hardcoded admin user ID
 const ADMIN_USER_ID = '00000000-0000-0000-0000-000000000001'
@@ -130,9 +132,10 @@ async function approveClaim(claim: ClaimWithBounty) {
 
     console.log('Reloading claims...')
     await loadClaims()
+    success(`Claim approved! ${claim.bounty.bounty_amount} points awarded.`) // Add this line
   } catch (error: any) {
     console.error('Error approving claim:', error)
-    alert('Failed to approve claim: ' + error.message)
+    showError('Failed to approve claim: ' + error.message) // Update this line
   } finally {
     processingId.value = null
   }
@@ -141,7 +144,6 @@ async function approveClaim(claim: ClaimWithBounty) {
 async function rejectClaim(claim: ClaimWithBounty) {
   const reason = prompt('Rejection reason (optional):')
 
-  // If user clicks cancel, don't proceed
   if (reason === null) return
 
   processingId.value = claim.id
@@ -166,9 +168,10 @@ async function rejectClaim(claim: ClaimWithBounty) {
 
     console.log('Rejection successful, reloading claims...')
     await loadClaims()
+    showError('Claim rejected') // Add this line (using error toast for red color)
   } catch (error: any) {
     console.error('Error rejecting claim:', error)
-    alert('Failed to reject claim: ' + error.message)
+    showError('Failed to reject claim: ' + error.message) // Update this line
   } finally {
     processingId.value = null
   }

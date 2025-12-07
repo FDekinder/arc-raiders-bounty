@@ -6,9 +6,11 @@ import { supabase } from '@/lib/supabase'
 import { uploadScreenshot, submitClaim } from '@/lib/db'
 import type { Bounty } from '@/lib/supabase'
 import { Upload, AlertCircle } from 'lucide-vue-next'
+import { useToast } from '@/composables/useToast' // Add this line
 
 const route = useRoute()
 const router = useRouter()
+const { success: showSuccess, error: showError } = useToast()
 
 const bounty = ref<Bounty | null>(null)
 const loading = ref(true)
@@ -73,6 +75,7 @@ function handleFileSelect(event: Event) {
 async function handleSubmit() {
   if (!selectedFile.value) {
     error.value = 'Please select a screenshot'
+    showError('Please select a screenshot')
     return
   }
 
@@ -82,20 +85,18 @@ async function handleSubmit() {
   error.value = ''
 
   try {
-    // Upload screenshot
     const screenshotUrl = await uploadScreenshot(selectedFile.value, TEMP_USER_ID)
-
-    // Submit claim
     await submitClaim(bounty.value.id, TEMP_USER_ID, screenshotUrl)
 
     success.value = true
+    showSuccess('Claim submitted successfully! Awaiting verification.') // Changed to showSuccess
 
-    // Redirect after 2 seconds
     setTimeout(() => {
       router.push('/bounties')
     }, 2000)
   } catch (err: any) {
     error.value = err.message || 'Failed to submit claim'
+    showError(err.message || 'Failed to submit claim')
     console.error(err)
   } finally {
     submitting.value = false
