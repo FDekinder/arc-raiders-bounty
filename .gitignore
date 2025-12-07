@@ -41,3 +41,5 @@ tests_output/
 # local env files
 .env
 .env*.local
+.vercel
+.env*.local
