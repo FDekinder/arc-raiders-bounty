@@ -9,9 +9,12 @@
     },
     {
       "path": "./tsconfig.vitest.json"
-    },
-    {
-      "path": "./nightwatch/tsconfig.json"
     }
-  ]
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
 }
