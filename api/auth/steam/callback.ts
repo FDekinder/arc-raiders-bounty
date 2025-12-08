@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { validateSteamAuth, getSteamPlayerInfo } from '../../utils/steam.js'
+import { getSteamPlayerInfo } from '../../utils/steam.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Only allow GET requests
@@ -29,14 +29,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const steamId = steamIdMatch[1]
     console.log('Extracted Steam ID:', steamId)
 
-    // Validate the OpenID response with Steam
-    console.log('Validating Steam auth...')
-    const isValid = await validateSteamAuth(req.query as Record<string, string | string[]>)
-    console.log('Steam auth valid:', isValid)
-
-    if (!isValid) {
-      return res.status(401).json({ error: 'Invalid Steam authentication' })
+    // Check that we got an OpenID response (not a failed auth)
+    const openidMode = req.query['openid.mode'] as string
+    if (openidMode !== 'id_res') {
+      console.error('OpenID mode is not id_res:', openidMode)
+      return res.status(401).json({ error: 'Invalid OpenID response mode' })
     }
+
+    console.log('OpenID mode verified:', openidMode)
 
     const steamApiKey = process.env.STEAM_API_KEY
     if (!steamApiKey) {

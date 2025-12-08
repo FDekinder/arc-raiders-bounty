@@ -5,46 +5,38 @@ export async function validateSteamAuth(
   openIdParams: Record<string, string | string[]>,
 ): Promise<boolean> {
   try {
+    console.log('Validating Steam auth with params:', Object.keys(openIdParams))
+
+    // Build validation params
     const validationParams = new URLSearchParams()
+    validationParams.append('openid.mode', 'check_auth')
+    validationParams.append('openid.ns', 'http://specs.openid.net/auth/2.0')
 
-    const assocHandle = openIdParams['openid.assoc_handle']
-    const signed = openIdParams['openid.signed']
-    const sig = openIdParams['openid.sig']
-    const ns = openIdParams['openid.ns']
-
-    if (!assocHandle || !signed || !sig || !ns) {
-      return false
-    }
-
-    validationParams.append(
-      'openid.assoc_handle',
-      Array.isArray(assocHandle) ? assocHandle[0] : assocHandle,
-    )
-    validationParams.append('openid.signed', Array.isArray(signed) ? signed[0] : signed)
-    validationParams.append('openid.sig', Array.isArray(sig) ? sig[0] : sig)
-    validationParams.append('openid.ns', Array.isArray(ns) ? ns[0] : ns)
-
-    // Add all signed fields
-    const signedFieldsStr = Array.isArray(signed) ? signed[0] : signed
-    const signedFields = signedFieldsStr.split(',')
-
-    for (const field of signedFields) {
-      const key = `openid.${field}`
-      const value = openIdParams[key]
-      if (value) {
-        validationParams.append(key, Array.isArray(value) ? value[0] : value)
+    // Copy all parameters from the callback
+    for (const [key, value] of Object.entries(openIdParams)) {
+      if (key.startsWith('openid.')) {
+        const paramValue = Array.isArray(value) ? value[0] : value
+        validationParams.append(key, paramValue)
+        console.log(`Adding param: ${key}`)
       }
     }
 
-    validationParams.append('openid.mode', 'check_auth')
-
+    console.log('Sending validation request to Steam...')
     const response = await fetch('https://steamcommunity.com/openid/login', {
       method: 'POST',
-      body: validationParams,
+      body: validationParams.toString(),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
     })
 
     const text = await response.text()
-    return text.includes('is_valid:true')
+    console.log('Steam validation response:', text.substring(0, 200))
+
+    const isValid = text.includes('is_valid:true')
+    console.log('Steam auth validation result:', isValid)
+
+    return isValid
   } catch (error) {
     console.error('Steam auth validation error:', error)
     return false
