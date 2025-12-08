@@ -3,11 +3,7 @@ import { supabase } from './supabase'
 
 export async function isUserAdmin(userId: string): Promise<boolean> {
   try {
-    const { data, error } = await supabase
-      .from('users')
-      .select('role')
-      .eq('id', userId)
-      .single()
+    const { data, error } = await supabase.from('users').select('role').eq('id', userId).single()
 
     if (error) return false
     return data?.role === 'admin'
@@ -19,10 +15,7 @@ export async function isUserAdmin(userId: string): Promise<boolean> {
 
 export async function promoteUserToAdmin(userId: string): Promise<boolean> {
   try {
-    const { error } = await supabase
-      .from('users')
-      .update({ role: 'admin' })
-      .eq('id', userId)
+    const { error } = await supabase.from('users').update({ role: 'admin' }).eq('id', userId)
 
     if (error) {
       console.error('Error promoting user:', error)
@@ -40,10 +33,7 @@ export async function promoteUserToAdmin(userId: string): Promise<boolean> {
 
 export async function demoteAdminToUser(userId: string): Promise<boolean> {
   try {
-    const { error } = await supabase
-      .from('users')
-      .update({ role: 'user' })
-      .eq('id', userId)
+    const { error } = await supabase.from('users').update({ role: 'user' }).eq('id', userId)
 
     if (error) {
       console.error('Error demoting user:', error)

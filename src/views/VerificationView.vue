@@ -125,7 +125,11 @@ async function rejectClaim(claim: ClaimWithBounty) {
   try {
     console.log('Rejecting claim:', claim.id)
 
-    const success_ = await rejectBountyClaim(claim.id, userId, reason || 'Claim rejected by moderator')
+    const success_ = await rejectBountyClaim(
+      claim.id,
+      userId,
+      reason || 'Claim rejected by moderator',
+    )
 
     if (!success_) {
       throw new Error('Failed to reject claim')
@@ -176,7 +180,10 @@ function getStatusIcon(status: string) {
       <div class="mb-8">
         <div class="flex items-center gap-3">
           <h1 class="text-4xl font-bold">Claim Verification</h1>
-          <div v-if="isAdmin" class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+          <div
+            v-if="isAdmin"
+            class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold"
+          >
             Admin
           </div>
         </div>

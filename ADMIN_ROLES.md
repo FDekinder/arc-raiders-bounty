@@ -3,6 +3,7 @@
 ## Overview
 
 Admin roles have been implemented to:
+
 - ✅ Control who can verify/approve bounty claims
 - ✅ Track all admin actions with audit logs
 - ✅ Provide admin badge in the UI
@@ -11,12 +12,15 @@ Admin roles have been implemented to:
 ## Database Changes
 
 ### New Column: `users.role`
+
 - Default: `'user'`
 - Options: `'user'` | `'admin'`
 - Constraint: CHECK (role IN ('user', 'admin'))
 
 ### New Table: `admin_logs`
+
 Audit trail for admin actions:
+
 ```
 - id (UUID)
 - admin_id (TEXT) → references users(id)
@@ -32,30 +36,37 @@ Audit trail for admin actions:
 ### `src/lib/adminUtils.ts`
 
 **`isUserAdmin(userId: string): Promise<boolean>`**
+
 - Check if a user is an admin
 
 **`promoteUserToAdmin(userId: string): Promise<boolean>`**
+
 - Make a user an admin
 - Logs the action
 
 **`demoteAdminToUser(userId: string): Promise<boolean>`**
+
 - Remove admin rights from a user
 - Logs the action
 
 **`approveBountyClaim(claimId, verifierId, pointsAwarded): Promise<boolean>`**
+
 - Approve a claim
 - Award points to hunter
 - Mark bounty as completed
 - Logs the action
 
 **`rejectBountyClaim(claimId, verifierId, reason): Promise<boolean>`**
+
 - Reject a claim with a reason
 - Logs the action
 
 **`logAdminAction(action, targetTable, targetId, changes): Promise<void>`**
+
 - Manual logging of admin actions
 
 **`getAdminLogs(limit = 50): Promise<AdminLog[]>`**
+
 - Retrieve admin action logs
 
 ## Updated Views
@@ -63,6 +74,7 @@ Audit trail for admin actions:
 ### `src/views/VerificationView.vue`
 
 Now:
+
 - ✅ Checks if user is admin on mount
 - ✅ Shows "Admin" badge if user is admin
 - ✅ Uses `approveBountyClaim()` and `rejectBountyClaim()` from adminUtils
@@ -87,6 +99,7 @@ USING (creator_of_bounty = auth.uid())
 ## Making Users Admin
 
 ### Option 1: Direct Database Update (Quick)
+
 ```sql
 UPDATE users SET role = 'admin' WHERE id = 'user_id_here';
 ```
@@ -94,6 +107,7 @@ UPDATE users SET role = 'admin' WHERE id = 'user_id_here';
 ### Option 2: Create Admin Management Page
 
 Frontend button to promote users (requires admin rights):
+
 ```typescript
 import { promoteUserToAdmin } from '@/lib/adminUtils'
 
@@ -114,7 +128,7 @@ All admin actions are logged to `admin_logs` table:
 ```typescript
 // View admin logs
 const logs = await getAdminLogs(100)
-logs.forEach(log => {
+logs.forEach((log) => {
   console.log(`[${log.created_at}] ${log.action}`)
   console.log(`  On: ${log.target_table}.${log.target_id}`)
   console.log(`  Changes:`, log.changes)
@@ -124,6 +138,7 @@ logs.forEach(log => {
 ## Testing Admin Features
 
 1. **Make yourself admin in database:**
+
    ```sql
    UPDATE users SET role = 'admin' WHERE id = 'your_id';
    ```
