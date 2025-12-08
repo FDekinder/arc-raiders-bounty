@@ -1,11 +1,13 @@
 # Deployment Checklist
 
 ## You're seeing CORS errors because:
+
 The backend serverless functions are NOT deployed yet. Your Vercel app is still using the old frontend code.
 
 ## To Fix:
 
 ### 1. Commit and Push Changes
+
 ```powershell
 cd c:\Users\Gaming\arc-raiders-bounty
 git add .
@@ -14,11 +16,13 @@ git push
 ```
 
 ### 2. Vercel Will Auto-Deploy
+
 - Go to your Vercel dashboard
 - Check the deployment logs
 - Wait for it to complete
 
 ### 3. Add Environment Variable to Vercel
+
 1. Go to Vercel Dashboard → arc-raiders-bounty project
 2. Click "Settings" → "Environment Variables"
 3. Add new variable:
@@ -29,6 +33,7 @@ git push
 5. Trigger a redeploy: Click "Deployments" → Latest → Three dots → "Redeploy"
 
 ### 4. Test the Callback URL
+
 Your callback URL should be: `https://arcraidersbounty.vercel.app/auth/steam/callback`
 
 Make sure this is registered in Steam's settings.
@@ -44,6 +49,7 @@ Make sure this is registered in Steam's settings.
 7. Frontend creates user and logs in
 
 ## If You Get an Error:
+
 - Check Vercel deployment logs: https://vercel.com/dashboard
 - Verify `STEAM_API_KEY` is set in environment variables
 - Check that callback URL matches Steam settings
