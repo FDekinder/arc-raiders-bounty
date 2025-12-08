@@ -4,6 +4,7 @@ import { ref, onMounted, computed } from 'vue'
 import { supabase } from '@/lib/supabase'
 import type { BountyClaim, Bounty } from '@/lib/supabase'
 import { CheckCircle, XCircle, Clock, Award, AlertCircle } from 'lucide-vue-next'
+import { getCurrentUser } from '@/lib/auth'
 
 interface ClaimWithBounty extends BountyClaim {
   bounty?: Bounty
@@ -13,8 +14,8 @@ const claims = ref<ClaimWithBounty[]>([])
 const loading = ref(true)
 const filter = ref<'all' | 'pending' | 'approved' | 'rejected'>('all')
 
-// For POC - hardcoded user ID
-const TEMP_USER_ID = '00000000-0000-0000-0000-000000000001'
+const currentUser = getCurrentUser()
+const userId = currentUser?.id || ''
 
 const filteredClaims = computed(() => {
   if (filter.value === 'all') return claims.value
@@ -49,7 +50,7 @@ async function loadClaims() {
         bounty:bounties(*)
       `,
       )
-      .eq('hunter_id', TEMP_USER_ID)
+      .eq('hunter_id', userId)
       .order('claimed_at', { ascending: false })
 
     if (error) throw error

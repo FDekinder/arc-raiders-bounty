@@ -6,7 +6,9 @@ import { supabase } from '@/lib/supabase'
 import { uploadScreenshot, submitClaim } from '@/lib/db'
 import type { Bounty } from '@/lib/supabase'
 import { Upload, AlertCircle } from 'lucide-vue-next'
-import { useToast } from '@/composables/useToast' // Add this line
+import { useToast } from '@/composables/useToast'
+
+import { getCurrentUser } from '@/lib/auth'
 
 const route = useRoute()
 const router = useRouter()
@@ -21,8 +23,8 @@ const success = ref(false)
 const selectedFile = ref<File | null>(null)
 const previewUrl = ref<string>('')
 
-// For POC - hardcoded user ID
-const TEMP_USER_ID = '00000000-0000-0000-0000-000000000001'
+const currentUser = getCurrentUser()
+const userId = currentUser?.id || ''
 
 onMounted(async () => {
   try {
@@ -85,8 +87,8 @@ async function handleSubmit() {
   error.value = ''
 
   try {
-    const screenshotUrl = await uploadScreenshot(selectedFile.value, TEMP_USER_ID)
-    await submitClaim(bounty.value.id, TEMP_USER_ID, screenshotUrl)
+    const screenshotUrl = await uploadScreenshot(selectedFile.value, userId)
+    await submitClaim(bounty.value.id, userId, screenshotUrl)
 
     success.value = true
     showSuccess('Claim submitted successfully! Awaiting verification.') // Changed to showSuccess

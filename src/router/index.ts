@@ -10,6 +10,16 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/LoginView.vue'),
+    },
+    {
+      path: '/auth/steam/callback',
+      name: 'steam-callback',
+      component: () => import('../views/SteamCallbackView.vue'),
+    },
+    {
       path: '/bounties',
       name: 'bounties',
       component: () => import('../views/BountiesView.vue'),
@@ -50,6 +60,18 @@ const router = createRouter({
       component: () => import('../views/UserProfileView.vue'),
     },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/', '/login', '/auth/steam/callback']
+  const authRequired = !publicPages.includes(to.path)
+  const currentUser = localStorage.getItem('arc_user')
+
+  if (authRequired && !currentUser) {
+    return next('/login')
+  }
+
+  next()
 })
 
 export default router

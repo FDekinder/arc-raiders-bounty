@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { Target } from 'lucide-vue-next'
+import { Target, LogOut } from 'lucide-vue-next'
 import ToastContainer from './components/ToastContainer.vue'
+import { getCurrentUser, logout } from './lib/auth'
+import { computed } from 'vue'
+
+const currentUser = computed(() => getCurrentUser())
 </script>
 
 <template>
@@ -18,7 +22,7 @@ import ToastContainer from './components/ToastContainer.vue'
             <span>Arc Bounty</span>
           </RouterLink>
 
-          <div class="flex gap-6">
+          <div class="flex gap-6 items-center">
             <RouterLink to="/" class="hover:text-red-500 transition" active-class="text-red-500">
               Home
             </RouterLink>
@@ -57,6 +61,23 @@ import ToastContainer from './components/ToastContainer.vue'
             >
               Verify
             </RouterLink>
+
+            <!-- User Info -->
+            <div
+              v-if="currentUser"
+              class="flex items-center gap-4 ml-4 pl-4 border-l border-gray-700"
+            >
+              <RouterLink :to="`/profile/${currentUser.id}`" class="hover:text-red-500 transition">
+                {{ currentUser.username }}
+              </RouterLink>
+              <button
+                @click="logout"
+                class="flex items-center gap-1 text-gray-400 hover:text-red-500 transition"
+                title="Logout"
+              >
+                <LogOut :size="18" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -4,7 +4,8 @@ import { ref } from 'vue'
 import { createBounty } from '@/lib/db'
 import { useRouter } from 'vue-router'
 import { Target } from 'lucide-vue-next'
-import { useToast } from '@/composables/useToast' // Add this line
+import { useToast } from '@/composables/useToast'
+import { getCurrentUser } from '@/lib/auth'
 
 const router = useRouter()
 const { success, error: showError } = useToast()
@@ -14,7 +15,9 @@ const loading = ref(false)
 const error = ref('')
 
 // For POC, we'll use a hardcoded user ID
-const TEMP_USER_ID = '00000000-0000-0000-0000-000000000001'
+
+const currentUser = getCurrentUser()
+const userId = currentUser?.id || ''
 
 async function handleSubmit() {
   error.value = ''
@@ -30,7 +33,7 @@ async function handleSubmit() {
       throw new Error('Bounty amount must be at least 10 points')
     }
 
-    await createBounty(gamertag.value.trim(), bountyAmount, TEMP_USER_ID)
+    await createBounty(gamertag.value.trim(), bountyAmount, userId)
 
     // Show success toast
     success(`Bounty created on ${gamertag.value.trim()} for ${bountyAmount} points!`)

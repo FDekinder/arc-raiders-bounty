@@ -3,7 +3,8 @@ import { ref, onMounted } from 'vue'
 import { supabase } from '@/lib/supabase'
 import type { BountyClaim, Bounty } from '@/lib/supabase'
 import { CheckCircle, XCircle, Clock, ExternalLink } from 'lucide-vue-next'
-import { useToast } from '@/composables/useToast' // Add this line
+import { useToast } from '@/composables/useToast'
+import { getCurrentUser } from '@/lib/auth'
 
 interface ClaimWithBounty extends BountyClaim {
   bounty?: Bounty
@@ -15,8 +16,8 @@ const filter = ref<'all' | 'pending' | 'approved' | 'rejected'>('pending')
 const processingId = ref<string | null>(null)
 const { success, error: showError } = useToast() // Add this line after the other refs
 
-// For POC - hardcoded admin user ID
-const ADMIN_USER_ID = '00000000-0000-0000-0000-000000000001'
+const currentUser = getCurrentUser()
+const userId = currentUser?.id || ''
 
 onMounted(async () => {
   await loadClaims()
@@ -95,7 +96,7 @@ async function approveClaim(claim: ClaimWithBounty) {
       .from('bounty_claims')
       .update({
         verification_status: 'approved',
-        verified_by: ADMIN_USER_ID,
+        verified_by: userId,
         verified_at: new Date().toISOString(),
         points_awarded: claim.bounty.bounty_amount,
       })
@@ -155,7 +156,7 @@ async function rejectClaim(claim: ClaimWithBounty) {
       .from('bounty_claims')
       .update({
         verification_status: 'rejected',
-        verified_by: ADMIN_USER_ID,
+        verified_by: userId,
         verified_at: new Date().toISOString(),
         rejection_reason: reason || 'Claim rejected by moderator',
       })
