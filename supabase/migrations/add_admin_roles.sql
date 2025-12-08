@@ -4,7 +4,7 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'user' CHECK (role 
 -- Create admin_logs table for audit trail
 CREATE TABLE IF NOT EXISTS admin_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  admin_id TEXT NOT NULL REFERENCES users(id),
+  admin_id UUID NOT NULL REFERENCES users(id),
   action TEXT NOT NULL,
   target_table TEXT NOT NULL,
   target_id TEXT NOT NULL,
@@ -14,10 +14,8 @@ CREATE TABLE IF NOT EXISTS admin_logs (
 
 -- Drop old policies
 DROP POLICY IF EXISTS "Anyone can update claims" ON bounty_claims;
-DROP POLICY IF EXISTS "Admins can update any claim" ON bounty_claims;
-DROP POLICY IF EXISTS "Creators can update own bounty claims" ON bounty_claims;
 
--- New policies for bounty_claims (permissive for now, stricter later)
+-- New policies for bounty_claims
 CREATE POLICY "Anyone can update claims"
 ON bounty_claims FOR UPDATE
 WITH CHECK (true);
@@ -33,5 +31,6 @@ USING (true);
 CREATE POLICY "Anyone can insert admin logs"
 ON admin_logs FOR INSERT
 WITH CHECK (true);
+
 
 
