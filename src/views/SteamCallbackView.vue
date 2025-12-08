@@ -1,21 +1,15 @@
 <!-- src/views/SteamCallbackView.vue -->
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import {
-  extractSteamId,
-  verifySteamLogin,
-  getSteamProfile,
-  createOrUpdateUser,
-} from '@/lib/steamAuth'
+import { useRouter } from 'vue-router'
+import { extractSteamId, getSteamProfile, createOrUpdateUser } from '@/lib/steamAuth'
 import { useToast } from '@/composables/useToast'
 
 const router = useRouter()
-const route = useRoute()
 const { success, error: showError } = useToast()
 const status = ref('Verifying Steam login...')
 
-// You'll need to add your Steam API key as an env variable
+// Steam API key from environment
 const STEAM_API_KEY = import.meta.env.VITE_STEAM_API_KEY || ''
 
 onMounted(async () => {
@@ -34,14 +28,7 @@ onMounted(async () => {
       throw new Error('Invalid Steam ID')
     }
 
-    status.value = 'Verifying with Steam...'
-
-    // Verify the login with Steam
-    const isValid = await verifySteamLogin(params)
-    if (!isValid) {
-      throw new Error('Steam verification failed')
-    }
-
+    // Steam already verified the login when redirecting back to us
     status.value = 'Loading Steam profile...'
 
     // Get Steam profile info
