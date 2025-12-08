@@ -63,7 +63,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/', '/login', '/auth/steam/callback']
+  const publicPages = ['/login', '/auth/steam/callback']
   const authRequired = !publicPages.includes(to.path)
   const currentUser = localStorage.getItem('arc_user')
 
