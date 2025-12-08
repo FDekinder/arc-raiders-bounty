@@ -88,3 +88,76 @@ export async function createOrUpdateUser(steamId: string, username: string, avat
     return { data, error }
   }
 }
+
+export async function searchSteamPlayer(
+  searchQuery: string,
+  apiKey: string,
+): Promise<{
+  steamId: string | null
+  personaName: string | null
+  avatarUrl: string | null
+  profileUrl: string | null
+  error?: string
+}> {
+  try {
+    // First, try to resolve as vanity URL (custom Steam profile name)
+    const vanityResponse = await fetch(
+      `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${apiKey}&vanityurl=${searchQuery}`,
+    )
+
+    const vanityData = await vanityResponse.json()
+
+    let steamId: string | null = null
+
+    // If vanity URL resolved successfully
+    if (vanityData.response?.success === 1) {
+      steamId = vanityData.response.steamid
+    } else if (/^\d{17}$/.test(searchQuery)) {
+      // If it looks like a Steam ID (17 digits), use it directly
+      steamId = searchQuery
+    } else {
+      return {
+        steamId: null,
+        personaName: null,
+        avatarUrl: null,
+        profileUrl: null,
+        error: 'Steam profile not found. Try using their Steam ID or exact profile name.',
+      }
+    }
+
+    // Get player profile info
+    const profileResponse = await fetch(
+      `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamId}`,
+    )
+
+    const profileData = await profileResponse.json()
+    const player = profileData.response?.players?.[0]
+
+    if (!player) {
+      return {
+        steamId: null,
+        personaName: null,
+        avatarUrl: null,
+        profileUrl: null,
+        error: 'Could not retrieve player profile',
+      }
+    }
+
+    return {
+      steamId: player.steamid,
+      personaName: player.personaname,
+      avatarUrl: player.avatarfull,
+      profileUrl: player.profileurl,
+      error: undefined,
+    }
+  } catch (error) {
+    console.error('Steam search error:', error)
+    return {
+      steamId: null,
+      personaName: null,
+      avatarUrl: null,
+      profileUrl: null,
+      error: 'Failed to search Steam. Please try again.',
+    }
+  }
+}
