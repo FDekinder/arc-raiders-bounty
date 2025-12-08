@@ -31,6 +31,7 @@
     "@tsconfig/node24": "^24.0.3",
     "@types/jsdom": "^27.0.0",
     "@types/node": "^24.10.1",
+    "@vercel/node": "^5.5.15",
     "@vitejs/plugin-vue": "^6.0.2",
     "@vitejs/plugin-vue-jsx": "^5.1.2",
     "@vitest/eslint-plugin": "^1.5.0",

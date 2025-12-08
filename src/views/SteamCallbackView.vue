@@ -2,48 +2,42 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { extractSteamId, getSteamProfile, createOrUpdateUser } from '@/lib/steamAuth'
+import { createOrUpdateUser } from '@/lib/steamAuth'
 import { useToast } from '@/composables/useToast'
 
 const router = useRouter()
 const { success, error: showError } = useToast()
 const status = ref('Verifying Steam login...')
 
-// Steam API key from environment
-const STEAM_API_KEY = import.meta.env.VITE_STEAM_API_KEY || ''
-
 onMounted(async () => {
   try {
-    // Get URL parameters
+    // Get all URL parameters to send to backend
     const params = new URLSearchParams(window.location.search)
 
-    // Extract Steam ID
-    const claimedId = params.get('openid.claimed_id')
-    if (!claimedId) {
-      throw new Error('No Steam ID found')
+    status.value = 'Verifying with Steam...'
+
+    // Call backend API to validate and get Steam profile
+    // The backend handles CORS and Steam API authentication
+    const response = await fetch(`/api/auth/steam/callback?${params.toString()}`)
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.error || 'Steam authentication failed')
     }
 
-    const steamId = extractSteamId(claimedId)
-    if (!steamId) {
-      throw new Error('Invalid Steam ID')
-    }
+    const { success: authSuccess, player } = await response.json()
 
-    // Steam already verified the login when redirecting back to us
-    status.value = 'Loading Steam profile...'
-
-    // Get Steam profile info
-    const profile = await getSteamProfile(steamId, STEAM_API_KEY)
-    if (!profile) {
-      throw new Error('Could not load Steam profile')
+    if (!authSuccess || !player) {
+      throw new Error('No player data returned from Steam')
     }
 
     status.value = 'Creating your account...'
 
     // Create or update user in database
     const { data: user, error: dbError } = await createOrUpdateUser(
-      steamId,
-      profile.personaname,
-      profile.avatarfull,
+      player.steamId,
+      player.username,
+      player.avatarUrl,
     )
 
     if (dbError) throw dbError
@@ -57,9 +51,10 @@ onMounted(async () => {
     setTimeout(() => {
       router.push('/bounties')
     }, 1000)
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Steam auth error:', error)
-    showError(error.message || 'Login failed')
+    const errorMessage = error instanceof Error ? error.message : 'Login failed'
+    showError(errorMessage)
     status.value = 'Login failed. Redirecting...'
 
     setTimeout(() => {
