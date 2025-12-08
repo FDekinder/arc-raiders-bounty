@@ -83,23 +83,23 @@ function getMedalEmoji(index: number) {
 
       <!-- Top 3 Cards -->
       <div v-else-if="topBounties.length > 0" class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        <div
-          v-for="(bounty, index) in topBounties"
-          :key="bounty.target_gamertag"
-          class="relative"
-        >
+        <div v-for="(bounty, index) in topBounties" :key="bounty.target_gamertag" class="relative">
           <!-- Medal Badge -->
           <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-            <div :class="[
-              'text-5xl w-20 h-20 rounded-full flex items-center justify-center shadow-2xl bg-gradient-to-br',
-              getMedalColor(index)
-            ]">
+            <div
+              :class="[
+                'text-5xl w-20 h-20 rounded-full flex items-center justify-center shadow-2xl bg-gradient-to-br',
+                getMedalColor(index),
+              ]"
+            >
               {{ getMedalEmoji(index) }}
             </div>
           </div>
 
           <!-- Card -->
-          <div class="bg-gray-800 rounded-xl p-8 pt-16 text-center hover:bg-gray-750 transition transform hover:scale-105 border-2 border-gray-700 hover:border-red-500">
+          <div
+            class="bg-gray-800 rounded-xl p-8 pt-16 text-center hover:bg-gray-750 transition transform hover:scale-105 border-2 border-gray-700 hover:border-red-500"
+          >
             <!-- Rank -->
             <div class="text-6xl font-bold text-gray-700 mb-2">#{{ index + 1 }}</div>
 
@@ -152,7 +152,8 @@ function getMedalEmoji(index: number) {
           </div>
           <h3 class="text-2xl font-bold mb-3">Place Bounties</h3>
           <p class="text-gray-400">
-            Target any player and set a bounty amount. The higher the bounty, the more hunters will come.
+            Target any player and set a bounty amount. The higher the bounty, the more hunters will
+            come.
           </p>
         </div>
 
@@ -170,7 +171,7 @@ function getMedalEmoji(index: number) {
         <!-- Community Driven -->
         <div class="bg-gray-800 rounded-lg p-8 text-center hover:bg-gray-750 transition">
           <div class="inline-block bg-blue-500/10 p-4 rounded-full mb-4">
-            <Users class="text-blue-500" :size="48} />
+            <Users class="text-blue-500" :size="48" />
           </div>
           <h3 class="text-2xl font-bold mb-3">Community Driven</h3>
           <p class="text-gray-400">
@@ -182,7 +183,9 @@ function getMedalEmoji(index: number) {
 
     <!-- CTA Section -->
     <div class="container mx-auto px-4 py-20 text-center">
-      <div class="bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/20 rounded-2xl p-12">
+      <div
+        class="bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/20 rounded-2xl p-12"
+      >
         <h2 class="text-4xl font-bold mb-4">Ready to Start Hunting?</h2>
         <p class="text-xl text-gray-300 mb-8">
           Join the Arc Raiders bounty hunting community today
