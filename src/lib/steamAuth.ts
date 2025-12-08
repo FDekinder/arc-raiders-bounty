@@ -27,7 +27,6 @@ export function extractSteamId(url: string): string | null {
 }
 
 export async function verifySteamLogin(params: URLSearchParams): Promise<boolean> {
-  // Convert to checkid_immediate mode for verification
   const verifyParams = new URLSearchParams(params)
   verifyParams.set('openid.mode', 'check_authentication')
 
@@ -45,15 +44,7 @@ export async function verifySteamLogin(params: URLSearchParams): Promise<boolean
   }
 }
 
-export function deprecatedGetSteamProfile(): void {
-  // DEPRECATED: This function is no longer used
-  // The frontend now calls the backend API instead
-  // to avoid CORS issues with Steam API
-  console.warn('getSteamProfile is deprecated. Use the backend API instead.')
-}
-
 export async function createOrUpdateUser(steamId: string, username: string, avatarUrl?: string) {
-  // Check if user exists
   const { data: existingUser } = await supabase
     .from('users')
     .select('*')
@@ -61,7 +52,6 @@ export async function createOrUpdateUser(steamId: string, username: string, avat
     .single()
 
   if (existingUser) {
-    // Update existing user
     const { data, error } = await supabase
       .from('users')
       .update({
@@ -74,7 +64,6 @@ export async function createOrUpdateUser(steamId: string, username: string, avat
 
     return { data, error }
   } else {
-    // Create new user
     const { data, error } = await supabase
       .from('users')
       .insert({
@@ -89,7 +78,10 @@ export async function createOrUpdateUser(steamId: string, username: string, avat
   }
 }
 
-export async function searchSteamPlayer(searchQuery: string, apiKey: string): Promise<{
+export async function searchSteamPlayer(
+  searchQuery: string,
+  apiKey: string,
+): Promise<{
   steamId: string | null
   personaName: string | null
   avatarUrl: string | null
@@ -97,7 +89,6 @@ export async function searchSteamPlayer(searchQuery: string, apiKey: string): Pr
   error?: string
 }> {
   try {
-    // Call our backend API instead of Steam directly to avoid CORS
     const response = await fetch(`/api/steam-verify?searchQuery=${encodeURIComponent(searchQuery)}`)
 
     if (!response.ok) {
@@ -107,7 +98,7 @@ export async function searchSteamPlayer(searchQuery: string, apiKey: string): Pr
         personaName: null,
         avatarUrl: null,
         profileUrl: null,
-        error: errorData.error || 'Failed to verify player'
+        error: errorData.error || 'Failed to verify player',
       }
     }
 
@@ -118,43 +109,6 @@ export async function searchSteamPlayer(searchQuery: string, apiKey: string): Pr
       personaName: data.personaName,
       avatarUrl: data.avatarUrl,
       profileUrl: data.profileUrl,
-      error: undefined
-    }
-  } catch (error) {
-    console.error('Steam search error:', error)
-    return {
-      steamId: null,
-      personaName: null,
-      avatarUrl: null,
-      profileUrl: null,
-      error: 'Failed to search Steam. Please try again.'
-    }
-  }
-}
-
-    // Get player profile info
-    const profileResponse = await fetch(
-      `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamId}`,
-    )
-
-    const profileData = await profileResponse.json()
-    const player = profileData.response?.players?.[0]
-
-    if (!player) {
-      return {
-        steamId: null,
-        personaName: null,
-        avatarUrl: null,
-        profileUrl: null,
-        error: 'Could not retrieve player profile',
-      }
-    }
-
-    return {
-      steamId: player.steamid,
-      personaName: player.personaname,
-      avatarUrl: player.avatarfull,
-      profileUrl: player.profileurl,
       error: undefined,
     }
   } catch (error) {
