@@ -20,7 +20,10 @@ export function initiateSteamLogin() {
 
 export function extractSteamId(url: string): string | null {
   const match = url.match(/openid\/id\/(\d+)/)
-  return match ? match[1] : null
+  if (match && match[1]) {
+    return match[1]
+  }
+  return null
 }
 
 export async function verifySteamLogin(params: URLSearchParams): Promise<boolean> {
