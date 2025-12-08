@@ -1,10 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { validateSteamAuth, getSteamPlayerInfo } from '../../utils/steam'
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse,
-) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Only allow GET requests
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })

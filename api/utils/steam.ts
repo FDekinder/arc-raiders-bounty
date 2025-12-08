@@ -1,10 +1,12 @@
 // api/utils/steam.ts
 const STEAM_API_URL = 'https://api.steampowered.com'
 
-export async function validateSteamAuth(openIdParams: Record<string, string | string[]>): Promise<boolean> {
+export async function validateSteamAuth(
+  openIdParams: Record<string, string | string[]>,
+): Promise<boolean> {
   try {
     const validationParams = new URLSearchParams()
-    
+
     const assocHandle = openIdParams['openid.assoc_handle']
     const signed = openIdParams['openid.signed']
     const sig = openIdParams['openid.sig']
@@ -14,7 +16,10 @@ export async function validateSteamAuth(openIdParams: Record<string, string | st
       return false
     }
 
-    validationParams.append('openid.assoc_handle', Array.isArray(assocHandle) ? assocHandle[0] : assocHandle)
+    validationParams.append(
+      'openid.assoc_handle',
+      Array.isArray(assocHandle) ? assocHandle[0] : assocHandle,
+    )
     validationParams.append('openid.signed', Array.isArray(signed) ? signed[0] : signed)
     validationParams.append('openid.sig', Array.isArray(sig) ? sig[0] : sig)
     validationParams.append('openid.ns', Array.isArray(ns) ? ns[0] : ns)
@@ -22,7 +27,7 @@ export async function validateSteamAuth(openIdParams: Record<string, string | st
     // Add all signed fields
     const signedFieldsStr = Array.isArray(signed) ? signed[0] : signed
     const signedFields = signedFieldsStr.split(',')
-    
+
     for (const field of signedFields) {
       const key = `openid.${field}`
       const value = openIdParams[key]
@@ -46,7 +51,10 @@ export async function validateSteamAuth(openIdParams: Record<string, string | st
   }
 }
 
-export async function getSteamPlayerInfo(steamId: string, apiKey: string): Promise<{
+export async function getSteamPlayerInfo(
+  steamId: string,
+  apiKey: string,
+): Promise<{
   steamId: string
   username: string
   avatarUrl: string
