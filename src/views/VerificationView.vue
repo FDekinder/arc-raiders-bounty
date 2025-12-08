@@ -5,6 +5,7 @@ import type { BountyClaim, Bounty } from '@/lib/supabase'
 import { CheckCircle, XCircle, Clock, ExternalLink } from 'lucide-vue-next'
 import { useToast } from '@/composables/useToast'
 import { getCurrentUser } from '@/lib/auth'
+import { isUserAdmin, approveBountyClaim, rejectBountyClaim } from '@/lib/adminUtils'
 
 interface ClaimWithBounty extends BountyClaim {
   bounty?: Bounty
@@ -14,12 +15,17 @@ const claims = ref<ClaimWithBounty[]>([])
 const loading = ref(true)
 const filter = ref<'all' | 'pending' | 'approved' | 'rejected'>('pending')
 const processingId = ref<string | null>(null)
-const { success, error: showError } = useToast() // Add this line after the other refs
+const isAdmin = ref(false)
+const { success, error: showError } = useToast()
 
 const currentUser = getCurrentUser()
 const userId = currentUser?.id || ''
 
 onMounted(async () => {
+  // Check if user is admin
+  if (userId) {
+    isAdmin.value = await isUserAdmin(userId)
+  }
   await loadClaims()
 })
 
@@ -91,52 +97,19 @@ async function approveClaim(claim: ClaimWithBounty) {
   processingId.value = claim.id
 
   try {
-    console.log('Step 1: Updating claim status...')
-    const { error: claimError } = await supabase
-      .from('bounty_claims')
-      .update({
-        verification_status: 'approved',
-        verified_by: userId,
-        verified_at: new Date().toISOString(),
-        points_awarded: claim.bounty.bounty_amount,
-      })
-      .eq('id', claim.id)
+    const success_ = await approveBountyClaim(claim.id, userId, claim.bounty.bounty_amount)
 
-    if (claimError) {
-      console.error('Claim update error:', claimError)
-      throw claimError
+    if (!success_) {
+      throw new Error('Failed to approve claim')
     }
-    console.log('Step 1: Success!')
 
-    console.log('Step 2: Updating hunter points...')
-    const { error: hunterError } = await supabase.rpc('increment_hunter_points', {
-      hunter_id: claim.hunter_id,
-      points: claim.bounty.bounty_amount,
-    })
-
-    if (hunterError) {
-      console.error('Hunter points error:', hunterError)
-    }
-    console.log('Step 2: Done!')
-
-    console.log('Step 3: Updating bounty status...')
-    const { error: bountyError } = await supabase
-      .from('bounties')
-      .update({ status: 'completed' })
-      .eq('id', claim.bounty_id)
-
-    if (bountyError) {
-      console.error('Bounty update error:', bountyError)
-      throw bountyError
-    }
-    console.log('Step 3: Success!')
-
-    console.log('Reloading claims...')
+    console.log('Approval successful, reloading claims...')
     await loadClaims()
-    success(`Claim approved! ${claim.bounty.bounty_amount} points awarded.`) // Add this line
-  } catch (error: any) {
+    success(`Claim approved! ${claim.bounty.bounty_amount} points awarded.`)
+  } catch (error: unknown) {
     console.error('Error approving claim:', error)
-    showError('Failed to approve claim: ' + error.message) // Update this line
+    const errorMessage = error instanceof Error ? error.message : 'Failed to approve claim'
+    showError(errorMessage)
   } finally {
     processingId.value = null
   }
@@ -152,27 +125,19 @@ async function rejectClaim(claim: ClaimWithBounty) {
   try {
     console.log('Rejecting claim:', claim.id)
 
-    const { error } = await supabase
-      .from('bounty_claims')
-      .update({
-        verification_status: 'rejected',
-        verified_by: userId,
-        verified_at: new Date().toISOString(),
-        rejection_reason: reason || 'Claim rejected by moderator',
-      })
-      .eq('id', claim.id)
+    const success_ = await rejectBountyClaim(claim.id, userId, reason || 'Claim rejected by moderator')
 
-    if (error) {
-      console.error('Reject error:', error)
-      throw error
+    if (!success_) {
+      throw new Error('Failed to reject claim')
     }
 
     console.log('Rejection successful, reloading claims...')
     await loadClaims()
-    showError('Claim rejected') // Add this line (using error toast for red color)
-  } catch (error: any) {
+    showError('Claim rejected')
+  } catch (error: unknown) {
     console.error('Error rejecting claim:', error)
-    showError('Failed to reject claim: ' + error.message) // Update this line
+    const errorMessage = error instanceof Error ? error.message : 'Failed to reject claim'
+    showError(errorMessage)
   } finally {
     processingId.value = null
   }
@@ -209,8 +174,13 @@ function getStatusIcon(status: string) {
   <div class="min-h-screen bg-gray-900 text-white">
     <div class="container mx-auto px-4 py-8">
       <div class="mb-8">
-        <h1 class="text-4xl font-bold mb-4">Claim Verification</h1>
-        <p class="text-gray-400">Review and verify bounty claims from hunters</p>
+        <div class="flex items-center gap-3">
+          <h1 class="text-4xl font-bold">Claim Verification</h1>
+          <div v-if="isAdmin" class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+            Admin
+          </div>
+        </div>
+        <p class="text-gray-400 mt-2">Review and verify bounty claims from hunters</p>
       </div>
 
       <!-- Filter Tabs -->
