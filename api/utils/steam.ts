@@ -61,11 +61,15 @@ export async function getSteamPlayerInfo(
   profileUrl: string
 } | null> {
   try {
-    const response = await fetch(
-      `${STEAM_API_URL}/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamId}`,
-    )
+    const url = `${STEAM_API_URL}/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamId}`
+    console.log('Calling Steam API:', url.replace(apiKey, '***'))
+
+    const response = await fetch(url)
+    console.log('Steam API response status:', response.status)
 
     if (!response.ok) {
+      const errorText = await response.text()
+      console.error('Steam API error response:', errorText)
       throw new Error(`Steam API error: ${response.status}`)
     }
 
@@ -80,11 +84,16 @@ export async function getSteamPlayerInfo(
       }
     }
 
+    console.log('Steam API data received:', data)
+
     if (!data.response.players || data.response.players.length === 0) {
+      console.warn('No players found in Steam API response')
       return null
     }
 
     const player = data.response.players[0]
+    console.log('Returning player data:', player.personaname)
+
     return {
       steamId: player.steamid,
       username: player.personaname,
