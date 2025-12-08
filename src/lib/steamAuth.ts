@@ -45,17 +45,11 @@ export async function verifySteamLogin(params: URLSearchParams): Promise<boolean
   }
 }
 
-export async function getSteamProfile(steamId: string, apiKey: string) {
-  try {
-    const response = await fetch(
-      `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamId}`,
-    )
-    const data = await response.json()
-    return data.response.players[0]
-  } catch (error) {
-    console.error('Error fetching Steam profile:', error)
-    return null
-  }
+export function deprecatedGetSteamProfile(): void {
+  // DEPRECATED: This function is no longer used
+  // The frontend now calls the backend API instead
+  // to avoid CORS issues with Steam API
+  console.warn('getSteamProfile is deprecated. Use the backend API instead.')
 }
 
 export async function createOrUpdateUser(steamId: string, username: string, avatarUrl?: string) {
