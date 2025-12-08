@@ -4,8 +4,8 @@ import { ref, onMounted, computed } from 'vue'
 import { getActiveBounties, getMostWanted } from '@/lib/db'
 import type { Bounty, MostWanted } from '@/lib/supabase'
 import { Target, Clock, Search } from 'lucide-vue-next'
-import { formatDistanceToNow } from 'date-fns'
 import { RouterLink } from 'vue-router'
+import { getTimeRemaining, getExpirationColor } from '@/lib/bountyExpiration'
 
 const bounties = ref<Bounty[]>([])
 const mostWanted = ref<MostWanted[]>([])
@@ -160,11 +160,26 @@ const filteredBounties = computed(() => {
           <div class="flex justify-between items-start">
             <div>
               <h3 class="text-2xl font-bold mb-2">{{ bounty.target_gamertag }}</h3>
-              <div class="flex items-center gap-4 text-sm text-gray-400">
-                <span class="flex items-center gap-1">
+              <div class="flex items-center gap-4 text-sm">
+                <span
+                  class="flex items-center gap-1"
+                  :class="getExpirationColor(bounty.expires_at)"
+                >
                   <Clock :size="16" />
-                  Expires
-                  {{ formatDistanceToNow(new Date(bounty.expires_at), { addSuffix: true }) }}
+                  <template v-if="getTimeRemaining(bounty.expires_at).isExpired">
+                    Expired
+                  </template>
+                  <template v-else-if="getTimeRemaining(bounty.expires_at).days > 0">
+                    {{ getTimeRemaining(bounty.expires_at).days }}d
+                    {{ getTimeRemaining(bounty.expires_at).hours }}h remaining
+                  </template>
+                  <template v-else-if="getTimeRemaining(bounty.expires_at).hours > 0">
+                    {{ getTimeRemaining(bounty.expires_at).hours }}h
+                    {{ getTimeRemaining(bounty.expires_at).minutes }}m remaining
+                  </template>
+                  <template v-else>
+                    {{ getTimeRemaining(bounty.expires_at).minutes }}m remaining
+                  </template>
                 </span>
               </div>
             </div>

@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { Target, LogOut } from 'lucide-vue-next'
 import ToastContainer from './components/ToastContainer.vue'
+import ExpirationChecker from './components/ExpirationChecker.vue'
 import { getCurrentUser, logout } from './lib/auth'
 import { computed } from 'vue'
 
@@ -12,6 +13,9 @@ const currentUser = computed(() => getCurrentUser())
   <div>
     <!-- Toast Container -->
     <ToastContainer />
+
+    <!-- Expiration Checker -->
+    <ExpirationChecker />
 
     <!-- Navigation -->
     <nav class="bg-gray-800 text-white border-b border-gray-700">
