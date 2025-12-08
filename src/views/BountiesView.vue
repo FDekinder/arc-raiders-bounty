@@ -5,7 +5,9 @@ import { getActiveBounties, getMostWanted } from '@/lib/db'
 import type { Bounty, MostWanted } from '@/lib/supabase'
 import { Target, Clock, Search } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
-import { getTimeRemaining, getExpirationColor } from '@/lib/bountyExpiration'
+import { getTimeRemaining, getExpirationColor, extendBounty } from '@/lib/bountyExpiration'
+import { getCurrentUser } from '@/lib/auth'
+import { useToast } from '@/composables/useToast'
 
 const bounties = ref<Bounty[]>([])
 const mostWanted = ref<MostWanted[]>([])
@@ -14,6 +16,9 @@ const loading = ref(true)
 // Search and filter state
 const searchQuery = ref('')
 const sortBy = ref<'amount-high' | 'amount-low' | 'newest' | 'expiring'>('amount-high')
+
+const { success, error: showError } = useToast()
+const currentUser = getCurrentUser()
 
 onMounted(async () => {
   try {
@@ -26,6 +31,24 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+async function handleExtendBounty(bountyId: string) {
+  if (!currentUser) return
+
+  try {
+    const { error } = await extendBounty(bountyId, 7) // Extend by 7 days
+
+    if (error) throw error
+
+    success('Bounty extended by 7 days!')
+
+    // Reload bounties
+    const bountiesData = await getActiveBounties()
+    bounties.value = bountiesData
+  } catch (err: any) {
+    showError(err.message || 'Failed to extend bounty')
+  }
+}
 
 // Filtered and sorted bounties
 const filteredBounties = computed(() => {
@@ -181,6 +204,20 @@ const filteredBounties = computed(() => {
                     {{ getTimeRemaining(bounty.expires_at).minutes }}m remaining
                   </template>
                 </span>
+
+                <!-- Extend button for bounty creator -->
+                <button
+                  v-if="
+                    currentUser &&
+                    bounty.created_by === currentUser.id &&
+                    getTimeRemaining(bounty.expires_at).totalHours < 48
+                  "
+                  @click="handleExtendBounty(bounty.id)"
+                  class="text-xs bg-yellow-600 hover:bg-yellow-700 px-3 py-1 rounded transition"
+                  title="Extend by 7 days"
+                >
+                  + 7 days
+                </button>
               </div>
             </div>
             <div class="text-right">
