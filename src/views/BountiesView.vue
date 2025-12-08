@@ -1,15 +1,19 @@
 <!-- src/views/BountiesView.vue -->
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { getActiveBounties, getMostWanted } from '@/lib/db'
 import type { Bounty, MostWanted } from '@/lib/supabase'
-import { Target, Clock } from 'lucide-vue-next'
+import { Target, Clock, Search } from 'lucide-vue-next'
 import { formatDistanceToNow } from 'date-fns'
 import { RouterLink } from 'vue-router'
 
 const bounties = ref<Bounty[]>([])
 const mostWanted = ref<MostWanted[]>([])
 const loading = ref(true)
+
+// Search and filter state
+const searchQuery = ref('')
+const sortBy = ref<'amount-high' | 'amount-low' | 'newest' | 'expiring'>('amount-high')
 
 onMounted(async () => {
   try {
@@ -22,12 +26,42 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+// Filtered and sorted bounties
+const filteredBounties = computed(() => {
+  let filtered = bounties.value
+
+  // Apply search filter
+  if (searchQuery.value.trim()) {
+    const query = searchQuery.value.toLowerCase()
+    filtered = filtered.filter((b) => b.target_gamertag.toLowerCase().includes(query))
+  }
+
+  // Apply sorting
+  const sorted = [...filtered]
+  switch (sortBy.value) {
+    case 'amount-high':
+      sorted.sort((a, b) => b.bounty_amount - a.bounty_amount)
+      break
+    case 'amount-low':
+      sorted.sort((a, b) => a.bounty_amount - b.bounty_amount)
+      break
+    case 'newest':
+      sorted.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      break
+    case 'expiring':
+      sorted.sort((a, b) => new Date(a.expires_at).getTime() - new Date(b.expires_at).getTime())
+      break
+  }
+
+  return sorted
+})
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-900 text-white">
     <div v-if="loading" class="flex items-center justify-center min-h-screen">
-      <div class="text-xl">Loading bounties...</div>
+      <div class="text-white text-xl">Loading bounties...</div>
     </div>
 
     <div v-else class="container mx-auto px-4 py-8">
@@ -39,6 +73,45 @@ onMounted(async () => {
         >
           + New Bounty
         </RouterLink>
+      </div>
+
+      <!-- Search and Filter Controls -->
+      <div class="bg-gray-800 rounded-lg p-4 mb-8">
+        <div class="grid md:grid-cols-2 gap-4">
+          <!-- Search Bar -->
+          <div class="relative">
+            <Search
+              class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              :size="20"
+            />
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search by gamertag..."
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-red-500"
+            />
+          </div>
+
+          <!-- Sort Dropdown -->
+          <div>
+            <select
+              v-model="sortBy"
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500"
+            >
+              <option value="amount-high">Highest Bounty</option>
+              <option value="amount-low">Lowest Bounty</option>
+              <option value="newest">Newest First</option>
+              <option value="expiring">Expiring Soon</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Results Count -->
+        <div v-if="searchQuery" class="mt-3 text-sm text-gray-400">
+          Found {{ filteredBounties.length }} bounty{{
+            filteredBounties.length !== 1 ? 'ies' : 'y'
+          }}
+        </div>
       </div>
 
       <!-- Most Wanted Section -->
@@ -69,14 +142,18 @@ onMounted(async () => {
       <!-- All Bounties -->
       <div class="space-y-4">
         <div
-          v-if="bounties.length === 0"
+          v-if="filteredBounties.length === 0"
           class="bg-gray-800 rounded-lg p-8 text-center text-gray-400"
         >
-          No active bounties. Be the first to create one!
+          {{
+            searchQuery
+              ? 'No bounties match your search'
+              : 'No active bounties. Be the first to create one!'
+          }}
         </div>
 
         <div
-          v-for="bounty in bounties"
+          v-for="bounty in filteredBounties"
           :key="bounty.id"
           class="bg-gray-800 rounded-lg p-6 hover:bg-gray-750 transition"
         >

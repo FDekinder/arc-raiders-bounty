@@ -1,15 +1,22 @@
-<!-- src/views/LeaderboardView.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { getTopHunters } from '@/lib/db'
+import { supabase } from '@/lib/supabase'
 import { Trophy, Target, Award } from 'lucide-vue-next'
+import { RouterLink } from 'vue-router'
 
 const hunters = ref<any[]>([])
 const loading = ref(true)
 
 onMounted(async () => {
   try {
-    const data = await getTopHunters()
+    // Modified query to get user ID
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, username, total_points, bounties_completed, avatar_url')
+      .order('total_points', { ascending: false })
+      .limit(10)
+
+    if (error) throw error
     hunters.value = data
   } catch (error) {
     console.error('Error loading leaderboard:', error)
@@ -42,7 +49,7 @@ function getMedalColor(index: number) {
       <div v-else class="max-w-4xl mx-auto space-y-4">
         <div
           v-for="(hunter, index) in hunters"
-          :key="hunter.username"
+          :key="hunter.id"
           class="bg-gray-800 rounded-lg p-6 flex items-center gap-6 hover:bg-gray-750 transition"
         >
           <!-- Rank -->
@@ -57,7 +64,12 @@ function getMedalColor(index: number) {
 
           <!-- Info -->
           <div class="flex-1">
-            <h3 class="text-2xl font-bold">{{ hunter.username }}</h3>
+            <RouterLink
+              :to="`/profile/${hunter.id}`"
+              class="text-2xl font-bold hover:text-red-500 transition"
+            >
+              {{ hunter.username }}
+            </RouterLink>
             <div class="flex gap-4 text-sm text-gray-400 mt-1">
               <span>{{ hunter.bounties_completed }} bounties completed</span>
             </div>

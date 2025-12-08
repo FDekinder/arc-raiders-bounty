@@ -44,6 +44,11 @@ const router = createRouter({
       name: 'activity',
       component: () => import('../views/ActivityFeedView.vue'),
     },
+    {
+      path: '/profile/:id',
+      name: 'user-profile',
+      component: () => import('../views/UserProfileView.vue'),
+    },
   ],
 })
 
