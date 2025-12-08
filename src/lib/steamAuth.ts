@@ -89,10 +89,7 @@ export async function createOrUpdateUser(steamId: string, username: string, avat
   }
 }
 
-export async function searchSteamPlayer(
-  searchQuery: string,
-  apiKey: string,
-): Promise<{
+export async function searchSteamPlayer(searchQuery: string, apiKey: string): Promise<{
   steamId: string | null
   personaName: string | null
   avatarUrl: string | null
@@ -100,30 +97,40 @@ export async function searchSteamPlayer(
   error?: string
 }> {
   try {
-    // First, try to resolve as vanity URL (custom Steam profile name)
-    const vanityResponse = await fetch(
-      `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${apiKey}&vanityurl=${searchQuery}`,
-    )
+    // Call our backend API instead of Steam directly to avoid CORS
+    const response = await fetch(`/api/steam-verify?searchQuery=${encodeURIComponent(searchQuery)}`)
 
-    const vanityData = await vanityResponse.json()
-
-    let steamId: string | null = null
-
-    // If vanity URL resolved successfully
-    if (vanityData.response?.success === 1) {
-      steamId = vanityData.response.steamid
-    } else if (/^\d{17}$/.test(searchQuery)) {
-      // If it looks like a Steam ID (17 digits), use it directly
-      steamId = searchQuery
-    } else {
+    if (!response.ok) {
+      const errorData = await response.json()
       return {
         steamId: null,
         personaName: null,
         avatarUrl: null,
         profileUrl: null,
-        error: 'Steam profile not found. Try using their Steam ID or exact profile name.',
+        error: errorData.error || 'Failed to verify player'
       }
     }
+
+    const data = await response.json()
+
+    return {
+      steamId: data.steamId,
+      personaName: data.personaName,
+      avatarUrl: data.avatarUrl,
+      profileUrl: data.profileUrl,
+      error: undefined
+    }
+  } catch (error) {
+    console.error('Steam search error:', error)
+    return {
+      steamId: null,
+      personaName: null,
+      avatarUrl: null,
+      profileUrl: null,
+      error: 'Failed to search Steam. Please try again.'
+    }
+  }
+}
 
     // Get player profile info
     const profileResponse = await fetch(
