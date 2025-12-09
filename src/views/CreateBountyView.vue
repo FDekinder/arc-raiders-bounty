@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router'
 import { Target, Search, CheckCircle, XCircle, Loader } from 'lucide-vue-next'
 import { useToast } from '@/composables/useToast'
 import { getCurrentUser } from '@/lib/auth'
-import { searchSteamPlayer } from '@/lib/steamAuth'
+import { verifyPlayer, type Platform, type PlayerVerification } from '@/lib/platformVerification'
 
 const router = useRouter()
 const { success, error: showError } = useToast()
@@ -15,25 +15,25 @@ const gamertag = ref('')
 const amount = ref('')
 const loading = ref(false)
 const error = ref('')
+const selectedPlatform = ref<Platform>('steam')
 
-// Steam verification
+// Verification
 const verifying = ref(false)
 const verificationStatus = ref<'idle' | 'success' | 'error'>('idle')
-const verifiedPlayer = ref<{
-  steamId: string
-  personaName: string
-  avatarUrl: string
-  profileUrl: string
-} | null>(null)
+const verifiedPlayer = ref<PlayerVerification | null>(null)
 
 const currentUser = getCurrentUser()
 const userId = currentUser?.id || ''
 
-const STEAM_API_KEY = import.meta.env.VITE_STEAM_API_KEY || ''
+const platforms = [
+  { value: 'steam', label: 'Steam', icon: '🎮' },
+  { value: 'xbox', label: 'Xbox', icon: '🎯' },
+  { value: 'playstation', label: 'PlayStation', icon: '🎮' },
+]
 
 async function verifyGamertag() {
   if (!gamertag.value.trim()) {
-    showError('Please enter a gamertag')
+    showError('Please enter a username/gamertag')
     return
   }
 
@@ -42,23 +42,20 @@ async function verifyGamertag() {
   verifiedPlayer.value = null
 
   try {
-    const result = await searchSteamPlayer(gamertag.value.trim(), STEAM_API_KEY)
+    const result = await verifyPlayer(gamertag.value.trim(), selectedPlatform.value)
 
-    if (result.error || !result.steamId) {
+    if (result.error || !result.playerId) {
       verificationStatus.value = 'error'
       error.value = result.error || 'Player not found'
-      showError(result.error || 'Player not found on Steam')
+      showError(result.error || 'Player not found')
     } else {
       verificationStatus.value = 'success'
-      verifiedPlayer.value = {
-        steamId: result.steamId,
-        personaName: result.personaName!,
-        avatarUrl: result.avatarUrl!,
-        profileUrl: result.profileUrl!,
-      }
+      verifiedPlayer.value = result
       // Update the gamertag field with the verified name
-      gamertag.value = result.personaName!
-      success('Steam player verified!')
+      gamertag.value = result.displayName
+      success(
+        `${platforms.find((p) => p.value === selectedPlatform.value)?.label} player verified!`,
+      )
     }
   } catch (err: any) {
     verificationStatus.value = 'error'
@@ -74,8 +71,8 @@ async function handleSubmit() {
 
   // Require verification
   if (verificationStatus.value !== 'success') {
-    error.value = 'Please verify the Steam player first'
-    showError('Please verify the Steam player first')
+    error.value = 'Please verify the player first'
+    showError('Please verify the player first')
     return
   }
 
@@ -87,14 +84,15 @@ async function handleSubmit() {
       throw new Error('Bounty amount must be at least 10 points')
     }
 
+    // Create bounty with platform info
     await createBounty(
-      verifiedPlayer.value!.personaName,
+      verifiedPlayer.value!.displayName,
       bountyAmount,
       userId,
-      verifiedPlayer.value!.steamId,
+      verifiedPlayer.value!.playerId,
     )
 
-    success(`Bounty created on ${verifiedPlayer.value!.personaName} for ${bountyAmount} points!`)
+    success(`Bounty created on ${verifiedPlayer.value!.displayName} for ${bountyAmount} points!`)
 
     router.push('/bounties')
   } catch (err: any) {
@@ -103,6 +101,12 @@ async function handleSubmit() {
   } finally {
     loading.value = false
   }
+}
+
+function handlePlatformChange() {
+  // Reset verification when platform changes
+  verificationStatus.value = 'idle'
+  verifiedPlayer.value = null
 }
 </script>
 
@@ -117,17 +121,45 @@ async function handleSubmit() {
 
         <div class="bg-gray-800 rounded-lg p-8">
           <form @submit.prevent="handleSubmit" class="space-y-6">
-            <!-- Target Gamertag with Verification -->
+            <!-- Platform Selection -->
+            <div>
+              <label class="block text-sm font-medium mb-2">Platform</label>
+              <div class="grid grid-cols-3 gap-3">
+                <button
+                  v-for="platform in platforms"
+                  :key="platform.value"
+                  type="button"
+                  @click="
+                    selectedPlatform = platform.value as Platform
+                    handlePlatformChange()
+                  "
+                  :class="[
+                    'p-4 rounded-lg border-2 transition font-semibold flex flex-col items-center gap-2',
+                    selectedPlatform === platform.value
+                      ? 'border-red-500 bg-red-500/10'
+                      : 'border-gray-600 hover:border-gray-500',
+                  ]"
+                >
+                  <span class="text-2xl">{{ platform.icon }}</span>
+                  <span>{{ platform.label }}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Target Player with Verification -->
             <div>
               <label class="block text-sm font-medium mb-2">
-                Target Player (Steam Username or ID)
+                Target Player
+                <span class="text-gray-400 text-xs ml-2">
+                  ({{ platforms.find((p) => p.value === selectedPlatform)?.label }} username/ID)
+                </span>
               </label>
               <div class="flex gap-2">
                 <div class="flex-1 relative">
                   <input
                     v-model="gamertag"
                     type="text"
-                    placeholder="Enter Steam username or ID..."
+                    :placeholder="`Enter ${platforms.find((p) => p.value === selectedPlatform)?.label} username...`"
                     class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500"
                     required
                     @input="verificationStatus = 'idle'"
@@ -163,25 +195,37 @@ async function handleSubmit() {
                 class="mt-4 bg-gray-700 rounded-lg p-4 flex items-center gap-4"
               >
                 <img
+                  v-if="verifiedPlayer.avatarUrl"
                   :src="verifiedPlayer.avatarUrl"
-                  :alt="verifiedPlayer.personaName"
+                  :alt="verifiedPlayer.displayName"
                   class="w-16 h-16 rounded-full"
                 />
+                <div
+                  class="w-16 h-16 rounded-full bg-gray-600 flex items-center justify-center text-2xl"
+                  v-else
+                >
+                  {{ platforms.find((p) => p.value === selectedPlatform)?.icon }}
+                </div>
                 <div class="flex-1">
-                  <div class="font-bold text-lg">{{ verifiedPlayer.personaName }}</div>
+                  <div class="font-bold text-lg">{{ verifiedPlayer.displayName }}</div>
+                  <div class="text-sm text-gray-400">
+                    {{ platforms.find((p) => p.value === selectedPlatform)?.label }}
+                  </div>
                   <a
+                    v-if="verifiedPlayer.profileUrl"
                     :href="verifiedPlayer.profileUrl"
                     target="_blank"
                     class="text-sm text-blue-400 hover:text-blue-300"
                   >
-                    View Steam Profile →
+                    View Profile →
                   </a>
                 </div>
                 <CheckCircle class="text-green-500" :size="32" />
               </div>
 
               <p class="text-sm text-gray-400 mt-2">
-                We'll verify this player exists on Steam before creating the bounty
+                We'll verify this player exists on
+                {{ platforms.find((p) => p.value === selectedPlatform)?.label }}
               </p>
             </div>
 
