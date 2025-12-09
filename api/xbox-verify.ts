@@ -46,7 +46,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     xuid: `xbox-${Date.now()}-${Math.random().toString(36).substring(7)}`,
     gamertag: trimmedGamertag,
     avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(trimmedGamertag)}&size=256&background=107c10&color=fff&bold=true`,
-    profileUrl: `https://account.xbox.com/en-us/profile?gamertag=${encodeURIComponent(trimmedGamertag)}`,
     verified: true,
   })
 }

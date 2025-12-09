@@ -213,7 +213,7 @@ function handlePlatformChange() {
                     {{ platforms.find((p) => p.value === selectedPlatform)?.label }}
                   </div>
                   <a
-                    v-if="verifiedPlayer.profileUrl"
+                    v-if="verifiedPlayer.profileUrl && selectedPlatform !== 'xbox'"
                     :href="verifiedPlayer.profileUrl"
                     target="_blank"
                     class="text-sm text-blue-400 hover:text-blue-300"
