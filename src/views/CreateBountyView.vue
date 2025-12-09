@@ -159,7 +159,7 @@ function handlePlatformChange() {
                   <input
                     v-model="gamertag"
                     type="text"
-                    :placeholder="`Enter ${platforms.find((p) => p.value === selectedPlatform)?.label} username...`"
+                    placeholder="Enter username or ID..."
                     class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500"
                     required
                     @input="verificationStatus = 'idle'"
