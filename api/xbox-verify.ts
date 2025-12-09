@@ -55,7 +55,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({
       xuid: `xbox-${Date.now()}-${Math.random().toString(36).substring(7)}`, // Placeholder XUID
       gamertag: trimmedGamertag,
-      avatarUrl: 'https://i.pravatar.cc/150?img=8', // Placeholder avatar
+      // avatarUrl omitted in validation-only mode - frontend will show default icon
       profileUrl: `https://account.xbox.com/en-us/profile?gamertag=${encodeURIComponent(trimmedGamertag)}`,
       verified: true,
       note: 'Xbox verification is in validation-only mode. Full API integration requires Xbox Live API credentials.',
