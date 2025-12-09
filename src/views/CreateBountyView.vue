@@ -131,7 +131,7 @@ function handlePlatformChange() {
                   :key="platform.value"
                   type="button"
                   @click="
-                    selectedPlatform = platform.value as Platform
+                    selectedPlatform = platform.value as Platform;
                     handlePlatformChange()
                   "
                   :class="[
