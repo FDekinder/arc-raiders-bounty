@@ -3,11 +3,12 @@
 import { ref, onMounted, computed } from 'vue'
 import { getActiveBounties, getMostWanted } from '@/lib/db'
 import type { Bounty, MostWanted } from '@/lib/supabase'
-import { Target, Clock, Search } from 'lucide-vue-next'
+import { Target, Clock, Search, Users, UserPlus, UserMinus } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import { getTimeRemaining, getExpirationColor, extendBounty } from '@/lib/bountyExpiration'
 import { getCurrentUser } from '@/lib/auth'
 import { useToast } from '@/composables/useToast'
+import { joinHunt, leaveHunt, getHunterCount, isHunting, getMyActiveHunts } from '@/lib/hunters'
 
 const bounties = ref<Bounty[]>([])
 const mostWanted = ref<MostWanted[]>([])
@@ -17,6 +18,12 @@ const loading = ref(true)
 const searchQuery = ref('')
 const sortBy = ref<'amount-high' | 'amount-low' | 'newest' | 'expiring'>('amount-high')
 
+// Hunter tracking
+const hunterCounts = ref<Record<string, number>>({})
+const huntingStatus = ref<Record<string, boolean>>({})
+const myActiveHunts = ref(0)
+const joiningHunt = ref<string | null>(null)
+
 const { success, error: showError } = useToast()
 const currentUser = getCurrentUser()
 
@@ -25,6 +32,8 @@ onMounted(async () => {
     const [bountiesData, mostWantedData] = await Promise.all([getActiveBounties(), getMostWanted()])
     bounties.value = bountiesData
     mostWanted.value = mostWantedData
+
+    await loadHunterData()
   } catch (error) {
     console.error('Error loading data:', error)
   } finally {
@@ -32,17 +41,70 @@ onMounted(async () => {
   }
 })
 
+async function loadHunterData() {
+  if (!currentUser) return
+
+  // Get my active hunt count
+  myActiveHunts.value = await getMyActiveHunts(currentUser.id)
+
+  // Load hunter counts and status for each bounty
+  for (const bounty of bounties.value) {
+    hunterCounts.value[bounty.id] = await getHunterCount(bounty.id)
+    huntingStatus.value[bounty.id] = await isHunting(bounty.id, currentUser.id)
+  }
+}
+
+async function handleJoinHunt(bountyId: string) {
+  if (!currentUser) {
+    showError('Please login to join a hunt')
+    return
+  }
+
+  joiningHunt.value = bountyId
+
+  const result = await joinHunt(bountyId, currentUser.id)
+
+  if (result.success) {
+    success('You are now hunting this target!')
+    huntingStatus.value[bountyId] = true
+    hunterCounts.value[bountyId] = (hunterCounts.value[bountyId] || 0) + 1
+    myActiveHunts.value++
+  } else {
+    showError(result.error || 'Failed to join hunt')
+  }
+
+  joiningHunt.value = null
+}
+
+async function handleLeaveHunt(bountyId: string) {
+  if (!currentUser) return
+
+  joiningHunt.value = bountyId
+
+  const result = await leaveHunt(bountyId, currentUser.id)
+
+  if (result.success) {
+    success('You have stopped hunting this target')
+    huntingStatus.value[bountyId] = false
+    hunterCounts.value[bountyId] = Math.max(0, (hunterCounts.value[bountyId] || 0) - 1)
+    myActiveHunts.value = Math.max(0, myActiveHunts.value - 1)
+  } else {
+    showError(result.error || 'Failed to leave hunt')
+  }
+
+  joiningHunt.value = null
+}
+
 async function handleExtendBounty(bountyId: string) {
   if (!currentUser) return
 
   try {
-    const { error } = await extendBounty(bountyId, 7) // Extend by 7 days
+    const { error } = await extendBounty(bountyId, 7)
 
     if (error) throw error
 
     success('Bounty extended by 7 days!')
 
-    // Reload bounties
     const bountiesData = await getActiveBounties()
     bounties.value = bountiesData
   } catch (err: any) {
@@ -50,17 +112,14 @@ async function handleExtendBounty(bountyId: string) {
   }
 }
 
-// Filtered and sorted bounties
 const filteredBounties = computed(() => {
   let filtered = bounties.value
 
-  // Apply search filter
   if (searchQuery.value.trim()) {
     const query = searchQuery.value.toLowerCase()
     filtered = filtered.filter((b) => b.target_gamertag.toLowerCase().includes(query))
   }
 
-  // Apply sorting
   const sorted = [...filtered]
   switch (sortBy.value) {
     case 'amount-high':
@@ -89,7 +148,12 @@ const filteredBounties = computed(() => {
 
     <div v-else class="container mx-auto px-4 py-8">
       <div class="flex justify-between items-center mb-8">
-        <h1 class="text-4xl font-bold">Active Bounties</h1>
+        <div>
+          <h1 class="text-4xl font-bold">Active Bounties</h1>
+          <p v-if="currentUser && myActiveHunts > 0" class="text-gray-400 mt-2">
+            You are hunting {{ myActiveHunts }}/3 targets
+          </p>
+        </div>
         <RouterLink
           to="/create-bounty"
           class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg font-semibold"
@@ -101,7 +165,6 @@ const filteredBounties = computed(() => {
       <!-- Search and Filter Controls -->
       <div class="bg-gray-800 rounded-lg p-4 mb-8">
         <div class="grid md:grid-cols-2 gap-4">
-          <!-- Search Bar -->
           <div class="relative">
             <Search
               class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -115,7 +178,6 @@ const filteredBounties = computed(() => {
             />
           </div>
 
-          <!-- Sort Dropdown -->
           <div>
             <select
               v-model="sortBy"
@@ -129,7 +191,6 @@ const filteredBounties = computed(() => {
           </div>
         </div>
 
-        <!-- Results Count -->
         <div v-if="searchQuery" class="mt-3 text-sm text-gray-400">
           Found {{ filteredBounties.length }} bounty{{
             filteredBounties.length !== 1 ? 'ies' : 'y'
@@ -181,9 +242,9 @@ const filteredBounties = computed(() => {
           class="bg-gray-800 rounded-lg p-6 hover:bg-gray-750 transition"
         >
           <div class="flex justify-between items-start">
-            <div>
+            <div class="flex-1">
               <h3 class="text-2xl font-bold mb-2">{{ bounty.target_gamertag }}</h3>
-              <div class="flex items-center gap-4 text-sm">
+              <div class="flex items-center gap-4 text-sm flex-wrap">
                 <span
                   class="flex items-center gap-1"
                   :class="getExpirationColor(bounty.expires_at)"
@@ -205,7 +266,15 @@ const filteredBounties = computed(() => {
                   </template>
                 </span>
 
-                <!-- Extend button for bounty creator -->
+                <!-- Hunter Count -->
+                <span class="flex items-center gap-1 text-blue-400">
+                  <Users :size="16" />
+                  {{ hunterCounts[bounty.id] || 0 }} hunter{{
+                    (hunterCounts[bounty.id] || 0) !== 1 ? 's' : ''
+                  }}
+                </span>
+
+                <!-- Extend button -->
                 <button
                   v-if="
                     currentUser &&
@@ -222,13 +291,40 @@ const filteredBounties = computed(() => {
             </div>
             <div class="text-right">
               <div class="text-3xl font-bold text-red-500">{{ bounty.bounty_amount }}</div>
-              <div class="text-sm text-gray-400">points</div>
-              <RouterLink
-                :to="`/claim/${bounty.id}`"
-                class="mt-2 inline-block bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm font-semibold"
-              >
-                Claim Bounty
-              </RouterLink>
+              <div class="text-sm text-gray-400 mb-2">points</div>
+
+              <!-- Hunt/Claim Buttons -->
+              <div class="flex flex-col gap-2">
+                <template v-if="currentUser">
+                  <button
+                    v-if="!huntingStatus[bounty.id]"
+                    @click="handleJoinHunt(bounty.id)"
+                    :disabled="joiningHunt === bounty.id || myActiveHunts >= 3"
+                    class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 px-4 py-2 rounded text-sm font-semibold flex items-center justify-center gap-2 transition"
+                    :title="myActiveHunts >= 3 ? 'Maximum 3 active hunts' : 'Join hunt'"
+                  >
+                    <UserPlus :size="16" />
+                    {{ joiningHunt === bounty.id ? 'Joining...' : 'Join Hunt' }}
+                  </button>
+
+                  <button
+                    v-else
+                    @click="handleLeaveHunt(bounty.id)"
+                    :disabled="joiningHunt === bounty.id"
+                    class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded text-sm font-semibold flex items-center justify-center gap-2 transition"
+                  >
+                    <UserMinus :size="16" />
+                    Leave Hunt
+                  </button>
+                </template>
+
+                <RouterLink
+                  :to="`/claim/${bounty.id}`"
+                  class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm font-semibold text-center transition"
+                >
+                  Claim Bounty
+                </RouterLink>
+              </div>
             </div>
           </div>
         </div>
