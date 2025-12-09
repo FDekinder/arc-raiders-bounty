@@ -23,6 +23,7 @@ export interface Bounty {
   id: string
   target_gamertag: string
   steam_id?: string
+  platform?: 'steam' | 'xbox' | 'playstation'
   bounty_amount: number
   created_by: string
   status: 'active' | 'completed' | 'expired'
