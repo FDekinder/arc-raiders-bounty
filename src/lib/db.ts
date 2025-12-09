@@ -18,7 +18,8 @@ export async function createBounty(
   targetGamertag: string,
   bountyAmount: number,
   createdBy: string,
-  steamId?: string,
+  platformPlayerId?: string,
+  platform?: 'steam' | 'xbox' | 'playstation',
 ) {
   const { data, error } = await supabase
     .from('bounties')
@@ -26,7 +27,8 @@ export async function createBounty(
       target_gamertag: targetGamertag,
       bounty_amount: bountyAmount,
       created_by: createdBy,
-      steam_id: steamId,
+      steam_id: platformPlayerId, // Keep for backward compatibility
+      platform: platform,
     })
     .select()
     .single()

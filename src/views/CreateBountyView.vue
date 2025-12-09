@@ -90,6 +90,7 @@ async function handleSubmit() {
       bountyAmount,
       userId,
       verifiedPlayer.value!.playerId,
+      verifiedPlayer.value!.platform,
     )
 
     success(`Bounty created on ${verifiedPlayer.value!.displayName} for ${bountyAmount} points!`)
