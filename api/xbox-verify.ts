@@ -51,6 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({
       xuid: `xbox-${Date.now()}-${Math.random().toString(36).substring(7)}`,
       gamertag: trimmedGamertag,
+      avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(trimmedGamertag)}&size=256&background=107c10&color=fff&bold=true`,
       profileUrl: `https://account.xbox.com/en-us/profile?gamertag=${encodeURIComponent(trimmedGamertag)}`,
       verified: true,
       validationOnly: true,
@@ -117,11 +118,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Return verified player information
+    const finalGamertag = player.gamertag || player.displayName
+    const realAvatarUrl = profileData?.profileUsers?.[0]?.settings?.find((s: any) => s.id === 'GameDisplayPicRaw')?.value
+
     return res.status(200).json({
       xuid: player.xuid,
-      gamertag: player.gamertag || player.displayName,
-      avatarUrl: profileData?.profileUsers?.[0]?.settings?.find((s: any) => s.id === 'GameDisplayPicRaw')?.value || undefined,
-      profileUrl: `https://account.xbox.com/en-us/profile?gamertag=${encodeURIComponent(player.gamertag || player.displayName)}`,
+      gamertag: finalGamertag,
+      avatarUrl: realAvatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(finalGamertag)}&size=256&background=107c10&color=fff&bold=true`,
+      profileUrl: `https://account.xbox.com/en-us/profile?gamertag=${encodeURIComponent(finalGamertag)}`,
       gamerscore: profileData?.profileUsers?.[0]?.settings?.find((s: any) => s.id === 'Gamerscore')?.value,
       verified: true,
     })

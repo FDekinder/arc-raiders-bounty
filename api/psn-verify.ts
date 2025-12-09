@@ -162,6 +162,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({
       accountId: `psn-${trimmedPsnId}`,
       onlineId: trimmedPsnId,
+      avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(trimmedPsnId)}&size=256&background=003791&color=fff&bold=true`,
       profileUrl: `https://psnprofiles.com/${encodeURIComponent(trimmedPsnId)}`,
       verified: true,
       validationOnly: true,
@@ -207,12 +208,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Get detailed profile
     const profile = await getPSNProfile(accessToken, accountId)
+    const finalOnlineId = profile.profile?.onlineId || exactMatch.socialMetadata.onlineId
+    const realAvatarUrl = profile.profile?.avatars?.[0]?.url
 
     return res.status(200).json({
       accountId: accountId,
-      onlineId: profile.profile?.onlineId || exactMatch.socialMetadata.onlineId,
-      avatarUrl: profile.profile?.avatars?.[0]?.url,
-      profileUrl: `https://psnprofiles.com/${encodeURIComponent(profile.profile?.onlineId || trimmedPsnId)}`,
+      onlineId: finalOnlineId,
+      avatarUrl: realAvatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(finalOnlineId)}&size=256&background=003791&color=fff&bold=true`,
+      profileUrl: `https://psnprofiles.com/${encodeURIComponent(finalOnlineId)}`,
       verified: true,
     })
   } catch (error) {
