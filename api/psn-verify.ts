@@ -46,14 +46,17 @@ async function getAccessToken(npsso: string): Promise<string> {
     })
 
     if (!codeResponse.ok) {
-      throw new Error('Failed to get authorization code')
+      const errorText = await codeResponse.text().catch(() => 'Unable to read error response')
+      console.error('PSN auth code error:', codeResponse.status, errorText)
+      throw new Error(`Failed to get authorization code: ${codeResponse.status} - ${errorText.substring(0, 200)}`)
     }
 
     const codeData = await codeResponse.json()
     const authCode = codeData.code
 
     if (!authCode) {
-      throw new Error('No authorization code received')
+      console.error('No auth code in response:', JSON.stringify(codeData).substring(0, 200))
+      throw new Error(`No authorization code received. Response: ${JSON.stringify(codeData).substring(0, 100)}`)
     }
 
     // Exchange auth code for access token
@@ -72,7 +75,9 @@ async function getAccessToken(npsso: string): Promise<string> {
     })
 
     if (!tokenResponse.ok) {
-      throw new Error('Failed to get access token')
+      const errorText = await tokenResponse.text().catch(() => 'Unable to read error response')
+      console.error('PSN token error:', tokenResponse.status, errorText)
+      throw new Error(`Failed to get access token: ${tokenResponse.status}`)
     }
 
     const tokenData = await tokenResponse.json()
@@ -166,9 +171,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       profileUrl: `https://psnprofiles.com/${encodeURIComponent(trimmedPsnId)}`,
       verified: true,
       validationOnly: true,
-      note: 'Running in validation-only mode. Set PSN_NPSSO for full verification.',
+      note: 'Running in validation-only mode. Set PSN_NPSSO environment variable for full verification. Get token from: https://ca.account.sony.com/api/v1/ssocookie',
     })
   }
+
+  // Log that we're attempting real PSN authentication
+  console.log('PSN: Attempting authentication with NPSSO token for:', trimmedPsnId)
 
   try {
     // Get access token
