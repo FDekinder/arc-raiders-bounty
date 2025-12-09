@@ -2,15 +2,25 @@
 import { supabase } from './supabase'
 
 const STEAM_OPENID_URL = 'https://steamcommunity.com/openid/login'
-const RETURN_URL = 'https://arcraidersbounty.vercel.app/auth/steam/callback'
-const REALM = 'https://arcraidersbounty.vercel.app'
+
+// Get the current domain dynamically
+function getCurrentDomain(): string {
+  if (typeof window !== 'undefined') {
+    return window.location.origin
+  }
+  // Fallback for SSR or build time
+  return 'https://arcraidersbounty.vercel.app'
+}
 
 export function initiateSteamLogin() {
+  const currentDomain = getCurrentDomain()
+  const returnUrl = `${currentDomain}/auth/steam/callback`
+
   const params = new URLSearchParams({
     'openid.ns': 'http://specs.openid.net/auth/2.0',
     'openid.mode': 'checkid_setup',
-    'openid.return_to': RETURN_URL,
-    'openid.realm': REALM,
+    'openid.return_to': returnUrl,
+    'openid.realm': currentDomain,
     'openid.identity': 'http://specs.openid.net/auth/2.0/identifier_select',
     'openid.claimed_id': 'http://specs.openid.net/auth/2.0/identifier_select',
   })
