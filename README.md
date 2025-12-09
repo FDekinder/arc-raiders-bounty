@@ -31,7 +31,7 @@ npm install
 
 ## Environment Variables
 
-The application requires several API keys for player verification. These should be set as environment variables in your Vercel project or `.env` file.
+The application requires the following environment variables. These should be set in your Vercel project or `.env` file.
 
 ### Required Variables
 
@@ -41,28 +41,15 @@ The application requires several API keys for player verification. These should 
   - Free to use
   - Rate limit: ~100,000 requests/day
 
-#### Xbox Live API (Required for Xbox verification)
-- **`OPENXBL_API_KEY`**
-  - Get your key at: https://xbl.io/
-  - Free tier: 120 requests/hour
-  - Paid tiers available for higher limits
-  - Sign up and get API key from the dashboard
-
-#### PlayStation Network API (Required for PSN verification)
-- **`PSN_NPSSO`**
-  - **How to get your NPSSO token:**
-    1. Visit https://www.playstation.com and sign in with your PlayStation account
-    2. In the same browser, navigate to https://ca.account.sony.com/api/v1/ssocookie
-    3. Copy the value of the `npsso` field (a long string)
-    4. Add it as the `PSN_NPSSO` environment variable
-  - **Important:**
-    - The NPSSO token expires after ~2 months and needs manual refresh
-    - Keep this token secret - it's equivalent to your PlayStation password
-    - Don't commit it to version control
-
-### Supabase Variables
+#### Supabase (Required for database)
 - **`VITE_SUPABASE_URL`** - Your Supabase project URL
 - **`VITE_SUPABASE_ANON_KEY`** - Your Supabase anonymous key
+
+### Platform Verification
+
+- **Steam**: Full API verification with real player data
+- **Xbox**: Format validation only (validates gamertag format)
+- **PlayStation**: Format validation only (validates PSN ID format)
 
 ### Setting Environment Variables in Vercel
 
@@ -70,16 +57,6 @@ The application requires several API keys for player verification. These should 
 2. Navigate to Settings → Environment Variables
 3. Add each variable with its value
 4. Redeploy your application
-
-### Fallback Behavior
-
-If API keys are not configured, the endpoints will fall back to "validation-only" mode:
-- Basic format validation is performed
-- No real API calls are made
-- Placeholder data is returned
-- Users will see a note indicating validation-only mode is active
-
-For production use, all API keys should be properly configured.
 
 ### Compile and Hot-Reload for Development
 
