@@ -101,3 +101,15 @@ export async function uploadScreenshot(file: File, userId: string) {
 
   return data.publicUrl
 }
+
+// Get user by username
+export async function getUserByUsername(username: string) {
+  const { data, error } = await supabase
+    .from('users')
+    .select('username, avatar_url')
+    .eq('username', username)
+    .single()
+
+  if (error) return null
+  return data
+}

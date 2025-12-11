@@ -48,4 +48,5 @@ export interface MostWanted {
   target_gamertag: string
   total_bounty: number
   bounty_count: number
+  avatar_url?: string
 }
