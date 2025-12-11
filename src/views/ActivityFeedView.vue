@@ -102,11 +102,11 @@ function getActivityIcon(type: string) {
 function getActivityColor(type: string) {
   switch (type) {
     case 'bounty_created':
-      return 'text-red-500 bg-red-500/10'
+      return 'text-arc-cyan bg-arc-cyan/10'
     case 'claim_submitted':
-      return 'text-blue-500 bg-blue-500/10'
+      return 'text-arc-cyan bg-arc-cyan/10'
     case 'claim_approved':
-      return 'text-green-500 bg-green-500/10'
+      return 'text-arc-green bg-arc-green/10'
     case 'claim_rejected':
       return 'text-gray-500 bg-gray-500/10'
     default:
@@ -143,7 +143,7 @@ function getActivityText(activity: Activity) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-900 text-white">
+  <div class="min-h-screen bg-arc-dark text-white">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
       <!-- Header -->
       <div class="mb-8">
@@ -161,7 +161,7 @@ function getActivityText(activity: Activity) {
         <div
           v-for="activity in activities"
           :key="activity.id"
-          class="bg-gray-800 rounded-lg p-6 hover:bg-gray-750 transition"
+          class="bg-arc-navy rounded-lg p-6 hover:bg-arc-navy/80 transition"
         >
           <div class="flex gap-4">
             <!-- Icon -->
@@ -192,7 +192,7 @@ function getActivityText(activity: Activity) {
               <div v-if="activity.type === 'bounty_created'" class="mt-3">
                 <RouterLink
                   :to="`/claim/${activity.data.id}`"
-                  class="inline-block bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm font-semibold transition"
+                  class="inline-block bg-arc-cyan hover:bg-arc-cyan/80 px-4 py-2 rounded text-sm font-semibold transition"
                 >
                   View Bounty
                 </RouterLink>
@@ -200,10 +200,10 @@ function getActivityText(activity: Activity) {
 
               <div v-if="activity.type === 'claim_approved'" class="mt-3">
                 <div
-                  class="inline-flex items-center gap-2 bg-green-500/10 border border-green-500 px-4 py-2 rounded text-sm"
+                  class="inline-flex items-center gap-2 bg-arc-green/10 border border-arc-green px-4 py-2 rounded text-sm"
                 >
-                  <CheckCircle :size="16" class="text-green-500" />
-                  <span class="text-green-400 font-semibold">
+                  <CheckCircle :size="16" class="text-arc-green" />
+                  <span class="text-arc-green font-semibold">
                     +{{ activity.data.points_awarded }} points
                   </span>
                 </div>

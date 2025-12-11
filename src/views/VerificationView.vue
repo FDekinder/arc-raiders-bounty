@@ -150,11 +150,11 @@ async function rejectClaim(claim: ClaimWithBounty) {
 function getStatusColor(status: string) {
   switch (status) {
     case 'approved':
-      return 'text-green-500'
+      return 'text-arc-green'
     case 'rejected':
-      return 'text-red-500'
+      return 'text-arc-red'
     case 'pending':
-      return 'text-yellow-500'
+      return 'text-arc-yellow'
     default:
       return 'text-gray-500'
   }
@@ -175,7 +175,7 @@ function getStatusIcon(status: string) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-900 text-white">
+  <div class="min-h-screen bg-arc-dark text-white">
     <div class="container mx-auto px-4 py-8">
       <div class="mb-8">
         <div class="flex items-center gap-3">
@@ -196,7 +196,7 @@ function getStatusIcon(status: string) {
           @click="setFilterPending()"
           :class="[
             'px-6 py-2 rounded-lg font-semibold transition',
-            filter === 'pending' ? 'bg-yellow-600 text-white' : 'bg-gray-800 hover:bg-gray-700',
+            filter === 'pending' ? 'bg-arc-yellow text-white' : 'bg-arc-navy hover:bg-arc-navy/80',
           ]"
         >
           Pending
@@ -205,7 +205,7 @@ function getStatusIcon(status: string) {
           @click="setFilterApproved()"
           :class="[
             'px-6 py-2 rounded-lg font-semibold transition',
-            filter === 'approved' ? 'bg-green-600 text-white' : 'bg-gray-800 hover:bg-gray-700',
+            filter === 'approved' ? 'bg-arc-green text-white' : 'bg-arc-navy hover:bg-arc-navy/80',
           ]"
         >
           Approved
@@ -214,7 +214,7 @@ function getStatusIcon(status: string) {
           @click="setFilterRejected()"
           :class="[
             'px-6 py-2 rounded-lg font-semibold transition',
-            filter === 'rejected' ? 'bg-red-600 text-white' : 'bg-gray-800 hover:bg-gray-700',
+            filter === 'rejected' ? 'bg-arc-red text-white' : 'bg-arc-navy hover:bg-arc-navy/80',
           ]"
         >
           Rejected
@@ -223,7 +223,7 @@ function getStatusIcon(status: string) {
           @click="setFilterAll()"
           :class="[
             'px-6 py-2 rounded-lg font-semibold transition',
-            filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-800 hover:bg-gray-700',
+            filter === 'all' ? 'bg-arc-cyan text-white' : 'bg-arc-navy hover:bg-arc-navy/80',
           ]"
         >
           All
@@ -243,7 +243,7 @@ function getStatusIcon(status: string) {
 
       <!-- Claims List -->
       <div v-else class="space-y-6">
-        <div v-for="claim in claims" :key="claim.id" class="bg-gray-800 rounded-lg p-6">
+        <div v-for="claim in claims" :key="claim.id" class="bg-arc-navy rounded-lg p-6">
           <div class="grid md:grid-cols-2 gap-6">
             <!-- Left: Screenshot -->
             <div>
@@ -252,7 +252,7 @@ function getStatusIcon(status: string) {
                 <img
                   :src="claim.screenshot_url"
                   alt="Claim screenshot"
-                  class="w-full rounded-lg border border-gray-700 hover:border-red-500 transition"
+                  class="w-full rounded-lg border border-arc-cyan/20 hover:border-arc-cyan transition"
                 />
                 <div
                   class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center rounded-lg"
@@ -288,7 +288,7 @@ function getStatusIcon(status: string) {
 
                 <div>
                   <p class="text-sm text-gray-400">Bounty Amount</p>
-                  <p class="text-2xl font-bold text-red-500">
+                  <p class="text-2xl font-bold text-arc-cyan">
                     {{ claim.bounty?.bounty_amount }} points
                   </p>
                 </div>
@@ -305,7 +305,7 @@ function getStatusIcon(status: string) {
 
                 <div v-if="claim.rejection_reason">
                   <p class="text-sm text-gray-400">Rejection Reason</p>
-                  <p class="text-red-400">{{ claim.rejection_reason }}</p>
+                  <p class="text-arc-red">{{ claim.rejection_reason }}</p>
                 </div>
               </div>
 
@@ -314,7 +314,7 @@ function getStatusIcon(status: string) {
                 <button
                   @click="approveClaim(claim)"
                   :disabled="processingId === claim.id"
-                  class="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 px-4 py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2"
+                  class="flex-1 bg-arc-green hover:bg-arc-green/80 disabled:bg-gray-600 px-4 py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2"
                 >
                   <CheckCircle :size="20" />
                   {{ processingId === claim.id ? 'Processing...' : 'Approve' }}
@@ -322,7 +322,7 @@ function getStatusIcon(status: string) {
                 <button
                   @click="rejectClaim(claim)"
                   :disabled="processingId === claim.id"
-                  class="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 px-4 py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2"
+                  class="flex-1 bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 px-4 py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2"
                 >
                   <XCircle :size="20" />
                   Reject

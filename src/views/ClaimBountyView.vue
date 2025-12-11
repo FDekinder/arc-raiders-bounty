@@ -107,14 +107,14 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-900 text-white">
+  <div class="min-h-screen bg-arc-dark text-white">
     <div v-if="loading" class="flex items-center justify-center min-h-screen">
       <div class="text-xl">Loading bounty...</div>
     </div>
 
     <div v-else-if="!bounty" class="flex items-center justify-center min-h-screen">
       <div class="text-center">
-        <AlertCircle class="mx-auto mb-4 text-red-500" :size="48" />
+        <AlertCircle class="mx-auto mb-4 text-arc-red" :size="48" />
         <h2 class="text-2xl font-bold mb-2">Bounty Not Found</h2>
         <p class="text-gray-400 mb-4">This bounty doesn't exist or has been completed.</p>
         <button
@@ -130,22 +130,22 @@ async function handleSubmit() {
       <!-- Success Message -->
       <div
         v-if="success"
-        class="bg-green-500/10 border border-green-500 text-green-500 p-6 rounded-lg text-center mb-8"
+        class="bg-arc-green/10 border border-arc-green text-arc-green p-6 rounded-lg text-center mb-8"
       >
         <h2 class="text-2xl font-bold mb-2">Claim Submitted!</h2>
         <p>Your claim is pending verification. Redirecting...</p>
       </div>
 
       <!-- Claim Form -->
-      <div v-else class="bg-gray-800 rounded-lg p-8">
+      <div v-else class="bg-arc-navy rounded-lg p-8">
         <h1 class="text-3xl font-bold mb-2">Claim Bounty</h1>
         <p class="text-gray-400 mb-8">
           Submit proof that you eliminated
-          <span class="text-red-500 font-bold">{{ bounty.target_gamertag }}</span>
+          <span class="text-arc-cyan font-bold">{{ bounty.target_gamertag }}</span>
         </p>
 
         <!-- Bounty Info -->
-        <div class="bg-gray-700 rounded-lg p-6 mb-8">
+        <div class="bg-gray-700 rounded-lg p-6 mb-8 border border-arc-cyan/20">
           <div class="flex justify-between items-center">
             <div>
               <div class="text-sm text-gray-400">Target</div>
@@ -153,7 +153,7 @@ async function handleSubmit() {
             </div>
             <div class="text-right">
               <div class="text-sm text-gray-400">Reward</div>
-              <div class="text-3xl font-bold text-red-500">{{ bounty.bounty_amount }}</div>
+              <div class="text-3xl font-bold text-arc-cyan">{{ bounty.bounty_amount }}</div>
               <div class="text-sm text-gray-400">points</div>
             </div>
           </div>
@@ -162,7 +162,7 @@ async function handleSubmit() {
         <!-- Error Message -->
         <div
           v-if="error"
-          class="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-lg mb-6"
+          class="bg-arc-red/10 border border-arc-red text-arc-red p-4 rounded-lg mb-6"
         >
           {{ error }}
         </div>
@@ -173,7 +173,7 @@ async function handleSubmit() {
 
           <!-- File Input -->
           <div
-            class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center hover:border-red-500 transition cursor-pointer"
+            class="border-2 border-dashed border-arc-cyan/30 rounded-lg p-8 text-center hover:border-arc-cyan transition cursor-pointer"
           >
             <input
               type="file"
@@ -195,7 +195,7 @@ async function handleSubmit() {
             <img
               :src="previewUrl"
               alt="Screenshot preview"
-              class="rounded-lg max-h-96 mx-auto border border-gray-700"
+              class="rounded-lg max-h-96 mx-auto border border-arc-cyan/20"
             />
             <p class="text-sm text-gray-400 mt-2 text-center">
               {{ selectedFile?.name }}
@@ -204,7 +204,7 @@ async function handleSubmit() {
         </div>
 
         <!-- Requirements -->
-        <div class="bg-gray-700 p-4 rounded-lg mb-6">
+        <div class="bg-gray-700 p-4 rounded-lg mb-6 border border-arc-cyan/20">
           <h3 class="font-semibold mb-2">Screenshot Requirements:</h3>
           <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
             <li>Must show the kill feed with target's gamertag</li>
@@ -219,7 +219,7 @@ async function handleSubmit() {
           <button
             @click="handleSubmit"
             :disabled="!selectedFile || submitting"
-            class="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold transition"
+            class="flex-1 bg-arc-cyan hover:bg-arc-cyan/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold transition"
           >
             {{ submitting ? 'Submitting...' : 'Submit Claim' }}
           </button>

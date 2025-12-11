@@ -26,19 +26,19 @@ onMounted(async () => {
 })
 
 function getMedalColor(index: number) {
-  if (index === 0) return 'text-yellow-500'
+  if (index === 0) return 'text-arc-yellow'
   if (index === 1) return 'text-gray-400'
-  if (index === 2) return 'text-orange-600'
+  if (index === 2) return 'text-arc-yellow'
   return 'text-gray-600'
 }
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-900 text-white">
+  <div class="min-h-screen bg-arc-dark text-white">
     <div class="container mx-auto px-4 py-8">
       <div class="text-center mb-12">
         <h1 class="text-5xl font-bold mb-4 flex items-center justify-center gap-3">
-          <Trophy class="text-yellow-500" :size="48" />
+          <Trophy class="text-arc-yellow" :size="48" />
           Top Hunters
         </h1>
         <p class="text-gray-400">The most skilled bounty hunters in Arc Raiders</p>
@@ -50,7 +50,7 @@ function getMedalColor(index: number) {
         <div
           v-for="(hunter, index) in hunters"
           :key="hunter.id"
-          class="bg-gray-800 rounded-lg p-6 flex items-center gap-6 hover:bg-gray-750 transition"
+          class="bg-arc-navy rounded-lg p-6 flex items-center gap-6 hover:bg-arc-navy/80 transition"
         >
           <!-- Rank -->
           <div class="text-4xl font-bold w-16 text-center" :class="getMedalColor(index)">
@@ -66,7 +66,7 @@ function getMedalColor(index: number) {
           <div class="flex-1">
             <RouterLink
               :to="`/profile/${hunter.id}`"
-              class="text-2xl font-bold hover:text-red-500 transition"
+              class="text-2xl font-bold hover:text-arc-cyan transition"
             >
               {{ hunter.username }}
             </RouterLink>
@@ -78,8 +78,8 @@ function getMedalColor(index: number) {
           <!-- Points -->
           <div class="text-right">
             <div class="flex items-center gap-2 justify-end mb-1">
-              <Award class="text-yellow-500" :size="24" />
-              <span class="text-3xl font-bold text-yellow-500">
+              <Award class="text-arc-yellow" :size="24" />
+              <span class="text-3xl font-bold text-arc-yellow">
                 {{ hunter.total_points }}
               </span>
             </div>

@@ -112,7 +112,7 @@ function handlePlatformChange() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-900 text-white">
+  <div class="min-h-screen bg-arc-dark text-white">
     <div class="container mx-auto px-4 py-8">
       <div class="max-w-2xl mx-auto">
         <div class="mb-8">
@@ -120,7 +120,7 @@ function handlePlatformChange() {
           <p class="text-gray-400">Place a bounty on another player</p>
         </div>
 
-        <div class="bg-gray-800 rounded-lg p-8">
+        <div class="bg-arc-navy rounded-lg p-8">
           <form @submit.prevent="handleSubmit" class="space-y-6">
             <!-- Platform Selection -->
             <div>
@@ -137,7 +137,7 @@ function handlePlatformChange() {
                   :class="[
                     'p-4 rounded-lg border-2 transition font-semibold flex flex-col items-center gap-2',
                     selectedPlatform === platform.value
-                      ? 'border-red-500 bg-red-500/10'
+                      ? 'border-arc-cyan bg-arc-cyan/10'
                       : 'border-gray-600 hover:border-gray-500',
                   ]"
                 >
@@ -161,7 +161,7 @@ function handlePlatformChange() {
                     v-model="gamertag"
                     type="text"
                     placeholder="Enter username or ID..."
-                    class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500"
+                    class="w-full bg-gray-700 border border-arc-cyan/30 rounded-lg px-4 py-3 focus:outline-none focus:border-arc-cyan"
                     required
                     @input="verificationStatus = 'idle'"
                   />
@@ -169,20 +169,20 @@ function handlePlatformChange() {
                     v-if="verificationStatus === 'success'"
                     class="absolute right-3 top-1/2 transform -translate-y-1/2"
                   >
-                    <CheckCircle class="text-green-500" :size="20" />
+                    <CheckCircle class="text-arc-green" :size="20" />
                   </div>
                   <div
                     v-if="verificationStatus === 'error'"
                     class="absolute right-3 top-1/2 transform -translate-y-1/2"
                   >
-                    <XCircle class="text-red-500" :size="20" />
+                    <XCircle class="text-arc-red" :size="20" />
                   </div>
                 </div>
                 <button
                   type="button"
                   @click="verifyGamertag"
                   :disabled="verifying || !gamertag.trim()"
-                  class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition"
+                  class="bg-arc-cyan hover:bg-arc-cyan/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition"
                 >
                   <Loader v-if="verifying" class="animate-spin" :size="18" />
                   <Search v-else :size="18" />
@@ -216,12 +216,12 @@ function handlePlatformChange() {
                     v-if="verifiedPlayer.profileUrl && selectedPlatform !== 'xbox'"
                     :href="verifiedPlayer.profileUrl"
                     target="_blank"
-                    class="text-sm text-blue-400 hover:text-blue-300"
+                    class="text-sm text-arc-cyan hover:text-arc-cyan/80"
                   >
                     View Profile →
                   </a>
                 </div>
-                <CheckCircle class="text-green-500" :size="32" />
+                <CheckCircle class="text-arc-green" :size="32" />
               </div>
 
               <p class="text-sm text-gray-400 mt-2">
@@ -238,7 +238,7 @@ function handlePlatformChange() {
                 type="number"
                 min="10"
                 placeholder="Minimum 10 points"
-                class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500"
+                class="w-full bg-gray-700 border border-arc-cyan/30 rounded-lg px-4 py-3 focus:outline-none focus:border-arc-cyan"
                 required
               />
               <p class="text-sm text-gray-400 mt-2">Higher bounties attract more hunters!</p>
@@ -247,7 +247,7 @@ function handlePlatformChange() {
             <!-- Error Message -->
             <div
               v-if="error"
-              class="bg-red-500/10 border border-red-500 rounded-lg p-4 text-red-400"
+              class="bg-arc-red/10 border border-arc-red rounded-lg p-4 text-arc-red"
             >
               {{ error }}
             </div>
@@ -256,7 +256,7 @@ function handlePlatformChange() {
             <button
               type="submit"
               :disabled="loading || verificationStatus !== 'success'"
-              class="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition"
+              class="w-full bg-arc-cyan hover:bg-arc-cyan/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition"
             >
               <Target :size="20" />
               {{ loading ? 'Creating Bounty...' : 'Create Bounty' }}

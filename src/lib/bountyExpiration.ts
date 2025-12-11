@@ -102,7 +102,7 @@ export function getExpirationColor(expiresAt: string): string {
   const { totalHours, isExpired } = getTimeRemaining(expiresAt)
 
   if (isExpired) return 'text-gray-500'
-  if (totalHours <= 24) return 'text-red-500'
-  if (totalHours <= 72) return 'text-yellow-500'
+  if (totalHours <= 24) return 'text-arc-red'
+  if (totalHours <= 72) return 'text-arc-yellow'
   return 'text-gray-400'
 }
