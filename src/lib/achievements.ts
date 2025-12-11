@@ -279,7 +279,7 @@ export async function getTopAchievements(userId: string, limit: number = 3): Pro
     return []
   }
 
-  const achievements = data?.map(d => d.achievement).filter(Boolean) as Achievement[]
+  const achievements = (data?.map(d => d.achievement).filter(Boolean) as unknown) as Achievement[]
 
   // Sort by rarity (legendary > epic > rare > common)
   const rarityOrder = { legendary: 4, epic: 3, rare: 2, common: 1 }
