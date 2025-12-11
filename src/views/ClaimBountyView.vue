@@ -141,11 +141,11 @@ async function handleSubmit() {
         <h1 class="text-3xl font-bold mb-2">Claim Bounty</h1>
         <p class="text-gray-400 mb-8">
           Submit proof that you eliminated
-          <span class="text-arc-cyan font-bold">{{ bounty.target_gamertag }}</span>
+          <span class="text-arc-red font-bold">{{ bounty.target_gamertag }}</span>
         </p>
 
         <!-- Bounty Info -->
-        <div class="bg-gray-700 rounded-lg p-6 mb-8 border border-arc-cyan/20">
+        <div class="bg-gray-700 rounded-lg p-6 mb-8 border border-arc-red/20">
           <div class="flex justify-between items-center">
             <div>
               <div class="text-sm text-gray-400">Target</div>
@@ -153,7 +153,7 @@ async function handleSubmit() {
             </div>
             <div class="text-right">
               <div class="text-sm text-gray-400">Reward</div>
-              <div class="text-3xl font-bold text-arc-cyan">{{ bounty.bounty_amount }}</div>
+              <div class="text-3xl font-bold text-arc-red">{{ bounty.bounty_amount }}</div>
               <div class="text-sm text-gray-400">points</div>
             </div>
           </div>
@@ -173,7 +173,7 @@ async function handleSubmit() {
 
           <!-- File Input -->
           <div
-            class="border-2 border-dashed border-arc-cyan/30 rounded-lg p-8 text-center hover:border-arc-cyan transition cursor-pointer"
+            class="border-2 border-dashed border-arc-red/30 rounded-lg p-8 text-center hover:border-arc-red transition cursor-pointer"
           >
             <input
               type="file"
@@ -195,7 +195,7 @@ async function handleSubmit() {
             <img
               :src="previewUrl"
               alt="Screenshot preview"
-              class="rounded-lg max-h-96 mx-auto border border-arc-cyan/20"
+              class="rounded-lg max-h-96 mx-auto border border-arc-red/20"
             />
             <p class="text-sm text-gray-400 mt-2 text-center">
               {{ selectedFile?.name }}
@@ -204,7 +204,7 @@ async function handleSubmit() {
         </div>
 
         <!-- Requirements -->
-        <div class="bg-gray-700 p-4 rounded-lg mb-6 border border-arc-cyan/20">
+        <div class="bg-gray-700 p-4 rounded-lg mb-6 border border-arc-red/20">
           <h3 class="font-semibold mb-2">Screenshot Requirements:</h3>
           <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
             <li>Must show the kill feed with target's gamertag</li>
@@ -219,7 +219,7 @@ async function handleSubmit() {
           <button
             @click="handleSubmit"
             :disabled="!selectedFile || submitting"
-            class="flex-1 bg-arc-cyan hover:bg-arc-cyan/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold transition"
+            class="flex-1 bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold transition"
           >
             {{ submitting ? 'Submitting...' : 'Submit Claim' }}
           </button>

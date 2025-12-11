@@ -30,41 +30,41 @@ const currentUser = computed(() => getCurrentUser())
           </RouterLink>
 
           <div class="flex gap-6 items-center">
-            <RouterLink to="/" class="hover:text-arc-cyan transition" active-class="text-arc-cyan">
+            <RouterLink to="/" class="hover:text-arc-red transition" active-class="text-arc-red">
               Home
             </RouterLink>
             <RouterLink
               to="/bounties"
-              class="hover:text-arc-cyan transition"
-              active-class="text-arc-cyan"
+              class="hover:text-arc-red transition"
+              active-class="text-arc-red"
             >
               Bounties
             </RouterLink>
             <RouterLink
               to="/activity"
-              class="hover:text-arc-cyan transition"
-              active-class="text-arc-cyan"
+              class="hover:text-arc-red transition"
+              active-class="text-arc-red"
             >
               Activity
             </RouterLink>
             <RouterLink
               to="/my-claims"
-              class="hover:text-arc-cyan transition"
-              active-class="text-arc-cyan"
+              class="hover:text-arc-red transition"
+              active-class="text-arc-red"
             >
               My Claims
             </RouterLink>
             <RouterLink
               to="/leaderboard"
-              class="hover:text-arc-cyan transition"
-              active-class="text-arc-cyan"
+              class="hover:text-arc-red transition"
+              active-class="text-arc-red"
             >
               Leaderboard
             </RouterLink>
             <RouterLink
               to="/verify"
-              class="hover:text-arc-cyan transition"
-              active-class="text-arc-cyan"
+              class="hover:text-arc-red transition"
+              active-class="text-arc-red"
             >
               Verify
             </RouterLink>
@@ -72,9 +72,9 @@ const currentUser = computed(() => getCurrentUser())
             <!-- User Info -->
             <div
               v-if="currentUser"
-              class="flex items-center gap-4 ml-4 pl-4 border-l border-arc-cyan/20"
+              class="flex items-center gap-4 ml-4 pl-4 border-l border-arc-red/20"
             >
-              <RouterLink :to="`/profile/${currentUser.id}`" class="hover:text-arc-cyan transition">
+              <RouterLink :to="`/profile/${currentUser.id}`" class="hover:text-arc-red transition">
                 {{ currentUser.username }}
               </RouterLink>
               <button

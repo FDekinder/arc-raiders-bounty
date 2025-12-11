@@ -26,7 +26,7 @@ function getColorClasses(type: Toast['type']) {
     case 'error':
       return 'bg-arc-red/90 border-arc-red'
     case 'info':
-      return 'bg-arc-cyan/90 border-arc-cyan'
+      return 'bg-arc-red/90 border-arc-red'
     case 'warning':
       return 'bg-arc-yellow/90 border-arc-yellow'
   }

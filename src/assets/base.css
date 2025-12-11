@@ -19,13 +19,13 @@
   --vt-c-black-mute: #1e1e2d;
 
   /* Accent color */
-  --vt-c-indigo: var(--arc-cyan);
+  --vt-c-indigo: var(--arc-red);
 
   /* Dividers with Arc Raiders colors */
-  --vt-c-divider-light-1: rgba(0, 212, 255, 0.29);
-  --vt-c-divider-light-2: rgba(0, 212, 255, 0.12);
-  --vt-c-divider-dark-1: rgba(0, 212, 255, 0.35);
-  --vt-c-divider-dark-2: rgba(0, 212, 255, 0.18);
+  --vt-c-divider-light-1: rgba(255, 51, 85, 0.29);
+  --vt-c-divider-light-2: rgba(255, 51, 85, 0.12);
+  --vt-c-divider-dark-1: rgba(255, 51, 85, 0.35);
+  --vt-c-divider-dark-2: rgba(255, 51, 85, 0.18);
 
   /* Text colors */
   --vt-c-text-light-1: var(--arc-navy);
@@ -43,7 +43,7 @@
   --color-border: var(--vt-c-divider-dark-2);
   --color-border-hover: var(--vt-c-divider-dark-1);
 
-  --color-heading: var(--arc-cyan);
+  --color-heading: var(--arc-red);
   --color-text: var(--vt-c-text-dark-2);
 
   --section-gap: 160px;
@@ -58,7 +58,7 @@
     --color-border: var(--vt-c-divider-dark-2);
     --color-border-hover: var(--vt-c-divider-dark-1);
 
-    --color-heading: var(--arc-cyan);
+    --color-heading: var(--arc-red);
     --color-text: var(--vt-c-text-dark-2);
   }
 }

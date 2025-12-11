@@ -35,7 +35,7 @@ onMounted(async () => {
 
 function getMedalColor(index: number) {
   if (index === 0) return 'from-arc-yellow to-arc-yellow-600'
-  if (index === 1) return 'from-arc-cyan-300 to-arc-cyan-400'
+  if (index === 1) return 'from-arc-red-300 to-arc-red-400'
   if (index === 2) return 'from-arc-red to-arc-red-600'
   return 'from-gray-600 to-gray-700'
 }
@@ -53,7 +53,7 @@ function getMedalEmoji(index: number) {
     <!-- Hero Section -->
     <div class="container mx-auto px-4 py-20 text-center">
       <h1 class="text-6xl md:text-7xl font-bold mb-6">
-        <span class="bg-gradient-to-r from-arc-cyan via-arc-green via-arc-yellow to-arc-red bg-clip-text text-transparent">
+        <span class="bg-gradient-to-r from-arc-red via-arc-green via-arc-yellow to-arc-red bg-clip-text text-transparent">
           ARC RAIDERS
         </span>
         <br />
@@ -84,7 +84,7 @@ function getMedalEmoji(index: number) {
       <div class="text-center mb-12">
         <h2 class="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
           <Target class="text-arc-red" :size="40" />
-          <span class="bg-gradient-to-r from-arc-cyan via-arc-yellow to-arc-red bg-clip-text text-transparent">Most Wanted</span>
+          <span class="bg-gradient-to-r from-arc-red via-arc-yellow to-arc-red bg-clip-text text-transparent">Most Wanted</span>
         </h2>
         <p class="text-gray-400 text-lg">The highest-value targets in Arc Raiders</p>
       </div>
@@ -114,12 +114,12 @@ function getMedalEmoji(index: number) {
             class="bg-arc-navy rounded-xl p-8 pt-16 text-center hover:bg-arc-dark transition transform hover:scale-105 border-2 border-arc-red/30 hover:border-arc-red hover:shadow-lg hover:shadow-arc-red/30"
           >
             <!-- Rank -->
-            <div class="text-6xl font-bold text-arc-cyan/20 mb-2">#{{ index + 1 }}</div>
+            <div class="text-6xl font-bold text-arc-red/20 mb-2">#{{ index + 1 }}</div>
 
             <!-- Profile Picture -->
             <div class="flex justify-center mb-4">
               <div
-                class="w-24 h-24 rounded-full border-4 border-arc-cyan overflow-hidden bg-arc-dark"
+                class="w-24 h-24 rounded-full border-4 border-arc-red overflow-hidden bg-arc-dark"
               >
                 <img
                   v-if="bounty.avatar_url"
@@ -129,7 +129,7 @@ function getMedalEmoji(index: number) {
                 />
                 <div
                   v-else
-                  class="w-full h-full flex items-center justify-center text-4xl font-bold text-arc-cyan"
+                  class="w-full h-full flex items-center justify-center text-4xl font-bold text-arc-red"
                 >
                   {{ bounty.target_gamertag.charAt(0).toUpperCase() }}
                 </div>
@@ -141,12 +141,12 @@ function getMedalEmoji(index: number) {
 
             <!-- Stats -->
             <div class="space-y-3 mb-6">
-              <div class="bg-arc-dark rounded-lg p-3 border border-arc-cyan/30">
-                <div class="text-3xl font-bold text-arc-cyan">{{ bounty.total_bounty }}</div>
+              <div class="bg-arc-dark rounded-lg p-3 border border-arc-red/30">
+                <div class="text-3xl font-bold text-arc-red">{{ bounty.total_bounty }}</div>
                 <div class="text-sm text-gray-400">Total Bounty</div>
               </div>
 
-              <div class="bg-arc-dark rounded-lg p-3 border border-arc-cyan/30">
+              <div class="bg-arc-dark rounded-lg p-3 border border-arc-red/30">
                 <div class="text-xl font-bold">{{ bounty.bounty_count }}</div>
                 <div class="text-sm text-gray-400">Active Bounties</div>
               </div>
@@ -217,7 +217,7 @@ function getMedalEmoji(index: number) {
     <!-- CTA Section -->
     <div class="container mx-auto px-4 py-20 text-center">
       <div
-        class="bg-gradient-to-r from-arc-cyan/10 via-arc-green/10 via-arc-yellow/10 to-arc-red/10 border-2 border-arc-red/30 rounded-2xl p-12 shadow-lg shadow-arc-red/20"
+        class="bg-gradient-to-r from-arc-red/10 via-arc-green/10 via-arc-yellow/10 to-arc-red/10 border-2 border-arc-red/30 rounded-2xl p-12 shadow-lg shadow-arc-red/20"
       >
         <h2 class="text-4xl font-bold mb-4">Ready to Start Hunting?</h2>
         <p class="text-xl text-gray-300 mb-8">

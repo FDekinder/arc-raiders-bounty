@@ -223,7 +223,7 @@ function getStatusIcon(status: string) {
           @click="setFilterAll()"
           :class="[
             'px-6 py-2 rounded-lg font-semibold transition',
-            filter === 'all' ? 'bg-arc-cyan text-white' : 'bg-arc-navy hover:bg-arc-navy/80',
+            filter === 'all' ? 'bg-arc-red text-white' : 'bg-arc-navy hover:bg-arc-navy/80',
           ]"
         >
           All
@@ -252,7 +252,7 @@ function getStatusIcon(status: string) {
                 <img
                   :src="claim.screenshot_url"
                   alt="Claim screenshot"
-                  class="w-full rounded-lg border border-arc-cyan/20 hover:border-arc-cyan transition"
+                  class="w-full rounded-lg border border-arc-red/20 hover:border-arc-red transition"
                 />
                 <div
                   class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center rounded-lg"
@@ -288,7 +288,7 @@ function getStatusIcon(status: string) {
 
                 <div>
                   <p class="text-sm text-gray-400">Bounty Amount</p>
-                  <p class="text-2xl font-bold text-arc-cyan">
+                  <p class="text-2xl font-bold text-arc-red">
                     {{ claim.bounty?.bounty_amount }} points
                   </p>
                 </div>

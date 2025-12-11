@@ -156,7 +156,7 @@ const filteredBounties = computed(() => {
         </div>
         <RouterLink
           to="/create-bounty"
-          class="bg-arc-cyan hover:bg-arc-cyan/80 px-6 py-2 rounded-lg font-semibold"
+          class="bg-arc-red hover:bg-arc-red/80 px-6 py-2 rounded-lg font-semibold"
         >
           + New Bounty
         </RouterLink>
@@ -174,14 +174,14 @@ const filteredBounties = computed(() => {
               v-model="searchQuery"
               type="text"
               placeholder="Search by gamertag..."
-              class="w-full bg-gray-700 border border-arc-cyan/30 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-arc-cyan"
+              class="w-full bg-gray-700 border border-arc-red/30 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-arc-red"
             />
           </div>
 
           <div>
             <select
               v-model="sortBy"
-              class="w-full bg-gray-700 border border-arc-cyan/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-arc-cyan"
+              class="w-full bg-gray-700 border border-arc-red/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-arc-red"
             >
               <option value="amount-high">Highest Bounty</option>
               <option value="amount-low">Lowest Bounty</option>
@@ -201,17 +201,17 @@ const filteredBounties = computed(() => {
       <!-- Most Wanted Section -->
       <div class="bg-arc-navy rounded-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
-          <Target class="text-arc-cyan" />
+          <Target class="text-arc-red" />
           Most Wanted
         </h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div
             v-for="(player, index) in mostWanted"
             :key="player.target_gamertag"
-            class="bg-gray-700 p-4 rounded-lg border border-arc-cyan/20"
+            class="bg-gray-700 p-4 rounded-lg border border-arc-red/20"
           >
             <div class="flex items-center gap-3">
-              <div class="text-3xl font-bold text-arc-cyan">#{{ index + 1 }}</div>
+              <div class="text-3xl font-bold text-arc-red">#{{ index + 1 }}</div>
               <div>
                 <div class="font-bold">{{ player.target_gamertag }}</div>
                 <div class="text-sm text-gray-400">
@@ -267,7 +267,7 @@ const filteredBounties = computed(() => {
                 </span>
 
                 <!-- Hunter Count -->
-                <span class="flex items-center gap-1 text-arc-cyan">
+                <span class="flex items-center gap-1 text-arc-red">
                   <Users :size="16" />
                   {{ hunterCounts[bounty.id] || 0 }} hunter{{
                     (hunterCounts[bounty.id] || 0) !== 1 ? 's' : ''
@@ -290,7 +290,7 @@ const filteredBounties = computed(() => {
               </div>
             </div>
             <div class="text-right">
-              <div class="text-3xl font-bold text-arc-cyan">{{ bounty.bounty_amount }}</div>
+              <div class="text-3xl font-bold text-arc-red">{{ bounty.bounty_amount }}</div>
               <div class="text-sm text-gray-400 mb-2">points</div>
 
               <!-- Hunt/Claim Buttons -->
@@ -300,7 +300,7 @@ const filteredBounties = computed(() => {
                     v-if="!huntingStatus[bounty.id]"
                     @click="handleJoinHunt(bounty.id)"
                     :disabled="joiningHunt === bounty.id || myActiveHunts >= 3"
-                    class="bg-arc-cyan hover:bg-arc-cyan/80 disabled:bg-gray-600 px-4 py-2 rounded text-sm font-semibold flex items-center justify-center gap-2 transition"
+                    class="bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 px-4 py-2 rounded text-sm font-semibold flex items-center justify-center gap-2 transition"
                     :title="myActiveHunts >= 3 ? 'Maximum 3 active hunts' : 'Join hunt'"
                   >
                     <UserPlus :size="16" />
@@ -320,7 +320,7 @@ const filteredBounties = computed(() => {
 
                 <RouterLink
                   :to="`/claim/${bounty.id}`"
-                  class="bg-arc-cyan hover:bg-arc-cyan/80 px-4 py-2 rounded text-sm font-semibold text-center transition"
+                  class="bg-arc-red hover:bg-arc-red/80 px-4 py-2 rounded text-sm font-semibold text-center transition"
                 >
                   Claim Bounty
                 </RouterLink>

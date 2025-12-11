@@ -137,7 +137,7 @@ function handlePlatformChange() {
                   :class="[
                     'p-4 rounded-lg border-2 transition font-semibold flex flex-col items-center gap-2',
                     selectedPlatform === platform.value
-                      ? 'border-arc-cyan bg-arc-cyan/10'
+                      ? 'border-arc-red bg-arc-red/10'
                       : 'border-gray-600 hover:border-gray-500',
                   ]"
                 >
@@ -161,7 +161,7 @@ function handlePlatformChange() {
                     v-model="gamertag"
                     type="text"
                     placeholder="Enter username or ID..."
-                    class="w-full bg-gray-700 border border-arc-cyan/30 rounded-lg px-4 py-3 focus:outline-none focus:border-arc-cyan"
+                    class="w-full bg-gray-700 border border-arc-red/30 rounded-lg px-4 py-3 focus:outline-none focus:border-arc-red"
                     required
                     @input="verificationStatus = 'idle'"
                   />
@@ -182,7 +182,7 @@ function handlePlatformChange() {
                   type="button"
                   @click="verifyGamertag"
                   :disabled="verifying || !gamertag.trim()"
-                  class="bg-arc-cyan hover:bg-arc-cyan/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition"
+                  class="bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition"
                 >
                   <Loader v-if="verifying" class="animate-spin" :size="18" />
                   <Search v-else :size="18" />
@@ -216,7 +216,7 @@ function handlePlatformChange() {
                     v-if="verifiedPlayer.profileUrl && selectedPlatform !== 'xbox'"
                     :href="verifiedPlayer.profileUrl"
                     target="_blank"
-                    class="text-sm text-arc-cyan hover:text-arc-cyan/80"
+                    class="text-sm text-arc-red hover:text-arc-red/80"
                   >
                     View Profile →
                   </a>
@@ -238,7 +238,7 @@ function handlePlatformChange() {
                 type="number"
                 min="10"
                 placeholder="Minimum 10 points"
-                class="w-full bg-gray-700 border border-arc-cyan/30 rounded-lg px-4 py-3 focus:outline-none focus:border-arc-cyan"
+                class="w-full bg-gray-700 border border-arc-red/30 rounded-lg px-4 py-3 focus:outline-none focus:border-arc-red"
                 required
               />
               <p class="text-sm text-gray-400 mt-2">Higher bounties attract more hunters!</p>
@@ -256,7 +256,7 @@ function handlePlatformChange() {
             <button
               type="submit"
               :disabled="loading || verificationStatus !== 'success'"
-              class="w-full bg-arc-cyan hover:bg-arc-cyan/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition"
+              class="w-full bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition"
             >
               <Target :size="20" />
               {{ loading ? 'Creating Bounty...' : 'Create Bounty' }}
