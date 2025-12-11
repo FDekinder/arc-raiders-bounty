@@ -36,7 +36,7 @@ function handleSteamLogin() {
 
         <button
           @click="handleSteamLogin"
-          class="w-full bg-gradient-to-r from-arc-cyan via-arc-green to-arc-red hover:from-arc-cyan-600 hover:to-arc-red-600 text-white font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg"
+          class="w-full bg-arc-red hover:bg-arc-red-600 text-white font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-red/30"
         >
           <svg class="w-8 h-8" viewBox="0 0 256 256" fill="currentColor">
             <path

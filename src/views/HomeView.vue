@@ -66,13 +66,13 @@ function getMedalEmoji(index: number) {
       <div class="flex gap-4 justify-center flex-wrap">
         <RouterLink
           to="/bounties"
-          class="bg-gradient-to-r from-arc-cyan to-arc-red hover:from-arc-cyan-600 hover:to-arc-red-600 px-8 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105 text-white shadow-lg"
+          class="bg-arc-red hover:bg-arc-red-600 px-8 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105 text-white shadow-lg shadow-arc-red/30"
         >
           View Bounties
         </RouterLink>
         <RouterLink
           to="/create-bounty"
-          class="bg-arc-navy border-2 border-arc-red hover:bg-arc-dark hover:border-arc-red hover:shadow-lg hover:shadow-arc-red/30 px-8 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105"
+          class="bg-arc-navy border-2 border-arc-red hover:bg-arc-red hover:shadow-lg hover:shadow-arc-red/30 px-8 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105"
         >
           Create Bounty
         </RouterLink>
@@ -155,7 +155,7 @@ function getMedalEmoji(index: number) {
             <!-- View Bounties Button -->
             <RouterLink
               to="/bounties"
-              class="block w-full bg-gradient-to-r from-arc-red to-arc-cyan hover:from-arc-red-600 hover:to-arc-cyan-600 text-white py-3 rounded-lg font-semibold transition shadow-md"
+              class="block w-full bg-arc-red hover:bg-arc-red-600 text-white py-3 rounded-lg font-semibold transition shadow-md"
             >
               Hunt This Target
             </RouterLink>
@@ -168,7 +168,7 @@ function getMedalEmoji(index: number) {
         <p class="text-xl mb-4">No bounties yet!</p>
         <RouterLink
           to="/create-bounty"
-          class="inline-block bg-gradient-to-r from-arc-red to-arc-cyan hover:from-arc-red-600 hover:to-arc-cyan-600 text-white px-6 py-3 rounded-lg font-semibold transition shadow-md"
+          class="inline-block bg-arc-red hover:bg-arc-red-600 text-white px-6 py-3 rounded-lg font-semibold transition shadow-md shadow-arc-red/30"
         >
           Be the First to Create One
         </RouterLink>
@@ -225,7 +225,7 @@ function getMedalEmoji(index: number) {
         </p>
         <RouterLink
           to="/bounties"
-          class="inline-block bg-gradient-to-r from-arc-cyan to-arc-red hover:from-arc-cyan-600 hover:to-arc-red-600 text-white px-10 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105 shadow-lg"
+          class="inline-block bg-arc-red hover:bg-arc-red-600 text-white px-10 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105 shadow-lg shadow-arc-red/40"
         >
           View All Bounties
         </RouterLink>

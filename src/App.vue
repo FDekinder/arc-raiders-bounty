@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { Target, LogOut } from 'lucide-vue-next'
+import { LogOut } from 'lucide-vue-next'
 import ToastContainer from './components/ToastContainer.vue'
 import ExpirationChecker from './components/ExpirationChecker.vue'
 import { getCurrentUser, logout } from './lib/auth'
@@ -22,8 +22,7 @@ const currentUser = computed(() => getCurrentUser())
       <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-16">
           <RouterLink to="/" class="flex items-center gap-3 font-bold text-xl">
-            <img src="/arc-logo.svg" alt="Arc Raiders Logo" class="h-10 w-10" />
-            <Target class="text-arc-cyan" />
+            <img src="/arc-logo.svg" alt="Arc Raiders Logo" class="h-12 w-12" />
             <span>Arc Bounty</span>
           </RouterLink>
 
