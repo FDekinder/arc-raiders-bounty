@@ -3,8 +3,8 @@
   <rect width="120" height="120" fill="#0a0a14"/>
 
   <!-- Diagonal stripes inspired by Arc Raiders logo -->
-  <!-- Cyan stripe -->
-  <path d="M 20 0 L 40 0 L 80 120 L 60 120 Z" fill="#00d4ff"/>
+  <!-- Red stripe -->
+  <path d="M 20 0 L 40 0 L 80 120 L 60 120 Z" fill="#ff3355"/>
 
   <!-- Green stripe -->
   <path d="M 45 0 L 65 0 L 105 120 L 85 120 Z" fill="#00ff88"/>

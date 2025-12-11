@@ -144,7 +144,7 @@ function getStatusIcon(status: string) {
           @click="filter = 'all'"
           :class="[
             'px-6 py-2 rounded-lg font-semibold transition',
-            filter === 'all' ? 'bg-arc-cyan text-white' : 'bg-arc-navy hover:bg-arc-navy/80',
+            filter === 'all' ? 'bg-arc-red text-white' : 'bg-arc-navy hover:bg-arc-navy/80',
           ]"
         >
           All ({{ stats.total }})
@@ -191,7 +191,7 @@ function getStatusIcon(status: string) {
         </p>
         <RouterLink
           to="/bounties"
-          class="inline-block bg-arc-cyan hover:bg-arc-cyan/80 px-6 py-2 rounded-lg font-semibold"
+          class="inline-block bg-arc-red hover:bg-arc-red/80 px-6 py-2 rounded-lg font-semibold"
         >
           Browse Bounties
         </RouterLink>
@@ -211,7 +211,7 @@ function getStatusIcon(status: string) {
                 <img
                   :src="claim.screenshot_url"
                   alt="Claim screenshot"
-                  class="w-full rounded-lg border border-arc-cyan/20 hover:border-arc-cyan transition"
+                  class="w-full rounded-lg border border-arc-red/20 hover:border-arc-red transition"
                 />
               </a>
             </div>
@@ -249,7 +249,7 @@ function getStatusIcon(status: string) {
               <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                 <div>
                   <p class="text-sm text-gray-400">Bounty Amount</p>
-                  <p class="text-xl font-bold text-arc-cyan">
+                  <p class="text-xl font-bold text-arc-red">
                     {{ claim.bounty?.bounty_amount }} pts
                   </p>
                 </div>

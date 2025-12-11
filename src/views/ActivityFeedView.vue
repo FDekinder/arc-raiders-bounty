@@ -102,9 +102,9 @@ function getActivityIcon(type: string) {
 function getActivityColor(type: string) {
   switch (type) {
     case 'bounty_created':
-      return 'text-arc-cyan bg-arc-cyan/10'
+      return 'text-arc-red bg-arc-red/10'
     case 'claim_submitted':
-      return 'text-arc-cyan bg-arc-cyan/10'
+      return 'text-arc-red bg-arc-red/10'
     case 'claim_approved':
       return 'text-arc-green bg-arc-green/10'
     case 'claim_rejected':
@@ -192,7 +192,7 @@ function getActivityText(activity: Activity) {
               <div v-if="activity.type === 'bounty_created'" class="mt-3">
                 <RouterLink
                   :to="`/claim/${activity.data.id}`"
-                  class="inline-block bg-arc-cyan hover:bg-arc-cyan/80 px-4 py-2 rounded text-sm font-semibold transition"
+                  class="inline-block bg-arc-red hover:bg-arc-red/80 px-4 py-2 rounded text-sm font-semibold transition"
                 >
                   View Bounty
                 </RouterLink>

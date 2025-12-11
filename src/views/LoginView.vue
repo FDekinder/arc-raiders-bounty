@@ -27,7 +27,7 @@ function handleSteamLogin() {
       <div class="bg-arc-navy rounded-lg p-8 shadow-2xl">
         <div class="text-center mb-8">
           <h1
-            class="text-4xl font-bold mb-2 bg-gradient-to-r from-arc-cyan via-arc-green via-arc-yellow to-arc-red bg-clip-text text-transparent"
+            class="text-4xl font-bold mb-2 bg-gradient-to-r from-arc-red via-arc-green via-arc-yellow to-arc-red bg-clip-text text-transparent"
           >
             ARC RAIDERS BOUNTY
           </h1>

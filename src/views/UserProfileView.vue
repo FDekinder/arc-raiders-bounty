@@ -173,8 +173,8 @@ function getStatusColor(status: string) {
               </div>
               <div>
                 <div class="flex items-center gap-2">
-                  <TrendingUp class="text-arc-cyan" :size="24" />
-                  <span class="text-2xl font-bold text-arc-cyan"
+                  <TrendingUp class="text-arc-red" :size="24" />
+                  <span class="text-2xl font-bold text-arc-red"
                     >{{ stats?.successRate || 0 }}%</span
                   >
                 </div>
@@ -206,7 +206,7 @@ function getStatusColor(status: string) {
               <span class="text-gray-400">Claims Rejected</span>
               <span class="font-bold text-arc-red">{{ stats?.rejectedClaims || 0 }}</span>
             </div>
-            <div class="flex justify-between border-t border-arc-cyan/20 pt-3">
+            <div class="flex justify-between border-t border-arc-red/20 pt-3">
               <span class="text-gray-400">Success Rate</span>
               <span class="font-bold">{{ stats?.successRate || 0 }}%</span>
             </div>
@@ -216,7 +216,7 @@ function getStatusColor(status: string) {
         <!-- Bounty Creator Stats -->
         <div class="bg-arc-navy rounded-lg p-6">
           <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-            <Target class="text-arc-cyan" />
+            <Target class="text-arc-red" />
             Bounty Creator
           </h3>
           <div class="space-y-3">
@@ -265,7 +265,7 @@ function getStatusColor(status: string) {
             <div
               v-for="claim in claimsSubmitted.slice(0, 5)"
               :key="claim.id"
-              class="bg-gray-700 rounded-lg p-4 flex justify-between items-center border border-arc-cyan/20"
+              class="bg-gray-700 rounded-lg p-4 flex justify-between items-center border border-arc-red/20"
             >
               <div>
                 <div class="font-bold">{{ claim.bounty?.target_gamertag }}</div>
@@ -303,7 +303,7 @@ function getStatusColor(status: string) {
             <div
               v-for="bounty in bountiesCreated.slice(0, 5)"
               :key="bounty.id"
-              class="bg-gray-700 rounded-lg p-4 flex justify-between items-center border border-arc-cyan/20"
+              class="bg-gray-700 rounded-lg p-4 flex justify-between items-center border border-arc-red/20"
             >
               <div>
                 <div class="font-bold">{{ bounty.target_gamertag }}</div>
@@ -312,7 +312,7 @@ function getStatusColor(status: string) {
                 </div>
               </div>
               <div class="text-right">
-                <div class="font-bold text-arc-cyan">{{ bounty.bounty_amount }} pts</div>
+                <div class="font-bold text-arc-red">{{ bounty.bounty_amount }} pts</div>
                 <div
                   class="text-sm"
                   :class="bounty.status === 'active' ? 'text-arc-yellow' : 'text-arc-green'"

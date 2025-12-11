@@ -66,7 +66,7 @@ function getMedalColor(index: number) {
           <div class="flex-1">
             <RouterLink
               :to="`/profile/${hunter.id}`"
-              class="text-2xl font-bold hover:text-arc-cyan transition"
+              class="text-2xl font-bold hover:text-arc-red transition"
             >
               {{ hunter.username }}
             </RouterLink>
