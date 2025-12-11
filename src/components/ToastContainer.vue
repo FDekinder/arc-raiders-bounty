@@ -22,13 +22,13 @@ function getIcon(type: Toast['type']) {
 function getColorClasses(type: Toast['type']) {
   switch (type) {
     case 'success':
-      return 'bg-green-500/90 border-green-400'
+      return 'bg-arc-green/90 border-arc-green'
     case 'error':
-      return 'bg-red-500/90 border-red-400'
+      return 'bg-arc-red/90 border-arc-red'
     case 'info':
-      return 'bg-blue-500/90 border-blue-400'
+      return 'bg-arc-cyan/90 border-arc-cyan'
     case 'warning':
-      return 'bg-yellow-500/90 border-yellow-400'
+      return 'bg-arc-yellow/90 border-arc-yellow'
   }
 }
 </script>

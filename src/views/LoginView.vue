@@ -21,13 +21,13 @@ function handleSteamLogin() {
 
 <template>
   <div
-    class="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white flex items-center justify-center"
+    class="min-h-screen bg-gradient-to-b from-arc-dark to-arc-navy text-white flex items-center justify-center"
   >
     <div class="max-w-md w-full mx-4">
-      <div class="bg-gray-800 rounded-lg p-8 shadow-2xl">
+      <div class="bg-arc-navy rounded-lg p-8 shadow-2xl">
         <div class="text-center mb-8">
           <h1
-            class="text-4xl font-bold mb-2 bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent"
+            class="text-4xl font-bold mb-2 bg-gradient-to-r from-arc-cyan to-arc-yellow bg-clip-text text-transparent"
           >
             ARC RAIDERS BOUNTY
           </h1>
@@ -36,7 +36,7 @@ function handleSteamLogin() {
 
         <button
           @click="handleSteamLogin"
-          class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg"
+          class="w-full bg-gradient-to-r from-arc-cyan to-arc-cyan/80 hover:from-arc-cyan/80 hover:to-arc-cyan text-white font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg"
         >
           <svg class="w-8 h-8" viewBox="0 0 256 256" fill="currentColor">
             <path

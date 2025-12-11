@@ -109,11 +109,11 @@ function getStatusIcon(status: string) {
 function getStatusColor(status: string) {
   switch (status) {
     case 'approved':
-      return 'text-green-500'
+      return 'text-arc-green'
     case 'rejected':
-      return 'text-red-500'
+      return 'text-arc-red'
     case 'pending':
-      return 'text-yellow-500'
+      return 'text-arc-yellow'
     default:
       return 'text-gray-500'
   }
@@ -121,7 +121,7 @@ function getStatusColor(status: string) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-900 text-white">
+  <div class="min-h-screen bg-arc-dark text-white">
     <div v-if="loading" class="flex items-center justify-center min-h-screen">
       <div class="text-xl">Loading profile...</div>
     </div>
@@ -135,7 +135,7 @@ function getStatusColor(status: string) {
 
     <div v-else class="container mx-auto px-4 py-8">
       <!-- Profile Header -->
-      <div class="bg-gray-800 rounded-lg p-8 mb-8">
+      <div class="bg-arc-navy rounded-lg p-8 mb-8">
         <div class="flex items-start gap-6">
           <!-- Avatar -->
           <div
@@ -155,8 +155,8 @@ function getStatusColor(status: string) {
             <div class="flex gap-6">
               <div>
                 <div class="flex items-center gap-2">
-                  <Award class="text-yellow-500" :size="24" />
-                  <span class="text-2xl font-bold text-yellow-500">{{
+                  <Award class="text-arc-yellow" :size="24" />
+                  <span class="text-2xl font-bold text-arc-yellow">{{
                     stats?.totalPoints || 0
                   }}</span>
                 </div>
@@ -164,8 +164,8 @@ function getStatusColor(status: string) {
               </div>
               <div>
                 <div class="flex items-center gap-2">
-                  <Trophy class="text-green-500" :size="24" />
-                  <span class="text-2xl font-bold text-green-500">{{
+                  <Trophy class="text-arc-green" :size="24" />
+                  <span class="text-2xl font-bold text-arc-green">{{
                     stats?.bountiesCompleted || 0
                   }}</span>
                 </div>
@@ -173,8 +173,8 @@ function getStatusColor(status: string) {
               </div>
               <div>
                 <div class="flex items-center gap-2">
-                  <TrendingUp class="text-blue-500" :size="24" />
-                  <span class="text-2xl font-bold text-blue-500"
+                  <TrendingUp class="text-arc-cyan" :size="24" />
+                  <span class="text-2xl font-bold text-arc-cyan"
                     >{{ stats?.successRate || 0 }}%</span
                   >
                 </div>
@@ -188,25 +188,25 @@ function getStatusColor(status: string) {
       <!-- Detailed Stats Grid -->
       <div class="grid md:grid-cols-3 gap-6 mb-8">
         <!-- Hunter Stats -->
-        <div class="bg-gray-800 rounded-lg p-6">
+        <div class="bg-arc-navy rounded-lg p-6">
           <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-            <Trophy class="text-green-500" />
+            <Trophy class="text-arc-green" />
             Hunter Stats
           </h3>
           <div class="space-y-3">
             <div class="flex justify-between">
               <span class="text-gray-400">Claims Approved</span>
-              <span class="font-bold text-green-500">{{ stats?.approvedClaims || 0 }}</span>
+              <span class="font-bold text-arc-green">{{ stats?.approvedClaims || 0 }}</span>
             </div>
             <div class="flex justify-between">
               <span class="text-gray-400">Claims Pending</span>
-              <span class="font-bold text-yellow-500">{{ stats?.pendingClaims || 0 }}</span>
+              <span class="font-bold text-arc-yellow">{{ stats?.pendingClaims || 0 }}</span>
             </div>
             <div class="flex justify-between">
               <span class="text-gray-400">Claims Rejected</span>
-              <span class="font-bold text-red-500">{{ stats?.rejectedClaims || 0 }}</span>
+              <span class="font-bold text-arc-red">{{ stats?.rejectedClaims || 0 }}</span>
             </div>
-            <div class="flex justify-between border-t border-gray-700 pt-3">
+            <div class="flex justify-between border-t border-arc-cyan/20 pt-3">
               <span class="text-gray-400">Success Rate</span>
               <span class="font-bold">{{ stats?.successRate || 0 }}%</span>
             </div>
@@ -214,9 +214,9 @@ function getStatusColor(status: string) {
         </div>
 
         <!-- Bounty Creator Stats -->
-        <div class="bg-gray-800 rounded-lg p-6">
+        <div class="bg-arc-navy rounded-lg p-6">
           <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-            <Target class="text-red-500" />
+            <Target class="text-arc-cyan" />
             Bounty Creator
           </h3>
           <div class="space-y-3">
@@ -226,17 +226,17 @@ function getStatusColor(status: string) {
             </div>
             <div class="flex justify-between">
               <span class="text-gray-400">Active</span>
-              <span class="font-bold text-yellow-500">{{ stats?.activeBounties || 0 }}</span>
+              <span class="font-bold text-arc-yellow">{{ stats?.activeBounties || 0 }}</span>
             </div>
             <div class="flex justify-between">
               <span class="text-gray-400">Completed</span>
-              <span class="font-bold text-green-500">{{ stats?.completedBounties || 0 }}</span>
+              <span class="font-bold text-arc-green">{{ stats?.completedBounties || 0 }}</span>
             </div>
           </div>
         </div>
 
         <!-- Other Stats -->
-        <div class="bg-gray-800 rounded-lg p-6">
+        <div class="bg-arc-navy rounded-lg p-6">
           <h3 class="text-xl font-bold mb-4">Other Stats</h3>
           <div class="space-y-3">
             <div class="flex justify-between">
@@ -245,14 +245,14 @@ function getStatusColor(status: string) {
             </div>
             <div class="flex justify-between">
               <span class="text-gray-400">Total Points</span>
-              <span class="font-bold text-yellow-500">{{ stats?.totalPoints || 0 }}</span>
+              <span class="font-bold text-arc-yellow">{{ stats?.totalPoints || 0 }}</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Recent Activity Tabs -->
-      <div class="bg-gray-800 rounded-lg p-6">
+      <div class="bg-arc-navy rounded-lg p-6">
         <h3 class="text-2xl font-bold mb-6">Recent Activity</h3>
 
         <!-- Recent Claims -->
@@ -265,7 +265,7 @@ function getStatusColor(status: string) {
             <div
               v-for="claim in claimsSubmitted.slice(0, 5)"
               :key="claim.id"
-              class="bg-gray-700 rounded-lg p-4 flex justify-between items-center"
+              class="bg-gray-700 rounded-lg p-4 flex justify-between items-center border border-arc-cyan/20"
             >
               <div>
                 <div class="font-bold">{{ claim.bounty?.target_gamertag }}</div>
@@ -278,7 +278,7 @@ function getStatusColor(status: string) {
                   <div class="font-bold">{{ claim.bounty?.bounty_amount }} pts</div>
                   <div
                     v-if="claim.verification_status === 'approved'"
-                    class="text-sm text-green-500"
+                    class="text-sm text-arc-green"
                   >
                     +{{ claim.points_awarded }} earned
                   </div>
@@ -303,7 +303,7 @@ function getStatusColor(status: string) {
             <div
               v-for="bounty in bountiesCreated.slice(0, 5)"
               :key="bounty.id"
-              class="bg-gray-700 rounded-lg p-4 flex justify-between items-center"
+              class="bg-gray-700 rounded-lg p-4 flex justify-between items-center border border-arc-cyan/20"
             >
               <div>
                 <div class="font-bold">{{ bounty.target_gamertag }}</div>
@@ -312,10 +312,10 @@ function getStatusColor(status: string) {
                 </div>
               </div>
               <div class="text-right">
-                <div class="font-bold text-red-500">{{ bounty.bounty_amount }} pts</div>
+                <div class="font-bold text-arc-cyan">{{ bounty.bounty_amount }} pts</div>
                 <div
                   class="text-sm"
-                  :class="bounty.status === 'active' ? 'text-yellow-500' : 'text-green-500'"
+                  :class="bounty.status === 'active' ? 'text-arc-yellow' : 'text-arc-green'"
                 >
                   {{ bounty.status }}
                 </div>

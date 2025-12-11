@@ -18,50 +18,50 @@ const currentUser = computed(() => getCurrentUser())
     <ExpirationChecker />
 
     <!-- Navigation -->
-    <nav class="bg-gray-800 text-white border-b border-gray-700">
+    <nav class="bg-arc-dark text-white border-b border-arc-cyan/20">
       <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-16">
           <RouterLink to="/" class="flex items-center gap-2 font-bold text-xl">
-            <Target class="text-red-500" />
+            <Target class="text-arc-cyan" />
             <span>Arc Bounty</span>
           </RouterLink>
 
           <div class="flex gap-6 items-center">
-            <RouterLink to="/" class="hover:text-red-500 transition" active-class="text-red-500">
+            <RouterLink to="/" class="hover:text-arc-cyan transition" active-class="text-arc-cyan">
               Home
             </RouterLink>
             <RouterLink
               to="/bounties"
-              class="hover:text-red-500 transition"
-              active-class="text-red-500"
+              class="hover:text-arc-cyan transition"
+              active-class="text-arc-cyan"
             >
               Bounties
             </RouterLink>
             <RouterLink
               to="/activity"
-              class="hover:text-red-500 transition"
-              active-class="text-red-500"
+              class="hover:text-arc-cyan transition"
+              active-class="text-arc-cyan"
             >
               Activity
             </RouterLink>
             <RouterLink
               to="/my-claims"
-              class="hover:text-red-500 transition"
-              active-class="text-red-500"
+              class="hover:text-arc-cyan transition"
+              active-class="text-arc-cyan"
             >
               My Claims
             </RouterLink>
             <RouterLink
               to="/leaderboard"
-              class="hover:text-red-500 transition"
-              active-class="text-red-500"
+              class="hover:text-arc-cyan transition"
+              active-class="text-arc-cyan"
             >
               Leaderboard
             </RouterLink>
             <RouterLink
               to="/verify"
-              class="hover:text-red-500 transition"
-              active-class="text-red-500"
+              class="hover:text-arc-cyan transition"
+              active-class="text-arc-cyan"
             >
               Verify
             </RouterLink>
@@ -69,14 +69,14 @@ const currentUser = computed(() => getCurrentUser())
             <!-- User Info -->
             <div
               v-if="currentUser"
-              class="flex items-center gap-4 ml-4 pl-4 border-l border-gray-700"
+              class="flex items-center gap-4 ml-4 pl-4 border-l border-arc-cyan/20"
             >
-              <RouterLink :to="`/profile/${currentUser.id}`" class="hover:text-red-500 transition">
+              <RouterLink :to="`/profile/${currentUser.id}`" class="hover:text-arc-cyan transition">
                 {{ currentUser.username }}
               </RouterLink>
               <button
                 @click="logout"
-                class="flex items-center gap-1 text-gray-400 hover:text-red-500 transition"
+                class="flex items-center gap-1 text-gray-400 hover:text-arc-red transition"
                 title="Logout"
               >
                 <LogOut :size="18" />
