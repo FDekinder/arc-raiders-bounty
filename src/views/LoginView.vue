@@ -27,7 +27,7 @@ function handleSteamLogin() {
       <div class="bg-arc-navy rounded-lg p-8 shadow-2xl">
         <div class="text-center mb-8">
           <h1
-            class="text-4xl font-bold mb-2 bg-gradient-to-r from-arc-cyan to-arc-yellow bg-clip-text text-transparent"
+            class="text-4xl font-bold mb-2 bg-gradient-to-r from-arc-cyan via-arc-green via-arc-yellow to-arc-red bg-clip-text text-transparent"
           >
             ARC RAIDERS BOUNTY
           </h1>
@@ -36,7 +36,7 @@ function handleSteamLogin() {
 
         <button
           @click="handleSteamLogin"
-          class="w-full bg-gradient-to-r from-arc-cyan to-arc-cyan/80 hover:from-arc-cyan/80 hover:to-arc-cyan text-white font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg"
+          class="w-full bg-arc-red hover:bg-arc-red-600 text-white font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-red/30"
         >
           <svg class="w-8 h-8" viewBox="0 0 256 256" fill="currentColor">
             <path

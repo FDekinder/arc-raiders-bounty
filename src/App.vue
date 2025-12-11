@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { Target, LogOut } from 'lucide-vue-next'
+import { LogOut } from 'lucide-vue-next'
 import ToastContainer from './components/ToastContainer.vue'
 import ExpirationChecker from './components/ExpirationChecker.vue'
 import { getCurrentUser, logout } from './lib/auth'
@@ -18,11 +18,11 @@ const currentUser = computed(() => getCurrentUser())
     <ExpirationChecker />
 
     <!-- Navigation -->
-    <nav class="bg-arc-dark text-white border-b border-arc-cyan/20">
+    <nav class="bg-arc-dark text-white border-b-2 border-gradient-to-r from-arc-cyan via-arc-yellow to-arc-red" style="border-image: linear-gradient(to right, #00d4ff, #ffd500, #ff3355) 1;">
       <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-16">
-          <RouterLink to="/" class="flex items-center gap-2 font-bold text-xl">
-            <Target class="text-arc-cyan" />
+          <RouterLink to="/" class="flex items-center gap-3 font-bold text-xl">
+            <img src="/arc-logo.svg" alt="Arc Raiders Logo" class="h-12 w-12" />
             <span>Arc Bounty</span>
           </RouterLink>
 

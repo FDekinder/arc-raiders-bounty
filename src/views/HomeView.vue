@@ -53,7 +53,7 @@ function getMedalEmoji(index: number) {
     <!-- Hero Section -->
     <div class="container mx-auto px-4 py-20 text-center">
       <h1 class="text-6xl md:text-7xl font-bold mb-6">
-        <span class="bg-gradient-to-r from-arc-cyan via-arc-green to-arc-yellow bg-clip-text text-transparent">
+        <span class="bg-gradient-to-r from-arc-cyan via-arc-green via-arc-yellow to-arc-red bg-clip-text text-transparent">
           ARC RAIDERS
         </span>
         <br />
@@ -66,13 +66,13 @@ function getMedalEmoji(index: number) {
       <div class="flex gap-4 justify-center flex-wrap">
         <RouterLink
           to="/bounties"
-          class="bg-arc-cyan hover:bg-arc-cyan-600 px-8 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105 text-arc-dark"
+          class="bg-arc-red hover:bg-arc-red-600 px-8 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105 text-white shadow-lg shadow-arc-red/30"
         >
           View Bounties
         </RouterLink>
         <RouterLink
           to="/create-bounty"
-          class="bg-arc-navy border-2 border-arc-cyan hover:bg-arc-dark px-8 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105"
+          class="bg-arc-navy border-2 border-arc-red hover:bg-arc-red hover:shadow-lg hover:shadow-arc-red/30 px-8 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105"
         >
           Create Bounty
         </RouterLink>
@@ -83,8 +83,8 @@ function getMedalEmoji(index: number) {
     <div class="container mx-auto px-4 py-16">
       <div class="text-center mb-12">
         <h2 class="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
-          <Target class="text-arc-cyan" :size="40" />
-          Most Wanted
+          <Target class="text-arc-red" :size="40" />
+          <span class="bg-gradient-to-r from-arc-cyan via-arc-yellow to-arc-red bg-clip-text text-transparent">Most Wanted</span>
         </h2>
         <p class="text-gray-400 text-lg">The highest-value targets in Arc Raiders</p>
       </div>
@@ -111,7 +111,7 @@ function getMedalEmoji(index: number) {
 
           <!-- Card -->
           <div
-            class="bg-arc-navy rounded-xl p-8 pt-16 text-center hover:bg-arc-dark transition transform hover:scale-105 border-2 border-arc-cyan/20 hover:border-arc-cyan"
+            class="bg-arc-navy rounded-xl p-8 pt-16 text-center hover:bg-arc-dark transition transform hover:scale-105 border-2 border-arc-red/30 hover:border-arc-red hover:shadow-lg hover:shadow-arc-red/30"
           >
             <!-- Rank -->
             <div class="text-6xl font-bold text-arc-cyan/20 mb-2">#{{ index + 1 }}</div>
@@ -155,7 +155,7 @@ function getMedalEmoji(index: number) {
             <!-- View Bounties Button -->
             <RouterLink
               to="/bounties"
-              class="block w-full bg-arc-cyan hover:bg-arc-cyan-600 text-arc-dark py-3 rounded-lg font-semibold transition"
+              class="block w-full bg-arc-red hover:bg-arc-red-600 text-white py-3 rounded-lg font-semibold transition shadow-md"
             >
               Hunt This Target
             </RouterLink>
@@ -168,7 +168,7 @@ function getMedalEmoji(index: number) {
         <p class="text-xl mb-4">No bounties yet!</p>
         <RouterLink
           to="/create-bounty"
-          class="inline-block bg-arc-cyan hover:bg-arc-cyan-600 text-arc-dark px-6 py-3 rounded-lg font-semibold transition"
+          class="inline-block bg-arc-red hover:bg-arc-red-600 text-white px-6 py-3 rounded-lg font-semibold transition shadow-md shadow-arc-red/30"
         >
           Be the First to Create One
         </RouterLink>
@@ -179,9 +179,9 @@ function getMedalEmoji(index: number) {
     <div class="container mx-auto px-4 py-16">
       <div class="grid md:grid-cols-3 gap-8">
         <!-- Place Bounties -->
-        <div class="bg-arc-navy rounded-lg p-8 text-center hover:bg-arc-dark transition border border-arc-cyan/20">
-          <div class="inline-block bg-arc-cyan/10 p-4 rounded-full mb-4">
-            <Target class="text-arc-cyan" :size="48" />
+        <div class="bg-arc-navy rounded-lg p-8 text-center hover:bg-arc-dark transition border border-arc-red/30 hover:border-arc-red hover:shadow-lg hover:shadow-arc-red/20">
+          <div class="inline-block bg-arc-red/10 p-4 rounded-full mb-4">
+            <Target class="text-arc-red" :size="48" />
           </div>
           <h3 class="text-2xl font-bold mb-3">Place Bounties</h3>
           <p class="text-gray-400">
@@ -191,7 +191,7 @@ function getMedalEmoji(index: number) {
         </div>
 
         <!-- Earn Points -->
-        <div class="bg-arc-navy rounded-lg p-8 text-center hover:bg-arc-dark transition border border-arc-yellow/20">
+        <div class="bg-arc-navy rounded-lg p-8 text-center hover:bg-arc-dark transition border border-arc-yellow/30 hover:border-arc-yellow hover:shadow-lg hover:shadow-arc-yellow/20">
           <div class="inline-block bg-arc-yellow/10 p-4 rounded-full mb-4">
             <Trophy class="text-arc-yellow" :size="48" />
           </div>
@@ -202,7 +202,7 @@ function getMedalEmoji(index: number) {
         </div>
 
         <!-- Community Driven -->
-        <div class="bg-arc-navy rounded-lg p-8 text-center hover:bg-arc-dark transition border border-arc-green/20">
+        <div class="bg-arc-navy rounded-lg p-8 text-center hover:bg-arc-dark transition border border-arc-green/30 hover:border-arc-green hover:shadow-lg hover:shadow-arc-green/20">
           <div class="inline-block bg-arc-green/10 p-4 rounded-full mb-4">
             <Users class="text-arc-green" :size="48" />
           </div>
@@ -217,7 +217,7 @@ function getMedalEmoji(index: number) {
     <!-- CTA Section -->
     <div class="container mx-auto px-4 py-20 text-center">
       <div
-        class="bg-gradient-to-r from-arc-cyan/10 via-arc-green/10 to-arc-yellow/10 border border-arc-cyan/30 rounded-2xl p-12"
+        class="bg-gradient-to-r from-arc-cyan/10 via-arc-green/10 via-arc-yellow/10 to-arc-red/10 border-2 border-arc-red/30 rounded-2xl p-12 shadow-lg shadow-arc-red/20"
       >
         <h2 class="text-4xl font-bold mb-4">Ready to Start Hunting?</h2>
         <p class="text-xl text-gray-300 mb-8">
@@ -225,7 +225,7 @@ function getMedalEmoji(index: number) {
         </p>
         <RouterLink
           to="/bounties"
-          class="inline-block bg-arc-cyan hover:bg-arc-cyan-600 text-arc-dark px-10 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105"
+          class="inline-block bg-arc-red hover:bg-arc-red-600 text-white px-10 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105 shadow-lg shadow-arc-red/40"
         >
           View All Bounties
         </RouterLink>

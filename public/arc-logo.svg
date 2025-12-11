@@ -1,0 +1,18 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark background -->
+  <rect width="120" height="120" fill="#0a0a14"/>
+
+  <!-- Diagonal stripes inspired by Arc Raiders logo -->
+  <!-- Cyan stripe -->
+  <path d="M 20 0 L 40 0 L 80 120 L 60 120 Z" fill="#00d4ff"/>
+
+  <!-- Green stripe -->
+  <path d="M 45 0 L 65 0 L 105 120 L 85 120 Z" fill="#00ff88"/>
+
+  <!-- Yellow stripe -->
+  <path d="M 70 0 L 90 0 L 120 100 L 120 120 L 110 120 Z" fill="#ffd500"/>
+
+  <!-- Red stripe (partially visible) -->
+  <path d="M 95 0 L 115 0 L 120 20 L 120 0 Z" fill="#ff3355"/>
+  <path d="M 120 75 L 120 120 Z" fill="#ff3355"/>
+</svg>
