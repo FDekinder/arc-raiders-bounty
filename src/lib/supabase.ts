@@ -50,3 +50,26 @@ export interface MostWanted {
   bounty_count: number
   avatar_url?: string
 }
+
+export interface Achievement {
+  id: string
+  name: string
+  description: string
+  icon: string
+  category: 'hunter' | 'creator' | 'social' | 'milestone'
+  requirement_type: string
+  requirement_value: number | null
+  badge_color: string | null
+  rarity: 'common' | 'rare' | 'epic' | 'legendary'
+  points_reward: number
+  created_at: string
+}
+
+export interface UserAchievement {
+  id: string
+  user_id: string
+  achievement_id: string
+  earned_at: string
+  progress: Record<string, any>
+  achievement?: Achievement // For joined queries
+}

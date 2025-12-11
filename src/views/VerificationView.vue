@@ -97,15 +97,26 @@ async function approveClaim(claim: ClaimWithBounty) {
   processingId.value = claim.id
 
   try {
-    const success_ = await approveBountyClaim(claim.id, userId, claim.bounty.bounty_amount)
+    const result = await approveBountyClaim(claim.id, userId, claim.bounty.bounty_amount)
 
-    if (!success_) {
+    if (!result.success) {
       throw new Error('Failed to approve claim')
     }
 
     console.log('Approval successful, reloading claims...')
     await loadClaims()
+
+    // Show success toast with points
     success(`Claim approved! ${claim.bounty.bounty_amount} points awarded.`)
+
+    // Show achievement notifications if any were earned
+    if (result.achievements && result.achievements.length > 0) {
+      for (const achievementName of result.achievements) {
+        setTimeout(() => {
+          success(`🏆 Achievement Unlocked: ${achievementName}!`)
+        }, 500)
+      }
+    }
   } catch (error: unknown) {
     console.error('Error approving claim:', error)
     const errorMessage = error instanceof Error ? error.message : 'Failed to approve claim'

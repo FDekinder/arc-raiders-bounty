@@ -1,5 +1,6 @@
 // src/lib/adminUtils.ts
 import { supabase } from './supabase'
+import { checkAndAwardAchievements, checkStreak24h, calculateCompletionTime } from './achievements'
 
 export async function isUserAdmin(userId: string): Promise<boolean> {
   try {
@@ -53,15 +54,29 @@ export async function approveBountyClaim(
   claimId: string,
   verifierId: string,
   pointsAwarded: number,
-): Promise<boolean> {
+): Promise<{ success: boolean; achievements?: string[] }> {
   try {
     const { data: claim, error: claimError } = await supabase
       .from('bounty_claims')
-      .select('bounty_id, hunter_id')
+      .select('bounty_id, hunter_id, claimed_at')
       .eq('id', claimId)
       .single()
 
     if (claimError) throw claimError
+
+    // Get bounty details and join time
+    const { data: bounty } = await supabase
+      .from('bounties')
+      .select('bounty_amount')
+      .eq('id', claim.bounty_id)
+      .single()
+
+    const { data: hunter } = await supabase
+      .from('bounty_hunters')
+      .select('joined_at')
+      .eq('bounty_id', claim.bounty_id)
+      .eq('hunter_id', claim.hunter_id)
+      .single()
 
     // Update claim status
     const { error: updateError } = await supabase
@@ -92,16 +107,55 @@ export async function approveBountyClaim(
 
     if (pointsError) console.warn('Could not increment points:', pointsError)
 
+    // Get updated user stats for achievements
+    const { data: user } = await supabase
+      .from('users')
+      .select('total_points, bounties_completed')
+      .eq('id', claim.hunter_id)
+      .single()
+
+    // Check for 24h streak
+    const recentCompletions = await checkStreak24h(claim.hunter_id)
+
+    // Calculate completion time for speed achievement
+    let completionTimeMinutes = 999
+    if (hunter?.joined_at) {
+      completionTimeMinutes = calculateCompletionTime(claim.claimed_at, hunter.joined_at)
+    }
+
+    // Check and award achievements
+    const newAchievements = await checkAndAwardAchievements({
+      type: 'bounty_completed',
+      userId: claim.hunter_id,
+      data: {
+        bountyValue: bounty?.bounty_amount || 0,
+        totalPoints: user?.total_points || 0,
+        totalBountiesCompleted: user?.bounties_completed || 0,
+        recentCompletions,
+        completionTimeMinutes
+      }
+    })
+
+    // Check for speed completion separately if applicable
+    if (completionTimeMinutes <= 60) {
+      const speedAchievements = await checkAndAwardAchievements({
+        type: 'speed_completion',
+        userId: claim.hunter_id,
+        data: { completionTimeMinutes }
+      })
+      newAchievements.push(...speedAchievements)
+    }
+
     // Log the action
     await logAdminAction('approve_claim', 'bounty_claims', claimId, {
       status: 'approved',
       points_awarded: pointsAwarded,
     })
 
-    return true
+    return { success: true, achievements: newAchievements }
   } catch (error) {
     console.error('Error approving claim:', error)
-    return false
+    return { success: false }
   }
 }
 
