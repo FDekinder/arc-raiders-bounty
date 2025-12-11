@@ -18,10 +18,11 @@ const currentUser = computed(() => getCurrentUser())
     <ExpirationChecker />
 
     <!-- Navigation -->
-    <nav class="bg-arc-dark text-white border-b border-arc-cyan/20">
+    <nav class="bg-arc-dark text-white border-b-2 border-gradient-to-r from-arc-cyan via-arc-yellow to-arc-red" style="border-image: linear-gradient(to right, #00d4ff, #ffd500, #ff3355) 1;">
       <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-16">
-          <RouterLink to="/" class="flex items-center gap-2 font-bold text-xl">
+          <RouterLink to="/" class="flex items-center gap-3 font-bold text-xl">
+            <img src="/arc-logo.svg" alt="Arc Raiders Logo" class="h-10 w-10" />
             <Target class="text-arc-cyan" />
             <span>Arc Bounty</span>
           </RouterLink>
