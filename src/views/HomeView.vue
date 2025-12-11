@@ -3,7 +3,7 @@
 import { ref, onMounted } from 'vue'
 import { Target, Trophy, Users } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
-import { getMostWanted } from '@/lib/db'
+import { getMostWanted, getUserByUsername } from '@/lib/db'
 import type { MostWanted } from '@/lib/supabase'
 
 const topBounties = ref<MostWanted[]>([])
@@ -12,7 +12,20 @@ const loading = ref(true)
 onMounted(async () => {
   try {
     const data = await getMostWanted()
-    topBounties.value = data.slice(0, 3) // Get top 3
+    const top3 = data.slice(0, 3) // Get top 3
+
+    // Fetch user profiles to get avatar URLs
+    const bountiesWithAvatars = await Promise.all(
+      top3.map(async (bounty: MostWanted) => {
+        const user = await getUserByUsername(bounty.target_gamertag)
+        return {
+          ...bounty,
+          avatar_url: user?.avatar_url
+        }
+      })
+    )
+
+    topBounties.value = bountiesWithAvatars
   } catch (error) {
     console.error('Error loading top bounties:', error)
   } finally {
@@ -102,6 +115,26 @@ function getMedalEmoji(index: number) {
           >
             <!-- Rank -->
             <div class="text-6xl font-bold text-gray-700 mb-2">#{{ index + 1 }}</div>
+
+            <!-- Profile Picture -->
+            <div class="flex justify-center mb-4">
+              <div
+                class="w-24 h-24 rounded-full border-4 border-gray-700 overflow-hidden bg-gray-700"
+              >
+                <img
+                  v-if="bounty.avatar_url"
+                  :src="bounty.avatar_url"
+                  :alt="`${bounty.target_gamertag}'s avatar`"
+                  class="w-full h-full object-cover"
+                />
+                <div
+                  v-else
+                  class="w-full h-full flex items-center justify-center text-4xl font-bold text-gray-500"
+                >
+                  {{ bounty.target_gamertag.charAt(0).toUpperCase() }}
+                </div>
+              </div>
+            </div>
 
             <!-- Gamertag -->
             <h3 class="text-2xl font-bold mb-4">{{ bounty.target_gamertag }}</h3>
