@@ -3,9 +3,13 @@ import { ref, onMounted } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { Trophy, Target, Award } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
+import { getTopAchievements } from '@/lib/achievements'
+import AchievementBadge from '@/components/AchievementBadge.vue'
+import type { Achievement } from '@/lib/supabase'
 
 const hunters = ref<any[]>([])
 const loading = ref(true)
+const hunterAchievements = ref<Map<string, Achievement[]>>(new Map())
 
 onMounted(async () => {
   try {
@@ -18,6 +22,14 @@ onMounted(async () => {
 
     if (error) throw error
     hunters.value = data
+
+    // Load top achievements for each hunter
+    if (data) {
+      for (const hunter of data) {
+        const achievements = await getTopAchievements(hunter.id, 3)
+        hunterAchievements.value.set(hunter.id, achievements)
+      }
+    }
   } catch (error) {
     console.error('Error loading leaderboard:', error)
   } finally {
@@ -72,6 +84,16 @@ function getMedalColor(index: number) {
             </RouterLink>
             <div class="flex gap-4 text-sm text-gray-400 mt-1">
               <span>{{ hunter.bounties_completed }} bounties completed</span>
+            </div>
+            <!-- Achievement Badges -->
+            <div v-if="hunterAchievements.get(hunter.id)?.length" class="flex gap-2 mt-2">
+              <AchievementBadge
+                v-for="achievement in hunterAchievements.get(hunter.id)"
+                :key="achievement.id"
+                :achievement="achievement"
+                :earned="true"
+                size="sm"
+              />
             </div>
           </div>
 

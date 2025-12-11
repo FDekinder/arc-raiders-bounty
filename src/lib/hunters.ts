@@ -1,5 +1,6 @@
 // src/lib/hunters.ts
 import { supabase } from './supabase'
+import { checkAndAwardAchievements } from './achievements'
 
 export async function joinHunt(
   bountyId: string,
@@ -49,6 +50,27 @@ export async function joinHunt(
     })
 
     if (insertError) throw insertError
+
+    // Increment hunts joined count
+    await supabase.rpc('increment_hunts_joined', { user_id: hunterId })
+
+    // Get updated count for achievement check
+    const { data: user } = await supabase
+      .from('users')
+      .select('hunts_joined')
+      .eq('id', hunterId)
+      .single()
+
+    // Check for hunt joining achievements
+    if (user) {
+      await checkAndAwardAchievements({
+        type: 'hunt_joined',
+        userId: hunterId,
+        data: {
+          totalHuntsJoined: user.hunts_joined
+        }
+      })
+    }
 
     return { success: true }
   } catch (error: any) {

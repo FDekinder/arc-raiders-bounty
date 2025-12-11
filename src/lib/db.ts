@@ -1,5 +1,6 @@
 // src/lib/db.ts
 import { supabase } from './supabase'
+import { checkAndAwardAchievements } from './achievements'
 
 // Create a new user
 export async function createUser(username: string, steamId?: string) {
@@ -34,6 +35,28 @@ export async function createBounty(
     .single()
 
   if (error) throw error
+
+  // Increment bounties created count
+  await supabase.rpc('increment_bounties_created', { user_id: createdBy })
+
+  // Get updated count for achievement check
+  const { data: user } = await supabase
+    .from('users')
+    .select('bounties_created')
+    .eq('id', createdBy)
+    .single()
+
+  // Check for bounty creation achievements
+  if (user) {
+    await checkAndAwardAchievements({
+      type: 'bounty_created',
+      userId: createdBy,
+      data: {
+        totalBountiesCreated: user.bounties_created
+      }
+    })
+  }
+
   return data
 }
 

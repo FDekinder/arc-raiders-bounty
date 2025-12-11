@@ -6,12 +6,18 @@ import { supabase } from '@/lib/supabase'
 import type { User, Bounty, BountyClaim } from '@/lib/supabase'
 import { Target, Trophy, Award, TrendingUp, Clock, CheckCircle, XCircle } from 'lucide-vue-next'
 import { formatDistanceToNow } from 'date-fns'
+import AchievementGrid from '@/components/AchievementGrid.vue'
+import { getTopAchievements } from '@/lib/achievements'
+import AchievementBadge from '@/components/AchievementBadge.vue'
+import type { Achievement } from '@/lib/supabase'
 
 const route = useRoute()
 const user = ref<User | null>(null)
 const bountiesCreated = ref<Bounty[]>([])
 const claimsSubmitted = ref<any[]>([])
 const loading = ref(true)
+const topAchievements = ref<Achievement[]>([])
+const showAllAchievements = ref(false)
 
 const userId = route.params.id as string
 
@@ -57,6 +63,10 @@ async function loadUserProfile() {
       .limit(10)
 
     claimsSubmitted.value = claimsData || []
+
+    // Get top achievements for this user
+    const achievements = await getTopAchievements(userId, 5)
+    topAchievements.value = achievements
   } catch (error) {
     console.error('Error loading profile:', error)
   } finally {
@@ -182,6 +192,39 @@ function getStatusColor(status: string) {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Top Achievements Section -->
+      <div v-if="topAchievements.length > 0" class="bg-arc-navy rounded-lg p-6 mb-8">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold flex items-center gap-2">
+            <Award class="text-arc-yellow" />
+            Achievements
+          </h3>
+          <button
+            @click="showAllAchievements = !showAllAchievements"
+            class="px-4 py-2 bg-arc-red text-white rounded-lg hover:bg-arc-red/80 transition-all text-sm font-medium"
+          >
+            {{ showAllAchievements ? 'Show Less' : 'View All' }}
+          </button>
+        </div>
+
+        <!-- Top Achievements Preview -->
+        <div v-if="!showAllAchievements" class="flex gap-4 justify-center">
+          <AchievementBadge
+            v-for="achievement in topAchievements"
+            :key="achievement.id"
+            :achievement="achievement"
+            :earned="true"
+            size="lg"
+            :show-name="true"
+          />
+        </div>
+
+        <!-- All Achievements Grid -->
+        <div v-else>
+          <AchievementGrid :user-id="userId" />
         </div>
       </div>
 
