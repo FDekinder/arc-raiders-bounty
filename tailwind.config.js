@@ -58,7 +58,7 @@ export default {
           900: '#330a11',
         },
         'arc-dark': {
-          DEFAULT: '#1a1a2e', // Dark background color
+          DEFAULT: '#16161f', // Very dark background
           50: '#f5f5f7',
           100: '#e8e8ed',
           200: '#d1d1db',
@@ -68,10 +68,10 @@ export default {
           600: '#707084',
           700: '#545463',
           800: '#383842',
-          900: '#1a1a2e',
+          900: '#16161f',
         },
         'arc-navy': {
-          DEFAULT: '#0f0f1f', // Darker navy background
+          DEFAULT: '#1e1e2d', // Dark purple/navy for cards
           50: '#f7f7f9',
           100: '#efeff3',
           200: '#dfdfe7',
@@ -81,20 +81,20 @@ export default {
           600: '#8c8c9c',
           700: '#696975',
           800: '#46464e',
-          900: '#0f0f1f',
+          900: '#1e1e2d',
         },
-        'arc-light': {
-          DEFAULT: '#ece2d0', // Main light background
-          50: '#ffffff',
-          100: '#fdfcfa',
-          200: '#f9f6f0',
-          300: '#f5f0e6',
-          400: '#f1e9db',
-          500: '#ece2d0',
-          600: '#d4c7b0',
-          700: '#bcac90',
-          800: '#a49170',
-          900: '#8c7650',
+        'arc-purple': {
+          DEFAULT: '#252538', // Slightly lighter for nested elements
+          50: '#f9f9fa',
+          100: '#f3f3f5',
+          200: '#e7e7eb',
+          300: '#dbdbe1',
+          400: '#cfcfd7',
+          500: '#c3c3cd',
+          600: '#9c9ca4',
+          700: '#75757b',
+          800: '#4e4e52',
+          900: '#252538',
         },
       },
     },

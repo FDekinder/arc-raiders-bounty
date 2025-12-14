@@ -3,46 +3,45 @@
 @tailwind utilities;
 
 @layer base {
-  /* Dark background with beige elements */
+  /* All dark theme */
   body {
     @apply bg-arc-dark text-white;
   }
 }
 
 @layer utilities {
-  /* Beige card/panel utilities */
-  .bg-beige-panel {
-    @apply bg-arc-light;
+  /* Card/panel utilities - dark purple/navy */
+  .bg-card {
+    @apply bg-arc-navy;
   }
 
-  .bg-beige-card {
-    @apply bg-arc-light-500;
+  .bg-card-hover {
+    @apply bg-arc-navy hover:bg-arc-navy/80;
   }
 
-  /* Text on beige backgrounds */
-  .text-on-beige {
-    @apply text-arc-dark-900;
+  .bg-nested {
+    @apply bg-arc-dark/50;
   }
 
-  .text-on-beige-secondary {
-    @apply text-arc-dark-700;
-  }
-
-  /* Text on dark backgrounds */
-  .text-on-dark {
+  /* Text utilities */
+  .text-primary {
     @apply text-white;
   }
 
-  .text-on-dark-secondary {
+  .text-secondary {
     @apply text-white/80;
   }
 
-  /* Border utilities */
-  .border-beige {
-    @apply border-arc-light/20;
+  .text-muted {
+    @apply text-white/60;
   }
 
-  .border-dark {
+  /* Border utilities */
+  .border-subtle {
     @apply border-white/10;
+  }
+
+  .border-visible {
+    @apply border-white/20;
   }
 }

@@ -1,45 +1,37 @@
-/* Arc Raiders color palette - Dark background with beige elements */
+/* Arc Raiders color palette - All dark theme */
 :root {
   /* Core Arc Raiders colors */
   --arc-cyan: #00d4ff;
   --arc-green: #00ff88;
   --arc-yellow: #ffd500;
   --arc-red: #ff3355;
-  --arc-beige: #ece2d0; /* Beige for cards/panels */
-  --arc-dark: #1a1a2e; /* Dark background */
-  --arc-navy: #0f0f1f; /* Darker navy background */
+  --arc-dark: #16161f; /* Very dark background */
+  --arc-navy: #1e1e2d; /* Dark purple/navy for cards */
+  --arc-purple: #252538; /* Slightly lighter purple for nested elements */
 
-  /* Beige variants for cards/panels */
-  --vt-c-beige: #ece2d0;
-  --vt-c-beige-soft: #f5f0e6;
-  --vt-c-beige-mute: #f1e9db;
-
-  /* Dark background variants */
-  --vt-c-black: #0f0f1f;
-  --vt-c-black-soft: #1a1a2e;
+  /* Dark theme variants */
+  --vt-c-black: #16161f;
+  --vt-c-black-soft: #1e1e2d;
   --vt-c-black-mute: #252538;
 
   /* Accent color */
   --vt-c-indigo: var(--arc-red);
 
-  /* Dividers for dark theme with beige elements */
-  --vt-c-divider-light-1: rgba(236, 226, 208, 0.15);
-  --vt-c-divider-light-2: rgba(236, 226, 208, 0.08);
-  --vt-c-divider-dark-1: rgba(255, 51, 85, 0.35);
-  --vt-c-divider-dark-2: rgba(255, 51, 85, 0.18);
+  /* Dividers for dark theme */
+  --vt-c-divider-dark-1: rgba(255, 255, 255, 0.12);
+  --vt-c-divider-dark-2: rgba(255, 255, 255, 0.06);
 
-  /* Text colors - dark text on beige, light text on dark */
-  --vt-c-text-light-1: #1a1a2e; /* Dark text for beige backgrounds */
-  --vt-c-text-light-2: rgba(26, 26, 46, 0.75);
-  --vt-c-text-dark-1: #ffffff; /* White text for dark backgrounds */
+  /* Text colors - all white/light on dark */
+  --vt-c-text-dark-1: #ffffff;
   --vt-c-text-dark-2: rgba(255, 255, 255, 0.84);
+  --vt-c-text-dark-3: rgba(255, 255, 255, 0.60);
 }
 
-/* semantic color variables for this project - Dark with beige elements */
+/* semantic color variables for this project - All dark */
 :root {
-  --color-background: var(--arc-navy); /* Dark background */
-  --color-background-soft: var(--arc-dark);
-  --color-background-mute: #252538;
+  --color-background: var(--arc-dark); /* Very dark background */
+  --color-background-soft: var(--arc-navy); /* Card backgrounds */
+  --color-background-mute: var(--arc-purple); /* Nested elements */
 
   --color-border: var(--vt-c-divider-dark-2);
   --color-border-hover: var(--vt-c-divider-dark-1);
