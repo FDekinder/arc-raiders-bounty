@@ -72,7 +72,7 @@ export async function createOrUpdateUser(steamId: string, username: string, avat
       .select()
       .single()
 
-    return { data, error }
+    return { data, error, isNewUser: false }
   } else {
     const { data, error } = await supabase
       .from('users')
@@ -84,7 +84,7 @@ export async function createOrUpdateUser(steamId: string, username: string, avat
       .select()
       .single()
 
-    return { data, error }
+    return { data, error, isNewUser: true }
   }
 }
 

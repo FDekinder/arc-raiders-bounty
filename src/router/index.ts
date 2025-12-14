@@ -59,6 +59,11 @@ const router = createRouter({
       name: 'user-profile',
       component: () => import('../views/UserProfileView.vue'),
     },
+    {
+      path: '/select-role',
+      name: 'select-role',
+      component: () => import('../views/RoleSelectionView.vue'),
+    },
   ],
 })
 

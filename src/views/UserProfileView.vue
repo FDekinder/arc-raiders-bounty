@@ -10,6 +10,7 @@ import AchievementGrid from '@/components/AchievementGrid.vue'
 import { getTopAchievements } from '@/lib/achievements'
 import AchievementBadge from '@/components/AchievementBadge.vue'
 import ClanTagEditor from '@/components/ClanTagEditor.vue'
+import RoleBadge from '@/components/RoleBadge.vue'
 import type { Achievement } from '@/lib/supabase'
 import { getCurrentUser } from '@/lib/auth'
 
@@ -173,6 +174,7 @@ function handleClanTagUpdate(clanTag: string | null) {
                 :is-own-profile="isOwnProfile"
                 @updated="handleClanTagUpdate"
               />
+              <RoleBadge v-if="user.role" :role="user.role" size="lg" :show-label="true" />
             </div>
             <p class="text-gray-400 mb-4">
               Member since {{ new Date(user.created_at).toLocaleDateString() }}

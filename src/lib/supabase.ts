@@ -8,6 +8,8 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Types
+export type UserRole = 'BH' | 'PR' // BH = Bounty Hunter, PR = Proud Rat
+
 export interface User {
   id: string
   username: string
@@ -18,6 +20,7 @@ export interface User {
   times_hunted: number
   created_at: string
   clan_tag?: string
+  role?: UserRole
 }
 
 export interface Bounty {

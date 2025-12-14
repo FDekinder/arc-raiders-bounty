@@ -34,7 +34,7 @@ onMounted(async () => {
     status.value = 'Creating your account...'
 
     // Create or update user in database
-    const { data: user, error: dbError } = await createOrUpdateUser(
+    const { data: user, error: dbError, isNewUser } = await createOrUpdateUser(
       player.steamId,
       player.username,
       player.avatarUrl,
@@ -47,9 +47,15 @@ onMounted(async () => {
 
     success('Successfully logged in!')
 
-    // Redirect to bounties
+    // Redirect based on whether user has selected a role
     setTimeout(() => {
-      router.push('/bounties')
+      if (isNewUser || !user.role) {
+        // New user or no role selected - go to role selection
+        router.push('/select-role')
+      } else {
+        // Existing user with role - go to home
+        router.push('/')
+      }
     }, 1000)
   } catch (error: unknown) {
     console.error('Steam auth error:', error)

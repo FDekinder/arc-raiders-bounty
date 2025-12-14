@@ -5,6 +5,7 @@ import { Trophy, Target, Award } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import { getTopAchievements } from '@/lib/achievements'
 import AchievementBadge from '@/components/AchievementBadge.vue'
+import RoleBadge from '@/components/RoleBadge.vue'
 import type { Achievement } from '@/lib/supabase'
 
 const hunters = ref<any[]>([])
@@ -16,7 +17,7 @@ onMounted(async () => {
     // Modified query to get user ID
     const { data, error } = await supabase
       .from('users')
-      .select('id, username, total_points, bounties_completed, avatar_url, clan_tag')
+      .select('id, username, total_points, bounties_completed, avatar_url, clan_tag, role')
       .order('total_points', { ascending: false })
       .limit(10)
 
@@ -76,13 +77,16 @@ function getMedalColor(index: number) {
 
           <!-- Info -->
           <div class="flex-1">
-            <RouterLink
-              :to="`/profile/${hunter.id}`"
-              class="text-2xl font-bold hover:text-arc-red transition"
-            >
-              <span v-if="hunter.clan_tag" class="text-arc-red">[{{ hunter.clan_tag }}]</span>
-              {{ hunter.username }}
-            </RouterLink>
+            <div class="flex items-center gap-2 mb-1">
+              <RouterLink
+                :to="`/profile/${hunter.id}`"
+                class="text-2xl font-bold hover:text-arc-red transition"
+              >
+                <span v-if="hunter.clan_tag" class="text-arc-red">[{{ hunter.clan_tag }}]</span>
+                {{ hunter.username }}
+              </RouterLink>
+              <RoleBadge v-if="hunter.role" :role="hunter.role" size="sm" />
+            </div>
             <div class="flex gap-4 text-sm text-gray-400 mt-1">
               <span>{{ hunter.bounties_completed }} bounties completed</span>
             </div>

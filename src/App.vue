@@ -3,6 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import { LogOut } from 'lucide-vue-next'
 import ToastContainer from './components/ToastContainer.vue'
 import ExpirationChecker from './components/ExpirationChecker.vue'
+import RoleBadge from './components/RoleBadge.vue'
 import { getCurrentUser, logout } from './lib/auth'
 import { computed } from 'vue'
 
@@ -72,11 +73,12 @@ const currentUser = computed(() => getCurrentUser())
             <!-- User Info -->
             <div
               v-if="currentUser"
-              class="flex items-center gap-4 ml-4 pl-4 border-l border-arc-red/20"
+              class="flex items-center gap-3 ml-4 pl-4 border-l border-arc-red/20"
             >
-              <RouterLink :to="`/profile/${currentUser.id}`" class="hover:text-arc-red transition">
+              <RouterLink :to="`/profile/${currentUser.id}`" class="flex items-center gap-2 hover:text-arc-red transition">
+                <RoleBadge v-if="currentUser.role" :role="currentUser.role" size="sm" />
                 <span v-if="currentUser.clan_tag" class="text-arc-red font-bold">[{{ currentUser.clan_tag }}]</span>
-                {{ currentUser.username }}
+                <span>{{ currentUser.username }}</span>
               </RouterLink>
               <button
                 @click="logout"
