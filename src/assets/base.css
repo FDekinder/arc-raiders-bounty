@@ -1,51 +1,51 @@
-/* Arc Raiders color palette - Light theme */
+/* Arc Raiders color palette - Dark background with beige elements */
 :root {
   /* Core Arc Raiders colors */
   --arc-cyan: #00d4ff;
   --arc-green: #00ff88;
   --arc-yellow: #ffd500;
   --arc-red: #ff3355;
-  --arc-light: #ece2d0; /* New main background */
-  --arc-dark: #1a1a2e; /* Dark text color */
-  --arc-navy: #2a2a3e; /* Dark panels/cards */
+  --arc-beige: #ece2d0; /* Beige for cards/panels */
+  --arc-dark: #1a1a2e; /* Dark background */
+  --arc-navy: #0f0f1f; /* Darker navy background */
 
-  /* Light theme variants */
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #fdfcfa;
-  --vt-c-white-mute: #f9f6f0;
+  /* Beige variants for cards/panels */
+  --vt-c-beige: #ece2d0;
+  --vt-c-beige-soft: #f5f0e6;
+  --vt-c-beige-mute: #f1e9db;
 
-  /* Dark text variants for light background */
-  --vt-c-black: #1a1a2e;
-  --vt-c-black-soft: #2a2a3e;
-  --vt-c-black-mute: #3a3a4e;
+  /* Dark background variants */
+  --vt-c-black: #0f0f1f;
+  --vt-c-black-soft: #1a1a2e;
+  --vt-c-black-mute: #252538;
 
   /* Accent color */
   --vt-c-indigo: var(--arc-red);
 
-  /* Dividers for light theme */
-  --vt-c-divider-light-1: rgba(42, 42, 62, 0.15);
-  --vt-c-divider-light-2: rgba(42, 42, 62, 0.08);
-  --vt-c-divider-dark-1: rgba(255, 51, 85, 0.20);
-  --vt-c-divider-dark-2: rgba(255, 51, 85, 0.10);
+  /* Dividers for dark theme with beige elements */
+  --vt-c-divider-light-1: rgba(236, 226, 208, 0.15);
+  --vt-c-divider-light-2: rgba(236, 226, 208, 0.08);
+  --vt-c-divider-dark-1: rgba(255, 51, 85, 0.35);
+  --vt-c-divider-dark-2: rgba(255, 51, 85, 0.18);
 
-  /* Text colors for light theme */
-  --vt-c-text-light-1: #1a1a2e;
+  /* Text colors - dark text on beige, light text on dark */
+  --vt-c-text-light-1: #1a1a2e; /* Dark text for beige backgrounds */
   --vt-c-text-light-2: rgba(26, 26, 46, 0.75);
-  --vt-c-text-dark-1: #1a1a2e;
-  --vt-c-text-dark-2: rgba(26, 26, 46, 0.80);
+  --vt-c-text-dark-1: #ffffff; /* White text for dark backgrounds */
+  --vt-c-text-dark-2: rgba(255, 255, 255, 0.84);
 }
 
-/* semantic color variables for this project - Light theme */
+/* semantic color variables for this project - Dark with beige elements */
 :root {
-  --color-background: var(--arc-light);
-  --color-background-soft: #f5f0e6;
-  --color-background-mute: #f1e9db;
+  --color-background: var(--arc-navy); /* Dark background */
+  --color-background-soft: var(--arc-dark);
+  --color-background-mute: #252538;
 
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
+  --color-border: var(--vt-c-divider-dark-2);
+  --color-border-hover: var(--vt-c-divider-dark-1);
 
   --color-heading: var(--arc-red);
-  --color-text: var(--vt-c-text-light-1);
+  --color-text: var(--vt-c-text-dark-2);
 
   --section-gap: 160px;
 }

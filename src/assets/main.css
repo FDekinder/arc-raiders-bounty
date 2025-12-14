@@ -3,41 +3,46 @@
 @tailwind utilities;
 
 @layer base {
-  /* Override default colors for light theme */
+  /* Dark background with beige elements */
   body {
-    @apply bg-arc-light text-arc-dark;
+    @apply bg-arc-dark text-white;
   }
 }
 
 @layer utilities {
-  /* Light theme text utilities */
-  .text-light-primary {
-    @apply text-arc-dark;
+  /* Beige card/panel utilities */
+  .bg-beige-panel {
+    @apply bg-arc-light;
   }
 
-  .text-light-secondary {
-    @apply text-arc-dark/75;
+  .bg-beige-card {
+    @apply bg-arc-light-500;
   }
 
-  .text-light-muted {
-    @apply text-arc-dark/60;
+  /* Text on beige backgrounds */
+  .text-on-beige {
+    @apply text-arc-dark-900;
   }
 
-  /* Light theme background utilities */
-  .bg-light-panel {
-    @apply bg-white/80;
+  .text-on-beige-secondary {
+    @apply text-arc-dark-700;
   }
 
-  .bg-light-card {
-    @apply bg-arc-light-300;
+  /* Text on dark backgrounds */
+  .text-on-dark {
+    @apply text-white;
   }
 
-  /* Border utilities for light theme */
-  .border-light {
-    @apply border-arc-dark/10;
+  .text-on-dark-secondary {
+    @apply text-white/80;
   }
 
-  .border-light-hover {
-    @apply border-arc-dark/20;
+  /* Border utilities */
+  .border-beige {
+    @apply border-arc-light/20;
+  }
+
+  .border-dark {
+    @apply border-white/10;
   }
 }

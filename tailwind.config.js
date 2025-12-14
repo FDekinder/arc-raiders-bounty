@@ -58,7 +58,7 @@ export default {
           900: '#330a11',
         },
         'arc-dark': {
-          DEFAULT: '#1a1a2e', // Darker text color for light background
+          DEFAULT: '#1a1a2e', // Dark background color
           50: '#f5f5f7',
           100: '#e8e8ed',
           200: '#d1d1db',
@@ -71,7 +71,7 @@ export default {
           900: '#1a1a2e',
         },
         'arc-navy': {
-          DEFAULT: '#2a2a3e', // Dark navy for cards/panels
+          DEFAULT: '#0f0f1f', // Darker navy background
           50: '#f7f7f9',
           100: '#efeff3',
           200: '#dfdfe7',
@@ -81,7 +81,7 @@ export default {
           600: '#8c8c9c',
           700: '#696975',
           800: '#46464e',
-          900: '#2a2a3e',
+          900: '#0f0f1f',
         },
         'arc-light': {
           DEFAULT: '#ece2d0', // Main light background
