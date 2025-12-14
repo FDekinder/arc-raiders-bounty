@@ -73,7 +73,7 @@ export async function approveBountyClaim(
 
     const { data: hunter } = await supabase
       .from('bounty_hunters')
-      .select('joined_at')
+      .select('started_hunting_at')
       .eq('bounty_id', claim.bounty_id)
       .eq('hunter_id', claim.hunter_id)
       .single()
@@ -119,8 +119,8 @@ export async function approveBountyClaim(
 
     // Calculate completion time for speed achievement
     let completionTimeMinutes = 999
-    if (hunter?.joined_at) {
-      completionTimeMinutes = calculateCompletionTime(claim.claimed_at, hunter.joined_at)
+    if (hunter?.started_hunting_at) {
+      completionTimeMinutes = calculateCompletionTime(claim.claimed_at, hunter.started_hunting_at)
     }
 
     // Check and award achievements
