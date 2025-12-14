@@ -9,7 +9,9 @@ import { formatDistanceToNow } from 'date-fns'
 import AchievementGrid from '@/components/AchievementGrid.vue'
 import { getTopAchievements } from '@/lib/achievements'
 import AchievementBadge from '@/components/AchievementBadge.vue'
+import ClanTagEditor from '@/components/ClanTagEditor.vue'
 import type { Achievement } from '@/lib/supabase'
+import { getCurrentUser } from '@/lib/auth'
 
 const route = useRoute()
 const user = ref<User | null>(null)
@@ -20,6 +22,8 @@ const topAchievements = ref<Achievement[]>([])
 const showAllAchievements = ref(false)
 
 const userId = route.params.id as string
+const currentUser = getCurrentUser()
+const isOwnProfile = computed(() => currentUser?.id === userId)
 
 onMounted(async () => {
   await loadUserProfile()
@@ -128,6 +132,12 @@ function getStatusColor(status: string) {
       return 'text-gray-500'
   }
 }
+
+function handleClanTagUpdate(clanTag: string | null) {
+  if (user.value) {
+    user.value.clan_tag = clanTag ?? undefined
+  }
+}
 </script>
 
 <template>
@@ -156,7 +166,14 @@ function getStatusColor(status: string) {
 
           <!-- Info -->
           <div class="flex-1">
-            <h1 class="text-4xl font-bold mb-2">{{ user.username }}</h1>
+            <div class="flex items-center gap-3 mb-2">
+              <h1 class="text-4xl font-bold">{{ user.username }}</h1>
+              <ClanTagEditor
+                :user="user"
+                :is-own-profile="isOwnProfile"
+                @updated="handleClanTagUpdate"
+              />
+            </div>
             <p class="text-gray-400 mb-4">
               Member since {{ new Date(user.created_at).toLocaleDateString() }}
             </p>

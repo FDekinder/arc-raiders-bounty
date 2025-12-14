@@ -75,6 +75,7 @@ const currentUser = computed(() => getCurrentUser())
               class="flex items-center gap-4 ml-4 pl-4 border-l border-arc-red/20"
             >
               <RouterLink :to="`/profile/${currentUser.id}`" class="hover:text-arc-red transition">
+                <span v-if="currentUser.clan_tag" class="text-arc-red font-bold">[{{ currentUser.clan_tag }}]</span>
                 {{ currentUser.username }}
               </RouterLink>
               <button

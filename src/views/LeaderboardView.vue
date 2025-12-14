@@ -16,7 +16,7 @@ onMounted(async () => {
     // Modified query to get user ID
     const { data, error } = await supabase
       .from('users')
-      .select('id, username, total_points, bounties_completed, avatar_url')
+      .select('id, username, total_points, bounties_completed, avatar_url, clan_tag')
       .order('total_points', { ascending: false })
       .limit(10)
 
@@ -80,6 +80,7 @@ function getMedalColor(index: number) {
               :to="`/profile/${hunter.id}`"
               class="text-2xl font-bold hover:text-arc-red transition"
             >
+              <span v-if="hunter.clan_tag" class="text-arc-red">[{{ hunter.clan_tag }}]</span>
               {{ hunter.username }}
             </RouterLink>
             <div class="flex gap-4 text-sm text-gray-400 mt-1">

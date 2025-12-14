@@ -17,6 +17,7 @@ export interface User {
   bounties_completed: number
   times_hunted: number
   created_at: string
+  clan_tag?: string
 }
 
 export interface Bounty {
