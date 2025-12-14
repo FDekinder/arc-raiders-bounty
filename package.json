@@ -16,11 +16,15 @@
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix --cache",
     "format": "prettier --write --experimental-cli src/",
-    "predeploy": "npm run lint && npm run type-check && npm run build"
+    "predeploy": "npm run lint && npm run type-check && npm run build",
+    "db:migrate": "tsx scripts/run-migration.ts",
+    "db:seed-achievements": "tsx scripts/seed-achievements.ts",
+    "db:grant-achievements": "tsx scripts/grant-all-achievements.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.86.2",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
     "lucide-vue-next": "^0.556.0",
     "pinia": "^3.0.4",
     "vue": "^3.5.25",
