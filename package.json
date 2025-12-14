@@ -19,7 +19,8 @@
     "predeploy": "npm run lint && npm run type-check && npm run build",
     "db:migrate": "tsx scripts/run-migration.ts",
     "db:seed-achievements": "tsx scripts/seed-achievements.ts",
-    "db:grant-achievements": "tsx scripts/grant-all-achievements.ts"
+    "db:grant-achievements": "tsx scripts/grant-all-achievements.ts",
+    "db:list-users": "tsx scripts/list-users.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.86.2",
@@ -56,6 +57,7 @@
     "prettier": "3.6.2",
     "tailwindcss": "^3.4.17",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "~5.9.0",
     "vite": "^7.2.4",
     "vite-plugin-nightwatch": "^0.4.6",
