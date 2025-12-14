@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* Override default colors for light theme */
+  body {
+    @apply bg-arc-light text-arc-dark;
+  }
+}
+
+@layer utilities {
+  /* Light theme text utilities */
+  .text-light-primary {
+    @apply text-arc-dark;
+  }
+
+  .text-light-secondary {
+    @apply text-arc-dark/75;
+  }
+
+  .text-light-muted {
+    @apply text-arc-dark/60;
+  }
+
+  /* Light theme background utilities */
+  .bg-light-panel {
+    @apply bg-white/80;
+  }
+
+  .bg-light-card {
+    @apply bg-arc-light-300;
+  }
+
+  /* Border utilities for light theme */
+  .border-light {
+    @apply border-arc-dark/10;
+  }
+
+  .border-light-hover {
+    @apply border-arc-dark/20;
+  }
+}

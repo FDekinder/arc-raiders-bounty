@@ -1,66 +1,53 @@
-/* Arc Raiders color palette - based on game logo */
+/* Arc Raiders color palette - Light theme */
 :root {
   /* Core Arc Raiders colors */
   --arc-cyan: #00d4ff;
   --arc-green: #00ff88;
   --arc-yellow: #ffd500;
   --arc-red: #ff3355;
-  --arc-dark: #0a0a14;
-  --arc-navy: #141420;
+  --arc-light: #ece2d0; /* New main background */
+  --arc-dark: #1a1a2e; /* Dark text color */
+  --arc-navy: #2a2a3e; /* Dark panels/cards */
 
-  /* White variants for light mode */
+  /* Light theme variants */
   --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
+  --vt-c-white-soft: #fdfcfa;
+  --vt-c-white-mute: #f9f6f0;
 
-  /* Dark variants */
-  --vt-c-black: #0a0a14;
-  --vt-c-black-soft: #141420;
-  --vt-c-black-mute: #1e1e2d;
+  /* Dark text variants for light background */
+  --vt-c-black: #1a1a2e;
+  --vt-c-black-soft: #2a2a3e;
+  --vt-c-black-mute: #3a3a4e;
 
   /* Accent color */
   --vt-c-indigo: var(--arc-red);
 
-  /* Dividers with Arc Raiders colors */
-  --vt-c-divider-light-1: rgba(255, 51, 85, 0.29);
-  --vt-c-divider-light-2: rgba(255, 51, 85, 0.12);
-  --vt-c-divider-dark-1: rgba(255, 51, 85, 0.35);
-  --vt-c-divider-dark-2: rgba(255, 51, 85, 0.18);
+  /* Dividers for light theme */
+  --vt-c-divider-light-1: rgba(42, 42, 62, 0.15);
+  --vt-c-divider-light-2: rgba(42, 42, 62, 0.08);
+  --vt-c-divider-dark-1: rgba(255, 51, 85, 0.20);
+  --vt-c-divider-dark-2: rgba(255, 51, 85, 0.10);
 
-  /* Text colors */
-  --vt-c-text-light-1: var(--arc-navy);
-  --vt-c-text-light-2: rgba(20, 20, 32, 0.66);
-  --vt-c-text-dark-1: #ffffff;
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.84);
+  /* Text colors for light theme */
+  --vt-c-text-light-1: #1a1a2e;
+  --vt-c-text-light-2: rgba(26, 26, 46, 0.75);
+  --vt-c-text-dark-1: #1a1a2e;
+  --vt-c-text-dark-2: rgba(26, 26, 46, 0.80);
 }
 
-/* semantic color variables for this project */
+/* semantic color variables for this project - Light theme */
 :root {
-  --color-background: var(--arc-dark);
-  --color-background-soft: var(--arc-navy);
-  --color-background-mute: #1e1e2d;
+  --color-background: var(--arc-light);
+  --color-background-soft: #f5f0e6;
+  --color-background-mute: #f1e9db;
 
-  --color-border: var(--vt-c-divider-dark-2);
-  --color-border-hover: var(--vt-c-divider-dark-1);
+  --color-border: var(--vt-c-divider-light-2);
+  --color-border-hover: var(--vt-c-divider-light-1);
 
   --color-heading: var(--arc-red);
-  --color-text: var(--vt-c-text-dark-2);
+  --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--arc-dark);
-    --color-background-soft: var(--arc-navy);
-    --color-background-mute: #1e1e2d;
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--arc-red);
-    --color-text: var(--vt-c-text-dark-2);
-  }
 }
 
 *,
