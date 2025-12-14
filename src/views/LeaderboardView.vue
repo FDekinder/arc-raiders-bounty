@@ -85,7 +85,7 @@ function getMedalColor(index: number) {
                 <span v-if="hunter.clan_tag" class="text-arc-red">[{{ hunter.clan_tag }}]</span>
                 {{ hunter.username }}
               </RouterLink>
-              <RoleBadge v-if="hunter.role" :role="hunter.role" size="sm" />
+              <RoleBadge v-if="hunter.game_role" :role="hunter.game_role" size="sm" />
             </div>
             <div class="flex gap-4 text-sm text-gray-400 mt-1">
               <span>{{ hunter.bounties_completed }} bounties completed</span>

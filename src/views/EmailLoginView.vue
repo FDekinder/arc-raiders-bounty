@@ -51,9 +51,9 @@ async function handleLogin() {
 
     success('Logged in successfully!')
 
-    // Redirect based on whether user has selected a role
+    // Redirect based on whether user has selected a game role
     setTimeout(() => {
-      if (!userData.role) {
+      if (!userData.game_role) {
         router.push('/select-role')
       } else {
         router.push('/')

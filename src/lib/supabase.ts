@@ -23,7 +23,7 @@ export interface User {
   times_hunted: number
   created_at: string
   clan_tag?: string
-  role?: UserRole
+  game_role?: UserRole
 }
 
 export interface Bounty {

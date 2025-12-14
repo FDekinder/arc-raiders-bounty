@@ -76,7 +76,7 @@ const currentUser = computed(() => getCurrentUser())
               class="flex items-center gap-3 ml-4 pl-4 border-l border-arc-red/20"
             >
               <RouterLink :to="`/profile/${currentUser.id}`" class="flex items-center gap-2 hover:text-arc-red transition">
-                <RoleBadge v-if="currentUser.role" :role="currentUser.role" size="sm" />
+                <RoleBadge v-if="currentUser.game_role" :role="currentUser.game_role" size="sm" />
                 <span v-if="currentUser.clan_tag" class="text-arc-red font-bold">[{{ currentUser.clan_tag }}]</span>
                 <span>{{ currentUser.username }}</span>
               </RouterLink>

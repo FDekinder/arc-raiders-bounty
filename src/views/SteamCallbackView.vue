@@ -47,13 +47,13 @@ onMounted(async () => {
 
     success('Successfully logged in!')
 
-    // Redirect based on whether user has selected a role
+    // Redirect based on whether user has selected a game role
     setTimeout(() => {
-      if (isNewUser || !user.role) {
-        // New user or no role selected - go to role selection
+      if (isNewUser || !user.game_role) {
+        // New user or no game role selected - go to role selection
         router.push('/select-role')
       } else {
-        // Existing user with role - go to home
+        // Existing user with game role - go to home
         router.push('/')
       }
     }, 1000)

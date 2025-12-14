@@ -32,16 +32,16 @@ async function confirmRole() {
     saving.value = true
     error.value = null
 
-    // Update user role in database
+    // Update user game_role in database
     const { error: updateError } = await supabase
       .from('users')
-      .update({ role: selectedRole.value })
+      .update({ game_role: selectedRole.value })
       .eq('id', currentUser.id)
 
     if (updateError) throw updateError
 
     // Update localStorage
-    const updatedUser = { ...currentUser, role: selectedRole.value }
+    const updatedUser = { ...currentUser, game_role: selectedRole.value }
     localStorage.setItem('arc_user', JSON.stringify(updatedUser))
 
     // Redirect to home
