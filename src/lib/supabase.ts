@@ -24,6 +24,7 @@ export interface User {
   created_at: string
   clan_tag?: string
   game_role?: UserRole
+  role?: 'admin' | 'user' // User permission role
 }
 
 export interface Bounty {

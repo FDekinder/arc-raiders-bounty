@@ -20,3 +20,8 @@ export function logout() {
 export function isAuthenticated(): boolean {
   return getCurrentUser() !== null
 }
+
+export function isAdmin(): boolean {
+  const user = getCurrentUser()
+  return user?.role === 'admin'
+}

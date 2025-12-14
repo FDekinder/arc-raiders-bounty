@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { getCurrentUser } from '@/lib/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,10 +81,20 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const publicPages = ['/login', '/auth/steam/callback', '/register', '/email-login', '/select-role']
   const authRequired = !publicPages.includes(to.path)
-  const currentUser = localStorage.getItem('arc_user')
+  const currentUser = getCurrentUser()
 
+  // Check authentication
   if (authRequired && !currentUser) {
     return next('/login')
+  }
+
+  // Check admin-only routes
+  const adminOnlyRoutes = ['/verify']
+  if (adminOnlyRoutes.includes(to.path)) {
+    if (!currentUser || currentUser.role !== 'admin') {
+      // Redirect non-admins to home
+      return next('/')
+    }
   }
 
   next()

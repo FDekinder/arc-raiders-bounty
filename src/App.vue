@@ -63,6 +63,7 @@ const currentUser = computed(() => getCurrentUser())
               Leaderboard
             </RouterLink>
             <RouterLink
+              v-if="currentUser?.role === 'admin'"
               to="/verify"
               class="hover:text-arc-red transition"
               active-class="text-arc-red"
