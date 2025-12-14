@@ -9,12 +9,15 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Types
 export type UserRole = 'BH' | 'PR' // BH = Bounty Hunter, PR = Proud Rat
+export type Platform = 'steam' | 'xbox' | 'playstation'
 
 export interface User {
   id: string
   username: string
   steam_id?: string
+  email?: string
   avatar_url?: string
+  platform?: Platform
   total_points: number
   bounties_completed: number
   times_hunted: number

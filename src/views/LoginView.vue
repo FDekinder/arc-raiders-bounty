@@ -3,6 +3,7 @@
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { initiateSteamLogin } from '@/lib/steamAuth'
+import { Mail } from 'lucide-vue-next'
 
 const router = useRouter()
 
@@ -16,6 +17,14 @@ onMounted(() => {
 
 function handleSteamLogin() {
   initiateSteamLogin()
+}
+
+function goToEmailLogin() {
+  router.push('/email-login')
+}
+
+function goToRegister() {
+  router.push('/register')
 }
 </script>
 
@@ -34,6 +43,7 @@ function handleSteamLogin() {
           <p class="text-gray-400">Sign in to start hunting</p>
         </div>
 
+        <!-- Steam Login Button -->
         <button
           @click="handleSteamLogin"
           class="w-full bg-arc-red hover:bg-arc-red-600 text-white font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-red/30"
@@ -46,9 +56,41 @@ function handleSteamLogin() {
           <span>Sign in through Steam</span>
         </button>
 
+        <!-- Divider -->
+        <div class="relative my-6">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-600"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-arc-navy text-gray-400">OR</span>
+          </div>
+        </div>
+
+        <!-- Email Login Button -->
+        <button
+          @click="goToEmailLogin"
+          class="w-full bg-arc-cyan hover:bg-arc-cyan/80 text-white font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-cyan/30"
+        >
+          <Mail :size="32" />
+          <span>Sign in with Email</span>
+        </button>
+
+        <!-- Register Link -->
+        <div class="mt-6 text-center">
+          <p class="text-gray-400 text-sm">
+            Don't have an account?
+            <button
+              @click="goToRegister"
+              class="text-arc-red hover:text-arc-red/80 font-bold transition-colors"
+            >
+              Register here
+            </button>
+          </p>
+        </div>
+
         <div class="mt-6 text-center text-sm text-gray-400">
-          <p>Secure authentication via Steam</p>
-          <p class="mt-2">We only access your public Steam profile</p>
+          <p>Secure authentication</p>
+          <p class="mt-2">We only access your public profile information</p>
         </div>
       </div>
     </div>

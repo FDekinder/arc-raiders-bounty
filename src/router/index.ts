@@ -64,11 +64,21 @@ const router = createRouter({
       name: 'select-role',
       component: () => import('../views/RoleSelectionView.vue'),
     },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/EmailRegisterView.vue'),
+    },
+    {
+      path: '/email-login',
+      name: 'email-login',
+      component: () => import('../views/EmailLoginView.vue'),
+    },
   ],
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/auth/steam/callback']
+  const publicPages = ['/login', '/auth/steam/callback', '/register', '/email-login', '/select-role']
   const authRequired = !publicPages.includes(to.path)
   const currentUser = localStorage.getItem('arc_user')
 

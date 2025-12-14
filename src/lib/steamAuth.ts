@@ -67,6 +67,7 @@ export async function createOrUpdateUser(steamId: string, username: string, avat
       .update({
         username,
         avatar_url: avatarUrl,
+        platform: 'steam',
       })
       .eq('steam_id', steamId)
       .select()
@@ -80,6 +81,7 @@ export async function createOrUpdateUser(steamId: string, username: string, avat
         steam_id: steamId,
         username,
         avatar_url: avatarUrl,
+        platform: 'steam',
       })
       .select()
       .single()
