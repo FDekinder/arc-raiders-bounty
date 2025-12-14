@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS achievements (
 -- Create user_achievements junction table
 CREATE TABLE IF NOT EXISTS user_achievements (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   achievement_id UUID NOT NULL REFERENCES achievements(id) ON DELETE CASCADE,
   earned_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   progress JSONB DEFAULT '{}', -- for tracking partial progress
@@ -80,7 +80,7 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS bounties_created INTEGER DEFAULT 0;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS hunts_joined INTEGER DEFAULT 0;
 
 -- Create RPC function to increment user achievements count
-CREATE OR REPLACE FUNCTION increment_user_achievements(user_id TEXT)
+CREATE OR REPLACE FUNCTION increment_user_achievements(user_id UUID)
 RETURNS void AS $$
 BEGIN
   UPDATE users
@@ -90,7 +90,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Create RPC function to increment bounties created
-CREATE OR REPLACE FUNCTION increment_bounties_created(user_id TEXT)
+CREATE OR REPLACE FUNCTION increment_bounties_created(user_id UUID)
 RETURNS void AS $$
 BEGIN
   UPDATE users
@@ -100,7 +100,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Create RPC function to increment hunts joined
-CREATE OR REPLACE FUNCTION increment_hunts_joined(user_id TEXT)
+CREATE OR REPLACE FUNCTION increment_hunts_joined(user_id UUID)
 RETURNS void AS $$
 BEGIN
   UPDATE users
