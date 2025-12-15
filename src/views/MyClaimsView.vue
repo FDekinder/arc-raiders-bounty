@@ -411,7 +411,7 @@ function getStatusIcon(status: string) {
 }
 
 .screenshot-section {
-  @apply;
+  /* No additional styles */
 }
 
 .screenshot-link {

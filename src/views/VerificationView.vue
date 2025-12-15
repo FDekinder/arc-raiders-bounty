@@ -256,7 +256,7 @@ function getStatusIcon(status: string) {
             <!-- Left: Screenshot -->
             <div class="screenshot-section">
               <p class="screenshot-label">Screenshot Evidence</p>
-              <a :href="claim.screenshot_url" target="_blank" class="screenshot-link">
+              <a :href="claim.screenshot_url" target="_blank" class="screenshot-link group">
                 <img
                   :src="claim.screenshot_url"
                   alt="Claim screenshot"
@@ -432,7 +432,7 @@ function getStatusIcon(status: string) {
 }
 
 .screenshot-section {
-  @apply;
+  /* No additional styles */
 }
 
 .screenshot-label {
@@ -440,7 +440,7 @@ function getStatusIcon(status: string) {
 }
 
 .screenshot-link {
-  @apply block relative group;
+  @apply block relative;
 }
 
 .screenshot-img {
@@ -448,7 +448,11 @@ function getStatusIcon(status: string) {
 }
 
 .screenshot-overlay {
-  @apply absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center rounded-lg;
+  @apply absolute inset-0 bg-black/50 opacity-0 transition flex items-center justify-center rounded-lg;
+}
+
+.screenshot-link:hover .screenshot-overlay {
+  @apply opacity-100;
 }
 
 .overlay-icon {
@@ -456,7 +460,7 @@ function getStatusIcon(status: string) {
 }
 
 .details-section {
-  @apply;
+  /* No additional styles */
 }
 
 .status-header {
@@ -472,7 +476,7 @@ function getStatusIcon(status: string) {
 }
 
 .detail-item {
-  @apply;
+  /* No additional styles */
 }
 
 .detail-label {
@@ -488,7 +492,7 @@ function getStatusIcon(status: string) {
 }
 
 .detail-value {
-  @apply;
+  /* No additional styles */
 }
 
 .detail-rejection {

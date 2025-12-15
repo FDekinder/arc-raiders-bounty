@@ -285,7 +285,7 @@ function handlePlatformChange() {
 }
 
 .form-section {
-  @apply;
+  /* No additional styles */
 }
 
 .form-label {

@@ -275,7 +275,7 @@ async function handleSubmit() {
 }
 
 .success-text {
-  @apply;
+  /* No additional styles */
 }
 
 .claim-form {

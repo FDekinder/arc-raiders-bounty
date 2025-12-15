@@ -104,7 +104,7 @@ async function confirmRole() {
 }
 
 .selection-info {
-  @apply;
+  /* No additional styles */
 }
 
 .selected-text {

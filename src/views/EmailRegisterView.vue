@@ -266,7 +266,7 @@ function goBack() {
 }
 
 .form-field {
-  @apply;
+  /* No additional styles */
 }
 
 .form-label {
