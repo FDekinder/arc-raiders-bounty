@@ -4,7 +4,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { supabase } from '@/lib/supabase'
 import type { User, Bounty, BountyClaim } from '@/lib/supabase'
-import { Target, Trophy, Award, TrendingUp, Clock, CheckCircle, XCircle } from 'lucide-vue-next'
+import { Target, Trophy, Award, TrendingUp, Clock } from 'lucide-vue-next'
 import { formatDistanceToNow } from 'date-fns'
 import AchievementGrid from '@/components/AchievementGrid.vue'
 import { getTopAchievements } from '@/lib/achievements'
@@ -13,6 +13,12 @@ import ClanTagEditor from '@/components/ClanTagEditor.vue'
 import RoleBadge from '@/components/RoleBadge.vue'
 import type { Achievement } from '@/lib/supabase'
 import { getCurrentUser } from '@/lib/auth'
+import LoadingState from '@/components/LoadingState.vue'
+import AlertMessage from '@/components/AlertMessage.vue'
+import StatCard from '@/components/StatCard.vue'
+import Card from '@/components/Card.vue'
+import EmptyState from '@/components/EmptyState.vue'
+import StatusBadge from '@/components/StatusBadge.vue'
 
 const route = useRoute()
 const user = ref<User | null>(null)
@@ -108,32 +114,6 @@ const stats = computed(() => {
   }
 })
 
-function getStatusIcon(status: string) {
-  switch (status) {
-    case 'approved':
-      return CheckCircle
-    case 'rejected':
-      return XCircle
-    case 'pending':
-      return Clock
-    default:
-      return Clock
-  }
-}
-
-function getStatusColor(status: string) {
-  switch (status) {
-    case 'approved':
-      return 'text-arc-green'
-    case 'rejected':
-      return 'text-arc-red'
-    case 'pending':
-      return 'text-arc-yellow'
-    default:
-      return 'text-gray-500'
-  }
-}
-
 function handleClanTagUpdate(clanTag: string | null) {
   if (user.value) {
     user.value.clan_tag = clanTag ?? undefined
@@ -143,15 +123,10 @@ function handleClanTagUpdate(clanTag: string | null) {
 
 <template>
   <div class="page-container">
-    <div v-if="loading" class="loading-container">
-      <div class="loading-text">Loading profile...</div>
-    </div>
+    <LoadingState v-if="loading" message="Loading profile..." />
 
     <div v-else-if="!user" class="error-container">
-      <div class="error-content">
-        <h2 class="error-title">User Not Found</h2>
-        <p class="error-message">This user doesn't exist</p>
-      </div>
+      <AlertMessage variant="error" message="User Not Found" />
     </div>
 
     <div v-else class="content-wrapper">
@@ -248,7 +223,7 @@ function handleClanTagUpdate(clanTag: string | null) {
       <!-- Detailed Stats Grid -->
       <div class="stats-grid">
         <!-- Hunter Stats -->
-        <div class="bg-arc-navy rounded-lg p-6">
+        <Card>
           <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
             <Trophy class="text-arc-green" />
             Hunter Stats
@@ -271,10 +246,10 @@ function handleClanTagUpdate(clanTag: string | null) {
               <span class="font-bold">{{ stats?.successRate || 0 }}%</span>
             </div>
           </div>
-        </div>
+        </Card>
 
         <!-- Bounty Creator Stats -->
-        <div class="bg-arc-navy rounded-lg p-6">
+        <Card>
           <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
             <Target class="text-arc-red" />
             Bounty Creator
@@ -293,10 +268,10 @@ function handleClanTagUpdate(clanTag: string | null) {
               <span class="font-bold text-arc-green">{{ stats?.completedBounties || 0 }}</span>
             </div>
           </div>
-        </div>
+        </Card>
 
         <!-- Other Stats -->
-        <div class="bg-arc-navy rounded-lg p-6">
+        <Card>
           <h3 class="text-xl font-bold mb-4">Other Stats</h3>
           <div class="space-y-3">
             <div class="flex justify-between">
@@ -308,19 +283,21 @@ function handleClanTagUpdate(clanTag: string | null) {
               <span class="font-bold text-arc-yellow">{{ stats?.totalPoints || 0 }}</span>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
 
       <!-- Recent Activity Tabs -->
-      <div class="bg-arc-navy rounded-lg p-6">
+      <Card>
         <h3 class="text-2xl font-bold mb-6">Recent Activity</h3>
 
         <!-- Recent Claims -->
         <div class="mb-8">
           <h4 class="text-lg font-bold mb-4 text-gray-300">Recent Claims</h4>
-          <div v-if="claimsSubmitted.length === 0" class="text-gray-400 text-center py-8">
-            No claims submitted yet
-          </div>
+          <EmptyState
+            v-if="claimsSubmitted.length === 0"
+            :icon="Clock"
+            message="No claims submitted yet"
+          />
           <div v-else class="space-y-3">
             <div
               v-for="claim in claimsSubmitted.slice(0, 5)"
@@ -343,11 +320,7 @@ function handleClanTagUpdate(clanTag: string | null) {
                     +{{ claim.points_awarded }} earned
                   </div>
                 </div>
-                <div
-                  :class="['flex items-center gap-1', getStatusColor(claim.verification_status)]"
-                >
-                  <component :is="getStatusIcon(claim.verification_status)" :size="20" />
-                </div>
+                <StatusBadge :status="claim.verification_status" size="sm" />
               </div>
             </div>
           </div>
@@ -356,9 +329,11 @@ function handleClanTagUpdate(clanTag: string | null) {
         <!-- Recent Bounties Created -->
         <div>
           <h4 class="text-lg font-bold mb-4 text-gray-300">Bounties Created</h4>
-          <div v-if="bountiesCreated.length === 0" class="text-gray-400 text-center py-8">
-            No bounties created yet
-          </div>
+          <EmptyState
+            v-if="bountiesCreated.length === 0"
+            :icon="Target"
+            message="No bounties created yet"
+          />
           <div v-else class="space-y-3">
             <div
               v-for="bounty in bountiesCreated.slice(0, 5)"
@@ -383,7 +358,7 @@ function handleClanTagUpdate(clanTag: string | null) {
             </div>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   </div>
 </template>

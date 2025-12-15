@@ -5,6 +5,13 @@ import { supabase } from '@/lib/supabase'
 import type { BountyClaim, Bounty } from '@/lib/supabase'
 import { CheckCircle, XCircle, Clock, Award, AlertCircle } from 'lucide-vue-next'
 import { getCurrentUser } from '@/lib/auth'
+import PageHeader from '@/components/PageHeader.vue'
+import StatCard from '@/components/StatCard.vue'
+import FilterTabs from '@/components/FilterTabs.vue'
+import LoadingState from '@/components/LoadingState.vue'
+import EmptyState from '@/components/EmptyState.vue'
+import StatusBadge from '@/components/StatusBadge.vue'
+import Card from '@/components/Card.vue'
 
 interface ClaimWithBounty extends BountyClaim {
   bounty?: Bounty
@@ -33,6 +40,13 @@ const stats = computed(() => {
       .reduce((sum, c) => sum + c.points_awarded, 0),
   }
 })
+
+const filterTabs = computed(() => [
+  { value: 'all', label: 'All', count: stats.value.total, variant: 'default' as const },
+  { value: 'pending', label: 'Pending', count: stats.value.pending, variant: 'yellow' as const },
+  { value: 'approved', label: 'Approved', count: stats.value.approved, variant: 'green' as const },
+  { value: 'rejected', label: 'Rejected', count: stats.value.rejected, variant: 'red' as const }
+])
 
 onMounted(async () => {
   await loadClaims()
@@ -106,88 +120,63 @@ function getStatusIcon(status: string) {
   <div class="page-container">
     <div class="content-wrapper">
       <!-- Header -->
-      <div class="header">
-        <h1 class="title">My Claims</h1>
-        <p class="subtitle">Track your bounty hunting history and earnings</p>
-      </div>
+      <PageHeader
+        title="My Claims"
+        subtitle="Track your bounty hunting history and earnings"
+      />
 
       <!-- Stats Cards -->
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value">{{ stats.total }}</div>
-          <div class="stat-label">Total Claims</div>
-        </div>
-        <div class="stat-card-pending">
-          <div class="stat-value-pending">{{ stats.pending }}</div>
-          <div class="stat-label">Pending</div>
-        </div>
-        <div class="stat-card-approved">
-          <div class="stat-value-approved">{{ stats.approved }}</div>
-          <div class="stat-label">Approved</div>
-        </div>
-        <div class="stat-card-rejected">
-          <div class="stat-value-rejected">{{ stats.rejected }}</div>
-          <div class="stat-label">Rejected</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-earned-wrapper">
-            <Award class="stat-icon" :size="24" />
-            <div class="stat-earned-value">{{ stats.totalEarned }}</div>
-          </div>
-          <div class="stat-label">Points Earned</div>
-        </div>
+        <StatCard
+          :value="stats.total"
+          label="Total Claims"
+        />
+        <StatCard
+          :value="stats.pending"
+          label="Pending"
+          variant="yellow"
+        />
+        <StatCard
+          :value="stats.approved"
+          label="Approved"
+          variant="green"
+        />
+        <StatCard
+          :value="stats.rejected"
+          label="Rejected"
+          variant="red"
+        />
+        <StatCard
+          :value="stats.totalEarned"
+          label="Points Earned"
+          :icon="Award"
+        />
       </div>
 
       <!-- Filter Tabs -->
-      <div class="filter-tabs">
-        <button
-          @click="filter = 'all'"
-          :class="['filter-btn', filter === 'all' ? 'filter-btn-active' : 'filter-btn-inactive']"
-        >
-          All ({{ stats.total }})
-        </button>
-        <button
-          @click="filter = 'pending'"
-          :class="['filter-btn', filter === 'pending' ? 'filter-btn-active-yellow' : 'filter-btn-inactive']"
-        >
-          Pending ({{ stats.pending }})
-        </button>
-        <button
-          @click="filter = 'approved'"
-          :class="['filter-btn', filter === 'approved' ? 'filter-btn-active-green' : 'filter-btn-inactive']"
-        >
-          Approved ({{ stats.approved }})
-        </button>
-        <button
-          @click="filter = 'rejected'"
-          :class="['filter-btn', filter === 'rejected' ? 'filter-btn-active-red' : 'filter-btn-inactive']"
-        >
-          Rejected ({{ stats.rejected }})
-        </button>
-      </div>
+      <FilterTabs
+        v-model="filter"
+        :tabs="filterTabs"
+      />
 
       <!-- Loading State -->
-      <div v-if="loading" class="loading-state">
-        <div class="loading-text">Loading claims...</div>
-      </div>
+      <LoadingState v-if="loading" message="Loading claims..." />
 
       <!-- Empty State -->
-      <div v-else-if="filteredClaims.length === 0" class="empty-state">
-        <Clock class="empty-icon" :size="48" />
-        <p class="empty-text">
-          {{ filter === 'all' ? 'No claims yet' : `No ${filter} claims` }}
-        </p>
-        <RouterLink to="/bounties" class="empty-action">
-          Browse Bounties
-        </RouterLink>
-      </div>
+      <EmptyState
+        v-else-if="filteredClaims.length === 0"
+        :icon="Clock"
+        :message="filter === 'all' ? 'No claims yet' : `No ${filter} claims`"
+        actionText="Browse Bounties"
+        actionTo="/bounties"
+      />
 
       <!-- Claims List -->
       <div v-else class="claims-list">
-        <div
+        <Card
           v-for="claim in filteredClaims"
           :key="claim.id"
-          :class="['claim-card', getStatusBg(claim.verification_status)]"
+          :variant="claim.verification_status === 'approved' ? 'bordered' : 'default'"
         >
           <div class="claim-grid">
             <!-- Screenshot Thumbnail -->
@@ -214,21 +203,7 @@ function getStatusIcon(status: string) {
                   </p>
                 </div>
 
-                <div class="status-badge">
-                  <component
-                    :is="getStatusIcon(claim.verification_status)"
-                    :class="getStatusColor(claim.verification_status)"
-                    :size="24"
-                  />
-                  <span
-                    :class="[
-                      'status-text',
-                      getStatusColor(claim.verification_status),
-                    ]"
-                  >
-                    {{ claim.verification_status }}
-                  </span>
-                </div>
+                <StatusBadge :status="claim.verification_status" />
               </div>
 
               <div class="claim-stats">
@@ -267,7 +242,7 @@ function getStatusIcon(status: string) {
               </div>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   </div>
@@ -282,136 +257,16 @@ function getStatusIcon(status: string) {
   @apply container mx-auto px-4 py-8;
 }
 
-.header {
-  @apply mb-8;
-}
-
-.title {
-  @apply text-4xl font-bold mb-2;
-}
-
-.subtitle {
-  @apply text-gray-400;
-}
-
 .stats-grid {
   @apply grid grid-cols-2 md:grid-cols-5 gap-4 mb-8;
-}
-
-.stat-card {
-  @apply bg-arc-navy rounded-lg p-4;
-}
-
-.stat-card-pending {
-  @apply bg-arc-yellow/10 border border-arc-yellow rounded-lg p-4;
-}
-
-.stat-card-approved {
-  @apply bg-arc-green/10 border border-arc-green rounded-lg p-4;
-}
-
-.stat-card-rejected {
-  @apply bg-arc-red/10 border border-arc-red rounded-lg p-4;
-}
-
-.stat-value {
-  @apply text-2xl font-bold;
-}
-
-.stat-value-pending {
-  @apply text-2xl font-bold text-arc-yellow;
-}
-
-.stat-value-approved {
-  @apply text-2xl font-bold text-arc-green;
-}
-
-.stat-value-rejected {
-  @apply text-2xl font-bold text-arc-red;
-}
-
-.stat-label {
-  @apply text-sm text-gray-400;
-}
-
-.stat-earned-wrapper {
-  @apply flex items-center gap-2;
-}
-
-.stat-icon {
-  @apply text-arc-yellow;
-}
-
-.stat-earned-value {
-  @apply text-2xl font-bold text-arc-yellow;
-}
-
-.filter-tabs {
-  @apply flex gap-4 mb-8;
-}
-
-.filter-btn {
-  @apply px-6 py-2 rounded-lg font-semibold transition;
-}
-
-.filter-btn-active {
-  @apply bg-arc-red text-white;
-}
-
-.filter-btn-active-yellow {
-  @apply bg-arc-yellow text-white;
-}
-
-.filter-btn-active-green {
-  @apply bg-arc-green text-white;
-}
-
-.filter-btn-active-red {
-  @apply bg-arc-red text-white;
-}
-
-.filter-btn-inactive {
-  @apply bg-arc-navy hover:bg-arc-navy/80;
-}
-
-.loading-state {
-  @apply text-center py-12;
-}
-
-.loading-text {
-  @apply text-xl;
-}
-
-.empty-state {
-  @apply text-center py-12;
-}
-
-.empty-icon {
-  @apply mx-auto mb-4 text-gray-600;
-}
-
-.empty-text {
-  @apply text-gray-400 mb-4;
-}
-
-.empty-action {
-  @apply inline-block bg-arc-red hover:bg-arc-red/80 px-6 py-2 rounded-lg font-semibold;
 }
 
 .claims-list {
   @apply space-y-4;
 }
 
-.claim-card {
-  @apply bg-arc-navy rounded-lg p-6 border;
-}
-
 .claim-grid {
   @apply grid md:grid-cols-4 gap-6;
-}
-
-.screenshot-section {
-  /* No additional styles */
 }
 
 .screenshot-link {
@@ -436,14 +291,6 @@ function getStatusIcon(status: string) {
 
 .claim-timestamp {
   @apply text-sm text-gray-400;
-}
-
-.status-badge {
-  @apply flex items-center gap-2;
-}
-
-.status-text {
-  @apply text-lg font-semibold uppercase;
 }
 
 .claim-stats {

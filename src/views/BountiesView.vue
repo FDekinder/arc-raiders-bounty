@@ -9,6 +9,11 @@ import { getTimeRemaining, getExpirationColor, extendBounty } from '@/lib/bounty
 import { getCurrentUser } from '@/lib/auth'
 import { useToast } from '@/composables/useToast'
 import { joinHunt, leaveHunt, getHunterCount, isHunting, getMyActiveHunts } from '@/lib/hunters'
+import PageHeader from '@/components/PageHeader.vue'
+import IconInput from '@/components/IconInput.vue'
+import LoadingState from '@/components/LoadingState.vue'
+import EmptyState from '@/components/EmptyState.vue'
+import Card from '@/components/Card.vue'
 
 const bounties = ref<Bounty[]>([])
 const mostWanted = ref<MostWanted[]>([])
@@ -142,35 +147,30 @@ const filteredBounties = computed(() => {
 
 <template>
   <div class="page-container">
-    <div v-if="loading" class="loading-container">
-      <div class="loading-text">Loading bounties...</div>
-    </div>
+    <LoadingState v-if="loading" message="Loading bounties..." />
 
     <div v-else class="content-wrapper">
-      <div class="header">
-        <div>
-          <h1 class="title">Active Bounties</h1>
-          <p v-if="currentUser && myActiveHunts > 0" class="hunt-status">
+      <PageHeader title="Active Bounties">
+        <template v-if="currentUser && myActiveHunts > 0" #subtitle>
+          <p class="hunt-status">
             You are hunting {{ myActiveHunts }}/3 targets
           </p>
-        </div>
-        <RouterLink to="/create-bounty" class="new-bounty-btn">
-          + New Bounty
-        </RouterLink>
-      </div>
+        </template>
+        <template #actions>
+          <RouterLink to="/create-bounty" class="new-bounty-btn">
+            + New Bounty
+          </RouterLink>
+        </template>
+      </PageHeader>
 
       <!-- Search and Filter Controls -->
       <div class="filters-section">
         <div class="filters-grid">
-          <div class="search-container">
-            <Search class="search-icon" :size="20" />
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search by gamertag..."
-              class="search-input"
-            />
-          </div>
+          <IconInput
+            v-model="searchQuery"
+            :icon="Search"
+            placeholder="Search by gamertag..."
+          />
 
           <div>
             <select v-model="sortBy" class="sort-select">
@@ -216,18 +216,20 @@ const filteredBounties = computed(() => {
 
       <!-- All Bounties -->
       <div class="bounties-list">
-        <div v-if="filteredBounties.length === 0" class="empty-state">
-          {{
-            searchQuery
+        <EmptyState
+          v-if="filteredBounties.length === 0"
+          :icon="Target"
+          :message="searchQuery
               ? 'No bounties match your search'
-              : 'No active bounties. Be the first to create one!'
-          }}
-        </div>
+              : 'No active bounties. Be the first to create one!'"
+          actionText="Create Bounty"
+          actionTo="/create-bounty"
+        />
 
-        <div
+        <Card
           v-for="bounty in filteredBounties"
           :key="bounty.id"
-          class="bounty-card"
+          hover
         >
           <div class="bounty-content">
             <div class="bounty-info">
@@ -309,7 +311,7 @@ const filteredBounties = computed(() => {
               </div>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   </div>
@@ -320,24 +322,8 @@ const filteredBounties = computed(() => {
   @apply min-h-screen bg-arc-dark text-white;
 }
 
-.loading-container {
-  @apply flex items-center justify-center min-h-screen;
-}
-
-.loading-text {
-  @apply text-white text-xl;
-}
-
 .content-wrapper {
   @apply container mx-auto px-4 py-8;
-}
-
-.header {
-  @apply flex justify-between items-center mb-8;
-}
-
-.title {
-  @apply text-4xl font-bold;
 }
 
 .hunt-status {
@@ -356,17 +342,6 @@ const filteredBounties = computed(() => {
   @apply grid md:grid-cols-2 gap-4;
 }
 
-.search-container {
-  @apply relative;
-}
-
-.search-icon {
-  @apply absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400;
-}
-
-.search-input {
-  @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-arc-red;
-}
 
 .sort-select {
   @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-arc-red;
@@ -412,13 +387,6 @@ const filteredBounties = computed(() => {
   @apply space-y-4;
 }
 
-.empty-state {
-  @apply bg-arc-navy rounded-lg p-8 text-center text-gray-400;
-}
-
-.bounty-card {
-  @apply bg-arc-navy rounded-lg p-6 hover:bg-arc-navy/80 transition;
-}
 
 .bounty-content {
   @apply flex justify-between items-start;

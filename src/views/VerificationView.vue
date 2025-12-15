@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { supabase } from '@/lib/supabase'
 import type { BountyClaim, Bounty } from '@/lib/supabase'
 import { CheckCircle, XCircle, Clock, ExternalLink } from 'lucide-vue-next'
 import { useToast } from '@/composables/useToast'
 import { getCurrentUser } from '@/lib/auth'
 import { isUserAdmin, approveBountyClaim, rejectBountyClaim } from '@/lib/adminUtils'
+import PageHeader from '@/components/PageHeader.vue'
+import FilterTabs from '@/components/FilterTabs.vue'
+import LoadingState from '@/components/LoadingState.vue'
+import EmptyState from '@/components/EmptyState.vue'
+import StatusBadge from '@/components/StatusBadge.vue'
+import Card from '@/components/Card.vue'
 
 interface ClaimWithBounty extends BountyClaim {
   bounty?: Bounty
@@ -65,24 +71,16 @@ async function loadClaims() {
   }
 }
 
-// Filter helper methods
-function setFilterPending() {
-  filter.value = 'pending'
-  loadClaims()
-}
+const filterTabs = [
+  { value: 'pending', label: 'Pending', variant: 'yellow' as const },
+  { value: 'approved', label: 'Approved', variant: 'green' as const },
+  { value: 'rejected', label: 'Rejected', variant: 'red' as const },
+  { value: 'all', label: 'All', variant: 'default' as const }
+]
 
-function setFilterApproved() {
-  filter.value = 'approved'
-  loadClaims()
-}
-
-function setFilterRejected() {
-  filter.value = 'rejected'
-  loadClaims()
-}
-
-function setFilterAll() {
-  filter.value = 'all'
+// Watch filter changes
+function handleFilterChange(newFilter: string) {
+  filter.value = newFilter as 'all' | 'pending' | 'approved' | 'rejected'
   loadClaims()
 }
 
@@ -188,70 +186,34 @@ function getStatusIcon(status: string) {
 <template>
   <div class="page-container">
     <div class="content-wrapper">
-      <div class="header">
-        <div class="header-title-row">
-          <h1 class="title">Claim Verification</h1>
+      <PageHeader title="Claim Verification" subtitle="Review and verify bounty claims from hunters">
+        <template #actions>
           <div v-if="isAdmin" class="admin-badge">
             Admin
           </div>
-        </div>
-        <p class="subtitle">Review and verify bounty claims from hunters</p>
-      </div>
+        </template>
+      </PageHeader>
 
       <!-- Filter Tabs -->
-      <div class="filter-tabs">
-        <button
-          @click="setFilterPending()"
-          :class="[
-            'filter-btn',
-            filter === 'pending' ? 'filter-btn-pending' : 'filter-btn-inactive'
-          ]"
-        >
-          Pending
-        </button>
-        <button
-          @click="setFilterApproved()"
-          :class="[
-            'filter-btn',
-            filter === 'approved' ? 'filter-btn-approved' : 'filter-btn-inactive'
-          ]"
-        >
-          Approved
-        </button>
-        <button
-          @click="setFilterRejected()"
-          :class="[
-            'filter-btn',
-            filter === 'rejected' ? 'filter-btn-rejected' : 'filter-btn-inactive'
-          ]"
-        >
-          Rejected
-        </button>
-        <button
-          @click="setFilterAll()"
-          :class="[
-            'filter-btn',
-            filter === 'all' ? 'filter-btn-all' : 'filter-btn-inactive'
-          ]"
-        >
-          All
-        </button>
-      </div>
+      <FilterTabs
+        :modelValue="filter"
+        @update:modelValue="handleFilterChange"
+        :tabs="filterTabs"
+      />
 
       <!-- Loading State -->
-      <div v-if="loading" class="loading-state">
-        <div class="loading-text">Loading claims...</div>
-      </div>
+      <LoadingState v-if="loading" message="Loading claims..." />
 
       <!-- Empty State -->
-      <div v-else-if="claims.length === 0" class="empty-state">
-        <Clock class="empty-icon" :size="48" />
-        <p class="empty-text">No {{ filter !== 'all' ? filter : '' }} claims found</p>
-      </div>
+      <EmptyState
+        v-else-if="claims.length === 0"
+        :icon="Clock"
+        :message="`No ${filter !== 'all' ? filter : ''} claims found`"
+      />
 
       <!-- Claims List -->
       <div v-else class="claims-list">
-        <div v-for="claim in claims" :key="claim.id" class="claim-card">
+        <Card v-for="claim in claims" :key="claim.id">
           <div class="claim-grid">
             <!-- Left: Screenshot -->
             <div class="screenshot-section">
@@ -270,21 +232,7 @@ function getStatusIcon(status: string) {
 
             <!-- Right: Claim Details -->
             <div class="details-section">
-              <div class="status-header">
-                <component
-                  :is="getStatusIcon(claim.verification_status)"
-                  :class="getStatusColor(claim.verification_status)"
-                  :size="24"
-                />
-                <span
-                  :class="[
-                    'status-text',
-                    getStatusColor(claim.verification_status),
-                  ]"
-                >
-                  {{ claim.verification_status }}
-                </span>
-              </div>
+              <StatusBadge :status="claim.verification_status" />
 
               <div class="details-list">
                 <div class="detail-item">
@@ -336,7 +284,7 @@ function getStatusIcon(status: string) {
               </div>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   </div>
@@ -351,88 +299,16 @@ function getStatusIcon(status: string) {
   @apply container mx-auto px-4 py-8;
 }
 
-.header {
-  @apply mb-8;
-}
-
-.header-title-row {
-  @apply flex items-center gap-3;
-}
-
-.title {
-  @apply text-4xl font-bold;
-}
-
 .admin-badge {
   @apply bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold;
-}
-
-.subtitle {
-  @apply text-gray-400 mt-2;
-}
-
-.filter-tabs {
-  @apply flex gap-4 mb-8;
-}
-
-.filter-btn {
-  @apply px-6 py-2 rounded-lg font-semibold transition;
-}
-
-.filter-btn-pending {
-  @apply bg-arc-yellow text-white;
-}
-
-.filter-btn-approved {
-  @apply bg-arc-green text-white;
-}
-
-.filter-btn-rejected {
-  @apply bg-arc-red text-white;
-}
-
-.filter-btn-all {
-  @apply bg-arc-red text-white;
-}
-
-.filter-btn-inactive {
-  @apply bg-arc-navy hover:bg-arc-navy/80;
-}
-
-.loading-state {
-  @apply text-center py-12;
-}
-
-.loading-text {
-  @apply text-xl;
-}
-
-.empty-state {
-  @apply text-center py-12;
-}
-
-.empty-icon {
-  @apply mx-auto mb-4 text-gray-600;
-}
-
-.empty-text {
-  @apply text-gray-400;
 }
 
 .claims-list {
   @apply space-y-6;
 }
 
-.claim-card {
-  @apply bg-arc-navy rounded-lg p-6;
-}
-
 .claim-grid {
   @apply grid md:grid-cols-2 gap-6;
-}
-
-.screenshot-section {
-  /* No additional styles */
 }
 
 .screenshot-label {
@@ -459,24 +335,8 @@ function getStatusIcon(status: string) {
   @apply text-white;
 }
 
-.details-section {
-  /* No additional styles */
-}
-
-.status-header {
-  @apply flex items-center gap-2 mb-4;
-}
-
-.status-text {
-  @apply text-lg font-semibold uppercase;
-}
-
 .details-list {
-  @apply space-y-3 mb-6;
-}
-
-.detail-item {
-  /* No additional styles */
+  @apply space-y-3 mb-6 mt-4;
 }
 
 .detail-label {
@@ -489,10 +349,6 @@ function getStatusIcon(status: string) {
 
 .detail-amount {
   @apply text-2xl font-bold text-arc-red;
-}
-
-.detail-value {
-  /* No additional styles */
 }
 
 .detail-rejection {
