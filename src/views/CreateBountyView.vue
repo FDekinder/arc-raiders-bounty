@@ -112,20 +112,20 @@ function handlePlatformChange() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-arc-dark text-white">
-    <div class="container mx-auto px-4 py-8">
-      <div class="max-w-2xl mx-auto">
-        <div class="mb-8">
-          <h1 class="text-4xl font-bold mb-2">Create Bounty</h1>
-          <p class="text-gray-400">Place a bounty on another player</p>
+  <div class="page-container">
+    <div class="content-wrapper">
+      <div class="content-inner">
+        <div class="header">
+          <h1 class="title">Create Bounty</h1>
+          <p class="subtitle">Place a bounty on another player</p>
         </div>
 
-        <div class="bg-arc-navy rounded-lg p-8">
-          <form @submit.prevent="handleSubmit" class="space-y-6">
+        <div class="form-card">
+          <form @submit.prevent="handleSubmit" class="form-content">
             <!-- Platform Selection -->
-            <div>
-              <label class="block text-sm font-medium mb-2">Platform</label>
-              <div class="grid grid-cols-3 gap-3">
+            <div class="form-section">
+              <label class="form-label">Platform</label>
+              <div class="platform-grid">
                 <button
                   v-for="platform in platforms"
                   :key="platform.value"
@@ -135,120 +135,103 @@ function handlePlatformChange() {
                     handlePlatformChange()
                   "
                   :class="[
-                    'p-4 rounded-lg border-2 transition font-semibold flex flex-col items-center gap-2',
-                    selectedPlatform === platform.value
-                      ? 'border-arc-red bg-arc-red/10'
-                      : 'border-gray-600 hover:border-gray-500',
+                    'platform-btn',
+                    selectedPlatform === platform.value ? 'platform-btn-active' : 'platform-btn-inactive'
                   ]"
                 >
-                  <span class="text-2xl">{{ platform.icon }}</span>
+                  <span class="platform-icon">{{ platform.icon }}</span>
                   <span>{{ platform.label }}</span>
                 </button>
               </div>
             </div>
 
             <!-- Target Player with Verification -->
-            <div>
-              <label class="block text-sm font-medium mb-2">
+            <div class="form-section">
+              <label class="form-label">
                 Target Player
-                <span class="text-gray-400 text-xs ml-2">
+                <span class="platform-hint">
                   ({{ platforms.find((p) => p.value === selectedPlatform)?.label }} username/ID)
                 </span>
               </label>
-              <div class="flex gap-2">
-                <div class="flex-1 relative">
+              <div class="input-group">
+                <div class="input-wrapper">
                   <input
                     v-model="gamertag"
                     type="text"
                     placeholder="Enter username or ID..."
-                    class="w-full bg-gray-700 border border-arc-red/30 rounded-lg px-4 py-3 focus:outline-none focus:border-arc-red"
+                    class="input-field"
                     required
                     @input="verificationStatus = 'idle'"
                   />
-                  <div
-                    v-if="verificationStatus === 'success'"
-                    class="absolute right-3 top-1/2 transform -translate-y-1/2"
-                  >
-                    <CheckCircle class="text-arc-green" :size="20" />
+                  <div v-if="verificationStatus === 'success'" class="input-icon">
+                    <CheckCircle class="icon-success" :size="20" />
                   </div>
-                  <div
-                    v-if="verificationStatus === 'error'"
-                    class="absolute right-3 top-1/2 transform -translate-y-1/2"
-                  >
-                    <XCircle class="text-arc-red" :size="20" />
+                  <div v-if="verificationStatus === 'error'" class="input-icon">
+                    <XCircle class="icon-error" :size="20" />
                   </div>
                 </div>
                 <button
                   type="button"
                   @click="verifyGamertag"
                   :disabled="verifying || !gamertag.trim()"
-                  class="bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition"
+                  class="verify-btn"
                 >
-                  <Loader v-if="verifying" class="animate-spin" :size="18" />
+                  <Loader v-if="verifying" class="spinner" :size="18" />
                   <Search v-else :size="18" />
                   Verify
                 </button>
               </div>
 
               <!-- Verified Player Card -->
-              <div
-                v-if="verifiedPlayer"
-                class="mt-4 bg-gray-700 rounded-lg p-4 flex items-center gap-4"
-              >
+              <div v-if="verifiedPlayer" class="player-card">
                 <img
                   v-if="verifiedPlayer.avatarUrl"
                   :src="verifiedPlayer.avatarUrl"
                   :alt="verifiedPlayer.displayName"
-                  class="w-16 h-16 rounded-full"
+                  class="player-avatar"
                 />
-                <div
-                  class="w-16 h-16 rounded-full bg-gray-600 flex items-center justify-center text-2xl"
-                  v-else
-                >
+                <div v-else class="player-avatar-placeholder">
                   {{ platforms.find((p) => p.value === selectedPlatform)?.icon }}
                 </div>
-                <div class="flex-1">
-                  <div class="font-bold text-lg">{{ verifiedPlayer.displayName }}</div>
-                  <div class="text-sm text-gray-400">
+                <div class="player-info">
+                  <div class="player-name">{{ verifiedPlayer.displayName }}</div>
+                  <div class="player-platform">
                     {{ platforms.find((p) => p.value === selectedPlatform)?.label }}
                   </div>
                   <a
                     v-if="verifiedPlayer.profileUrl && selectedPlatform !== 'xbox'"
                     :href="verifiedPlayer.profileUrl"
                     target="_blank"
-                    class="text-sm text-arc-red hover:text-arc-red/80"
+                    class="player-link"
                   >
                     View Profile →
                   </a>
                 </div>
-                <CheckCircle class="text-arc-green" :size="32" />
+                <CheckCircle class="verified-icon" :size="32" />
               </div>
 
-              <p class="text-sm text-gray-400 mt-2">
+              <p class="help-text">
                 We'll verify this player exists on
                 {{ platforms.find((p) => p.value === selectedPlatform)?.label }}
               </p>
             </div>
 
             <!-- Bounty Amount -->
-            <div>
-              <label class="block text-sm font-medium mb-2">Bounty Amount (Points)</label>
+            <div class="form-section">
+              <label class="form-label">Bounty Amount (Points)</label>
               <input
                 v-model="amount"
                 type="number"
                 min="10"
                 placeholder="Minimum 10 points"
-                class="w-full bg-gray-700 border border-arc-red/30 rounded-lg px-4 py-3 focus:outline-none focus:border-arc-red"
+                class="input-field"
                 required
               />
-              <p class="text-sm text-gray-400 mt-2">Higher bounties attract more hunters!</p>
+              <p class="help-text">Higher bounties attract more hunters!</p>
             </div>
 
             <!-- Error Message -->
-            <div
-              v-if="error"
-              class="bg-arc-red/10 border border-arc-red rounded-lg p-4 text-arc-red"
-            >
+            <div v-if="error" class="error-alert">
               {{ error }}
             </div>
 
@@ -256,7 +239,7 @@ function handlePlatformChange() {
             <button
               type="submit"
               :disabled="loading || verificationStatus !== 'success'"
-              class="w-full bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition"
+              class="submit-btn"
             >
               <Target :size="20" />
               {{ loading ? 'Creating Bounty...' : 'Create Bounty' }}
@@ -267,3 +250,145 @@ function handlePlatformChange() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.page-container {
+  @apply min-h-screen bg-arc-dark text-white;
+}
+
+.content-wrapper {
+  @apply container mx-auto px-4 py-8;
+}
+
+.content-inner {
+  @apply max-w-2xl mx-auto;
+}
+
+.header {
+  @apply mb-8;
+}
+
+.title {
+  @apply text-4xl font-bold mb-2;
+}
+
+.subtitle {
+  @apply text-gray-400;
+}
+
+.form-card {
+  @apply bg-arc-navy rounded-lg p-8;
+}
+
+.form-content {
+  @apply space-y-6;
+}
+
+.form-section {
+  @apply;
+}
+
+.form-label {
+  @apply block text-sm font-medium mb-2;
+}
+
+.platform-grid {
+  @apply grid grid-cols-3 gap-3;
+}
+
+.platform-btn {
+  @apply p-4 rounded-lg border-2 transition font-semibold flex flex-col items-center gap-2;
+}
+
+.platform-btn-active {
+  @apply border-arc-red bg-arc-red/10;
+}
+
+.platform-btn-inactive {
+  @apply border-gray-600 hover:border-gray-500;
+}
+
+.platform-icon {
+  @apply text-2xl;
+}
+
+.platform-hint {
+  @apply text-gray-400 text-xs ml-2;
+}
+
+.input-group {
+  @apply flex gap-2;
+}
+
+.input-wrapper {
+  @apply flex-1 relative;
+}
+
+.input-field {
+  @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg px-4 py-3 focus:outline-none focus:border-arc-red;
+}
+
+.input-icon {
+  @apply absolute right-3 top-1/2 transform -translate-y-1/2;
+}
+
+.icon-success {
+  @apply text-arc-green;
+}
+
+.icon-error {
+  @apply text-arc-red;
+}
+
+.verify-btn {
+  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition;
+}
+
+.spinner {
+  @apply animate-spin;
+}
+
+.player-card {
+  @apply mt-4 bg-gray-700 rounded-lg p-4 flex items-center gap-4;
+}
+
+.player-avatar {
+  @apply w-16 h-16 rounded-full;
+}
+
+.player-avatar-placeholder {
+  @apply w-16 h-16 rounded-full bg-gray-600 flex items-center justify-center text-2xl;
+}
+
+.player-info {
+  @apply flex-1;
+}
+
+.player-name {
+  @apply font-bold text-lg;
+}
+
+.player-platform {
+  @apply text-sm text-gray-400;
+}
+
+.player-link {
+  @apply text-sm text-arc-red hover:text-arc-red/80;
+}
+
+.verified-icon {
+  @apply text-arc-green;
+}
+
+.help-text {
+  @apply text-sm text-gray-400 mt-2;
+}
+
+.error-alert {
+  @apply bg-arc-red/10 border border-arc-red rounded-lg p-4 text-arc-red;
+}
+
+.submit-btn {
+  @apply w-full bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition;
+}
+</style>

@@ -99,18 +99,18 @@ function getActivityIcon(type: string) {
   }
 }
 
-function getActivityColor(type: string) {
+function getActivityColorClass(type: string) {
   switch (type) {
     case 'bounty_created':
-      return 'text-arc-red bg-arc-red/10'
+      return 'icon-bounty-created'
     case 'claim_submitted':
-      return 'text-arc-red bg-arc-red/10'
+      return 'icon-claim-submitted'
     case 'claim_approved':
-      return 'text-arc-green bg-arc-green/10'
+      return 'icon-claim-approved'
     case 'claim_rejected':
-      return 'text-gray-500 bg-gray-500/10'
+      return 'icon-claim-rejected'
     default:
-      return 'text-gray-500 bg-gray-500/10'
+      return 'icon-default'
   }
 }
 
@@ -143,67 +143,65 @@ function getActivityText(activity: Activity) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-arc-dark text-white">
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
+  <div class="activity-page">
+    <div class="activity-container">
       <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-4xl font-bold mb-2">Activity Feed</h1>
-        <p class="text-gray-400">Recent bounty hunting activity from the community</p>
+      <div class="header">
+        <h1 class="title">Activity Feed</h1>
+        <p class="subtitle">Recent bounty hunting activity from the community</p>
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="text-center py-12">
+      <div v-if="loading" class="loading-state">
         <div class="text-xl">Loading activity...</div>
       </div>
 
       <!-- Activity Timeline -->
-      <div v-else class="space-y-4">
+      <div v-else class="activity-timeline">
         <div
           v-for="activity in activities"
           :key="activity.id"
-          class="bg-arc-navy rounded-lg p-6 hover:bg-arc-navy/80 transition"
+          class="activity-card"
         >
-          <div class="flex gap-4">
+          <div class="activity-content">
             <!-- Icon -->
-            <div :class="['rounded-full p-3 flex-shrink-0', getActivityColor(activity.type)]">
+            <div :class="['activity-icon', getActivityColorClass(activity.type)]">
               <component :is="getActivityIcon(activity.type)" :size="24" />
             </div>
 
             <!-- Content -->
-            <div class="flex-1">
-              <div class="flex items-start justify-between mb-2">
+            <div class="activity-details">
+              <div class="activity-header">
                 <div>
-                  <h3 class="text-lg font-bold">
+                  <h3 class="activity-title">
                     {{ getActivityText(activity).title }}
                   </h3>
-                  <p class="text-gray-400">
+                  <p class="activity-description">
                     {{ getActivityText(activity).description }}
                   </p>
                 </div>
 
                 <!-- Timestamp -->
-                <div class="text-sm text-gray-500 flex items-center gap-1">
+                <div class="activity-timestamp">
                   <Clock :size="14" />
                   {{ formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true }) }}
                 </div>
               </div>
 
               <!-- Additional Info Based on Type -->
-              <div v-if="activity.type === 'bounty_created'" class="mt-3">
+              <div v-if="activity.type === 'bounty_created'" class="activity-action">
                 <RouterLink
                   :to="`/claim/${activity.data.id}`"
-                  class="inline-block bg-arc-red hover:bg-arc-red/80 px-4 py-2 rounded text-sm font-semibold transition"
+                  class="btn-view-bounty"
                 >
                   View Bounty
                 </RouterLink>
               </div>
 
-              <div v-if="activity.type === 'claim_approved'" class="mt-3">
-                <div
-                  class="inline-flex items-center gap-2 bg-arc-green/10 border border-arc-green px-4 py-2 rounded text-sm"
-                >
+              <div v-if="activity.type === 'claim_approved'" class="activity-action">
+                <div class="points-badge">
                   <CheckCircle :size="16" class="text-arc-green" />
-                  <span class="text-arc-green font-semibold">
+                  <span class="points-text">
                     +{{ activity.data.points_awarded }} points
                   </span>
                 </div>
@@ -213,11 +211,121 @@ function getActivityText(activity: Activity) {
         </div>
 
         <!-- Empty State -->
-        <div v-if="activities.length === 0" class="text-center py-12">
-          <Clock class="mx-auto mb-4 text-gray-600" :size="48" />
-          <p class="text-gray-400">No activity yet</p>
+        <div v-if="activities.length === 0" class="empty-state">
+          <Clock class="empty-icon" :size="48" />
+          <p class="empty-text">No activity yet</p>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.activity-page {
+  @apply min-h-screen bg-arc-dark text-white;
+}
+
+.activity-container {
+  @apply container mx-auto px-4 py-8 max-w-4xl;
+}
+
+.header {
+  @apply mb-8;
+}
+
+.title {
+  @apply text-4xl font-bold mb-2;
+}
+
+.subtitle {
+  @apply text-gray-400;
+}
+
+.loading-state {
+  @apply text-center py-12;
+}
+
+.activity-timeline {
+  @apply space-y-4;
+}
+
+.activity-card {
+  @apply bg-arc-navy rounded-lg p-6 hover:bg-arc-navy/80 transition;
+}
+
+.activity-content {
+  @apply flex gap-4;
+}
+
+.activity-icon {
+  @apply rounded-full p-3 flex-shrink-0;
+}
+
+.icon-bounty-created {
+  @apply text-arc-red bg-arc-red/10;
+}
+
+.icon-claim-submitted {
+  @apply text-arc-red bg-arc-red/10;
+}
+
+.icon-claim-approved {
+  @apply text-arc-green bg-arc-green/10;
+}
+
+.icon-claim-rejected {
+  @apply text-gray-500 bg-gray-500/10;
+}
+
+.icon-default {
+  @apply text-gray-500 bg-gray-500/10;
+}
+
+.activity-details {
+  @apply flex-1;
+}
+
+.activity-header {
+  @apply flex items-start justify-between mb-2;
+}
+
+.activity-title {
+  @apply text-lg font-bold;
+}
+
+.activity-description {
+  @apply text-gray-400;
+}
+
+.activity-timestamp {
+  @apply text-sm text-gray-500 flex items-center gap-1;
+}
+
+.activity-action {
+  @apply mt-3;
+}
+
+.btn-view-bounty {
+  @apply inline-block bg-arc-red hover:bg-arc-red/80 px-4 py-2 rounded text-sm font-semibold transition;
+}
+
+.points-badge {
+  @apply inline-flex items-center gap-2 bg-arc-green/10 border border-arc-green px-4 py-2 rounded text-sm;
+}
+
+.points-text {
+  @apply text-arc-green font-semibold;
+}
+
+.empty-state {
+  @apply text-center py-12;
+}
+
+.empty-icon {
+  @apply mx-auto mb-4 text-gray-600;
+}
+
+.empty-text {
+  @apply text-gray-400;
+}
+</style>

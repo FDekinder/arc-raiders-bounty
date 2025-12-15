@@ -142,33 +142,31 @@ function handleClanTagUpdate(clanTag: string | null) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-arc-dark text-white">
-    <div v-if="loading" class="flex items-center justify-center min-h-screen">
-      <div class="text-xl">Loading profile...</div>
+  <div class="page-container">
+    <div v-if="loading" class="loading-container">
+      <div class="loading-text">Loading profile...</div>
     </div>
 
-    <div v-else-if="!user" class="flex items-center justify-center min-h-screen">
-      <div class="text-center">
-        <h2 class="text-2xl font-bold mb-2">User Not Found</h2>
-        <p class="text-gray-400">This user doesn't exist</p>
+    <div v-else-if="!user" class="error-container">
+      <div class="error-content">
+        <h2 class="error-title">User Not Found</h2>
+        <p class="error-message">This user doesn't exist</p>
       </div>
     </div>
 
-    <div v-else class="container mx-auto px-4 py-8">
+    <div v-else class="content-wrapper">
       <!-- Profile Header -->
-      <div class="bg-arc-navy rounded-lg p-8 mb-8">
-        <div class="flex items-start gap-6">
+      <div class="profile-header">
+        <div class="profile-content">
           <!-- Avatar -->
-          <div
-            class="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0"
-          >
-            <Target :size="48" class="text-gray-500" />
+          <div class="profile-avatar">
+            <Target :size="48" class="avatar-icon" />
           </div>
 
           <!-- Info -->
-          <div class="flex-1">
-            <div class="flex items-center gap-3 mb-2">
-              <h1 class="text-4xl font-bold">{{ user.username }}</h1>
+          <div class="profile-info">
+            <div class="profile-title-row">
+              <h1 class="profile-username">{{ user.username }}</h1>
               <ClanTagEditor
                 :user="user"
                 :is-own-profile="isOwnProfile"
@@ -176,38 +174,38 @@ function handleClanTagUpdate(clanTag: string | null) {
               />
               <RoleBadge v-if="user.game_role" :role="user.game_role" size="lg" :show-label="true" />
             </div>
-            <p class="text-gray-400 mb-4">
+            <p class="profile-member-since">
               Member since {{ new Date(user.created_at).toLocaleDateString() }}
             </p>
 
             <!-- Quick Stats -->
-            <div class="flex gap-6">
-              <div>
-                <div class="flex items-center gap-2">
-                  <Award class="text-arc-yellow" :size="24" />
-                  <span class="text-2xl font-bold text-arc-yellow">{{
+            <div class="quick-stats">
+              <div class="quick-stat">
+                <div class="stat-value-row">
+                  <Award class="stat-icon-yellow" :size="24" />
+                  <span class="stat-value-yellow">{{
                     stats?.totalPoints || 0
                   }}</span>
                 </div>
-                <div class="text-sm text-gray-400">Total Points</div>
+                <div class="stat-label">Total Points</div>
               </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <Trophy class="text-arc-green" :size="24" />
-                  <span class="text-2xl font-bold text-arc-green">{{
+              <div class="quick-stat">
+                <div class="stat-value-row">
+                  <Trophy class="stat-icon-green" :size="24" />
+                  <span class="stat-value-green">{{
                     stats?.bountiesCompleted || 0
                   }}</span>
                 </div>
-                <div class="text-sm text-gray-400">Bounties Completed</div>
+                <div class="stat-label">Bounties Completed</div>
               </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <TrendingUp class="text-arc-red" :size="24" />
-                  <span class="text-2xl font-bold text-arc-red"
+              <div class="quick-stat">
+                <div class="stat-value-row">
+                  <TrendingUp class="stat-icon-red" :size="24" />
+                  <span class="stat-value-red"
                     >{{ stats?.successRate || 0 }}%</span
                   >
                 </div>
-                <div class="text-sm text-gray-400">Success Rate</div>
+                <div class="stat-label">Success Rate</div>
               </div>
             </div>
           </div>
@@ -215,22 +213,22 @@ function handleClanTagUpdate(clanTag: string | null) {
       </div>
 
       <!-- Top Achievements Section -->
-      <div v-if="topAchievements.length > 0" class="bg-arc-navy rounded-lg p-6 mb-8">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="text-2xl font-bold flex items-center gap-2">
-            <Award class="text-arc-yellow" />
+      <div v-if="topAchievements.length > 0" class="achievements-section">
+        <div class="achievements-header">
+          <h3 class="achievements-title">
+            <Award class="title-icon" />
             Achievements
           </h3>
           <button
             @click="showAllAchievements = !showAllAchievements"
-            class="px-4 py-2 bg-arc-red text-white rounded-lg hover:bg-arc-red/80 transition-all text-sm font-medium"
+            class="view-all-btn"
           >
             {{ showAllAchievements ? 'Show Less' : 'View All' }}
           </button>
         </div>
 
         <!-- Top Achievements Preview -->
-        <div v-if="!showAllAchievements" class="flex gap-4 justify-center">
+        <div v-if="!showAllAchievements" class="achievements-preview">
           <AchievementBadge
             v-for="achievement in topAchievements"
             :key="achievement.id"
@@ -248,7 +246,7 @@ function handleClanTagUpdate(clanTag: string | null) {
       </div>
 
       <!-- Detailed Stats Grid -->
-      <div class="grid md:grid-cols-3 gap-6 mb-8">
+      <div class="stats-grid">
         <!-- Hunter Stats -->
         <div class="bg-arc-navy rounded-lg p-6">
           <h3 class="text-xl font-bold mb-4 flex items-center gap-2">

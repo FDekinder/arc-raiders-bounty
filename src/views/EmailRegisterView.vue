@@ -115,75 +115,75 @@ function goBack() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-arc-dark text-white flex items-center justify-center p-4">
-    <div class="max-w-md w-full">
+  <div class="page-container">
+    <div class="content-wrapper">
       <!-- Step 1: Credentials -->
-      <div v-if="step === 'credentials'" class="bg-arc-navy rounded-lg p-8 border-2 border-arc-red/20">
-        <h1 class="text-3xl font-bold mb-6 text-center">Create Account</h1>
+      <div v-if="step === 'credentials'" class="register-card">
+        <h1 class="title">Create Account</h1>
 
-        <form @submit.prevent="handleCredentialsSubmit" class="space-y-4">
+        <form @submit.prevent="handleCredentialsSubmit" class="form-content">
           <!-- Username -->
-          <div>
-            <label class="block text-sm font-medium mb-2">Username</label>
-            <div class="relative">
-              <User class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" :size="20" />
+          <div class="form-field">
+            <label class="form-label">Username</label>
+            <div class="input-wrapper">
+              <User class="input-icon" :size="20" />
               <input
                 v-model="username"
                 type="text"
                 placeholder="Your username"
-                class="w-full bg-arc-dark border border-gray-600 rounded-lg pl-10 pr-4 py-3 focus:border-arc-red focus:outline-none"
+                class="input-field"
                 required
               />
             </div>
           </div>
 
           <!-- Email -->
-          <div>
-            <label class="block text-sm font-medium mb-2">Email</label>
-            <div class="relative">
-              <Mail class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" :size="20" />
+          <div class="form-field">
+            <label class="form-label">Email</label>
+            <div class="input-wrapper">
+              <Mail class="input-icon" :size="20" />
               <input
                 v-model="email"
                 type="email"
                 placeholder="your@email.com"
-                class="w-full bg-arc-dark border border-gray-600 rounded-lg pl-10 pr-4 py-3 focus:border-arc-red focus:outline-none"
+                class="input-field"
                 required
               />
             </div>
           </div>
 
           <!-- Password -->
-          <div>
-            <label class="block text-sm font-medium mb-2">Password</label>
-            <div class="relative">
-              <Lock class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" :size="20" />
+          <div class="form-field">
+            <label class="form-label">Password</label>
+            <div class="input-wrapper">
+              <Lock class="input-icon" :size="20" />
               <input
                 v-model="password"
                 type="password"
                 placeholder="At least 6 characters"
-                class="w-full bg-arc-dark border border-gray-600 rounded-lg pl-10 pr-4 py-3 focus:border-arc-red focus:outline-none"
+                class="input-field"
                 required
               />
             </div>
           </div>
 
           <!-- Confirm Password -->
-          <div>
-            <label class="block text-sm font-medium mb-2">Confirm Password</label>
-            <div class="relative">
-              <Lock class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" :size="20" />
+          <div class="form-field">
+            <label class="form-label">Confirm Password</label>
+            <div class="input-wrapper">
+              <Lock class="input-icon" :size="20" />
               <input
                 v-model="confirmPassword"
                 type="password"
                 placeholder="Confirm your password"
-                class="w-full bg-arc-dark border border-gray-600 rounded-lg pl-10 pr-4 py-3 focus:border-arc-red focus:outline-none"
+                class="input-field"
                 required
               />
             </div>
           </div>
 
           <!-- Error Message -->
-          <div v-if="error" class="flex items-center gap-2 text-arc-red text-sm bg-arc-red/10 p-3 rounded-lg">
+          <div v-if="error" class="error-message">
             <AlertCircle :size="16" />
             <span>{{ error }}</span>
           </div>
@@ -191,7 +191,7 @@ function goBack() {
           <!-- Submit Button -->
           <button
             type="submit"
-            class="w-full bg-arc-red hover:bg-arc-red/80 text-white font-bold py-3 rounded-lg transition-all"
+            class="submit-btn"
           >
             Continue
           </button>
@@ -200,7 +200,7 @@ function goBack() {
           <button
             type="button"
             @click="goBack"
-            class="w-full text-gray-400 hover:text-white transition-all"
+            class="link-btn"
           >
             Back to Login
           </button>
@@ -208,8 +208,8 @@ function goBack() {
       </div>
 
       <!-- Step 2: Platform Selection -->
-      <div v-else-if="step === 'platform'" class="bg-arc-navy rounded-lg p-8 border-2 border-arc-red/20">
-        <h1 class="text-3xl font-bold mb-6 text-center">Almost There!</h1>
+      <div v-else-if="step === 'platform'" class="register-card">
+        <h1 class="title">Almost There!</h1>
 
         <PlatformSelector
           v-model="selectedPlatform"
@@ -217,16 +217,16 @@ function goBack() {
         />
 
         <!-- Error Message -->
-        <div v-if="error" class="flex items-center gap-2 text-arc-red text-sm bg-arc-red/10 p-3 rounded-lg mt-4">
+        <div v-if="error" class="error-message-platform">
           <AlertCircle :size="16" />
           <span>{{ error }}</span>
         </div>
 
         <!-- Buttons -->
-        <div class="flex gap-4 mt-6">
+        <div class="button-group">
           <button
             @click="goBack"
-            class="flex-1 bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 rounded-lg transition-all"
+            class="back-btn-secondary"
             :disabled="loading"
           >
             Back
@@ -234,7 +234,7 @@ function goBack() {
           <button
             @click="completeRegistration"
             :disabled="!selectedPlatform || loading"
-            class="flex-1 bg-arc-red hover:bg-arc-red/80 text-white font-bold py-3 rounded-lg transition-all disabled:bg-gray-600 disabled:cursor-not-allowed"
+            class="create-btn"
           >
             {{ loading ? 'Creating Account...' : 'Create Account' }}
           </button>
@@ -243,3 +243,73 @@ function goBack() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.page-container {
+  @apply min-h-screen bg-arc-dark text-white flex items-center justify-center p-4;
+}
+
+.content-wrapper {
+  @apply max-w-md w-full;
+}
+
+.register-card {
+  @apply bg-arc-navy rounded-lg p-8 border-2 border-arc-red/20;
+}
+
+.title {
+  @apply text-3xl font-bold mb-6 text-center;
+}
+
+.form-content {
+  @apply space-y-4;
+}
+
+.form-field {
+  @apply;
+}
+
+.form-label {
+  @apply block text-sm font-medium mb-2;
+}
+
+.input-wrapper {
+  @apply relative;
+}
+
+.input-icon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400;
+}
+
+.input-field {
+  @apply w-full bg-arc-dark border border-gray-600 rounded-lg pl-10 pr-4 py-3 focus:border-arc-red focus:outline-none;
+}
+
+.error-message {
+  @apply flex items-center gap-2 text-arc-red text-sm bg-arc-red/10 p-3 rounded-lg;
+}
+
+.error-message-platform {
+  @apply flex items-center gap-2 text-arc-red text-sm bg-arc-red/10 p-3 rounded-lg mt-4;
+}
+
+.submit-btn {
+  @apply w-full bg-arc-red hover:bg-arc-red/80 text-white font-bold py-3 rounded-lg transition-all;
+}
+
+.link-btn {
+  @apply w-full text-gray-400 hover:text-white transition-all;
+}
+
+.button-group {
+  @apply flex gap-4 mt-6;
+}
+
+.back-btn-secondary {
+  @apply flex-1 bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 rounded-lg transition-all;
+}
+
+.create-btn {
+  @apply flex-1 bg-arc-red hover:bg-arc-red/80 text-white font-bold py-3 rounded-lg transition-all disabled:bg-gray-600 disabled:cursor-not-allowed;
+}
+</style>

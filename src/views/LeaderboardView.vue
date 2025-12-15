@@ -47,51 +47,51 @@ function getMedalColor(index: number) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-arc-dark text-white">
-    <div class="container mx-auto px-4 py-8">
-      <div class="text-center mb-12">
-        <h1 class="text-5xl font-bold mb-4 flex items-center justify-center gap-3">
+  <div class="page-container">
+    <div class="content-wrapper">
+      <div class="header">
+        <h1 class="title">
           <Trophy class="text-arc-yellow" :size="48" />
           Top Hunters
         </h1>
-        <p class="text-gray-400">The most skilled bounty hunters in Arc Raiders</p>
+        <p class="subtitle">The most skilled bounty hunters in Arc Raiders</p>
       </div>
 
-      <div v-if="loading" class="text-center text-xl">Loading leaderboard...</div>
+      <div v-if="loading" class="loading-state">Loading leaderboard...</div>
 
-      <div v-else class="max-w-4xl mx-auto space-y-4">
+      <div v-else class="hunters-list">
         <div
           v-for="(hunter, index) in hunters"
           :key="hunter.id"
-          class="bg-arc-navy rounded-lg p-6 flex items-center gap-6 hover:bg-arc-navy/80 transition"
+          class="hunter-card"
         >
           <!-- Rank -->
-          <div class="text-4xl font-bold w-16 text-center" :class="getMedalColor(index)">
+          <div class="rank" :class="getMedalColor(index)">
             #{{ index + 1 }}
           </div>
 
           <!-- Avatar placeholder -->
-          <div class="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center">
+          <div class="avatar">
             <Target :size="32" class="text-gray-500" />
           </div>
 
           <!-- Info -->
-          <div class="flex-1">
-            <div class="flex items-center gap-2 mb-1">
+          <div class="hunter-info">
+            <div class="hunter-name-row">
               <RouterLink
                 :to="`/profile/${hunter.id}`"
-                class="text-2xl font-bold hover:text-arc-red transition"
+                class="hunter-name"
               >
-                <span v-if="hunter.clan_tag" class="text-arc-red">[{{ hunter.clan_tag }}]</span>
+                <span v-if="hunter.clan_tag" class="clan-tag">[{{ hunter.clan_tag }}]</span>
                 {{ hunter.username }}
               </RouterLink>
               <RoleBadge v-if="hunter.game_role" :role="hunter.game_role" size="sm" />
             </div>
-            <div class="flex gap-4 text-sm text-gray-400 mt-1">
+            <div class="hunter-stats">
               <span>{{ hunter.bounties_completed }} bounties completed</span>
             </div>
             <!-- Achievement Badges -->
-            <div v-if="hunterAchievements.get(hunter.id)?.length" class="flex gap-2 mt-2">
+            <div v-if="hunterAchievements.get(hunter.id)?.length" class="achievements">
               <AchievementBadge
                 v-for="achievement in hunterAchievements.get(hunter.id)"
                 :key="achievement.id"
@@ -103,21 +103,107 @@ function getMedalColor(index: number) {
           </div>
 
           <!-- Points -->
-          <div class="text-right">
-            <div class="flex items-center gap-2 justify-end mb-1">
+          <div class="points-section">
+            <div class="points-display">
               <Award class="text-arc-yellow" :size="24" />
-              <span class="text-3xl font-bold text-arc-yellow">
+              <span class="points-value">
                 {{ hunter.total_points }}
               </span>
             </div>
-            <div class="text-sm text-gray-400">points</div>
+            <div class="points-label">points</div>
           </div>
         </div>
 
-        <div v-if="hunters.length === 0" class="text-center text-gray-400 py-12">
+        <div v-if="hunters.length === 0" class="empty-state">
           No hunters yet. Be the first to complete a bounty!
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.page-container {
+  @apply min-h-screen bg-arc-dark text-white;
+}
+
+.content-wrapper {
+  @apply container mx-auto px-4 py-8;
+}
+
+.header {
+  @apply text-center mb-12;
+}
+
+.title {
+  @apply text-5xl font-bold mb-4 flex items-center justify-center gap-3;
+}
+
+.subtitle {
+  @apply text-gray-400;
+}
+
+.loading-state {
+  @apply text-center text-xl;
+}
+
+.hunters-list {
+  @apply max-w-4xl mx-auto space-y-4;
+}
+
+.hunter-card {
+  @apply bg-arc-navy rounded-lg p-6 flex items-center gap-6 hover:bg-arc-navy/80 transition;
+}
+
+.rank {
+  @apply text-4xl font-bold w-16 text-center;
+}
+
+.avatar {
+  @apply w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center;
+}
+
+.hunter-info {
+  @apply flex-1;
+}
+
+.hunter-name-row {
+  @apply flex items-center gap-2 mb-1;
+}
+
+.hunter-name {
+  @apply text-2xl font-bold hover:text-arc-red transition;
+}
+
+.clan-tag {
+  @apply text-arc-red;
+}
+
+.hunter-stats {
+  @apply flex gap-4 text-sm text-gray-400 mt-1;
+}
+
+.achievements {
+  @apply flex gap-2 mt-2;
+}
+
+.points-section {
+  @apply text-right;
+}
+
+.points-display {
+  @apply flex items-center gap-2 justify-end mb-1;
+}
+
+.points-value {
+  @apply text-3xl font-bold text-arc-yellow;
+}
+
+.points-label {
+  @apply text-sm text-gray-400;
+}
+
+.empty-state {
+  @apply text-center text-gray-400 py-12;
+}
+</style>

@@ -71,12 +71,28 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-    <div class="text-center">
-      <div
-        class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-500 mx-auto mb-4"
-      ></div>
-      <p class="text-xl">{{ status }}</p>
+  <div class="page-container">
+    <div class="content-wrapper">
+      <div class="spinner"></div>
+      <p class="status-text">{{ status }}</p>
     </div>
   </div>
 </template>
+
+<style scoped>
+.page-container {
+  @apply min-h-screen bg-gray-900 text-white flex items-center justify-center;
+}
+
+.content-wrapper {
+  @apply text-center;
+}
+
+.spinner {
+  @apply animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-500 mx-auto mb-4;
+}
+
+.status-text {
+  @apply text-xl;
+}
+</style>

@@ -141,48 +141,39 @@ const filteredBounties = computed(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-arc-dark text-white">
-    <div v-if="loading" class="flex items-center justify-center min-h-screen">
-      <div class="text-white text-xl">Loading bounties...</div>
+  <div class="page-container">
+    <div v-if="loading" class="loading-container">
+      <div class="loading-text">Loading bounties...</div>
     </div>
 
-    <div v-else class="container mx-auto px-4 py-8">
-      <div class="flex justify-between items-center mb-8">
+    <div v-else class="content-wrapper">
+      <div class="header">
         <div>
-          <h1 class="text-4xl font-bold">Active Bounties</h1>
-          <p v-if="currentUser && myActiveHunts > 0" class="text-gray-400 mt-2">
+          <h1 class="title">Active Bounties</h1>
+          <p v-if="currentUser && myActiveHunts > 0" class="hunt-status">
             You are hunting {{ myActiveHunts }}/3 targets
           </p>
         </div>
-        <RouterLink
-          to="/create-bounty"
-          class="bg-arc-red hover:bg-arc-red/80 px-6 py-2 rounded-lg font-semibold"
-        >
+        <RouterLink to="/create-bounty" class="new-bounty-btn">
           + New Bounty
         </RouterLink>
       </div>
 
       <!-- Search and Filter Controls -->
-      <div class="bg-arc-navy rounded-lg p-4 mb-8">
-        <div class="grid md:grid-cols-2 gap-4">
-          <div class="relative">
-            <Search
-              class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              :size="20"
-            />
+      <div class="filters-section">
+        <div class="filters-grid">
+          <div class="search-container">
+            <Search class="search-icon" :size="20" />
             <input
               v-model="searchQuery"
               type="text"
               placeholder="Search by gamertag..."
-              class="w-full bg-gray-700 border border-arc-red/30 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-arc-red"
+              class="search-input"
             />
           </div>
 
           <div>
-            <select
-              v-model="sortBy"
-              class="w-full bg-gray-700 border border-arc-red/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-arc-red"
-            >
+            <select v-model="sortBy" class="sort-select">
               <option value="amount-high">Highest Bounty</option>
               <option value="amount-low">Lowest Bounty</option>
               <option value="newest">Newest First</option>
@@ -191,7 +182,7 @@ const filteredBounties = computed(() => {
           </div>
         </div>
 
-        <div v-if="searchQuery" class="mt-3 text-sm text-gray-400">
+        <div v-if="searchQuery" class="search-results">
           Found {{ filteredBounties.length }} bounty{{
             filteredBounties.length !== 1 ? 'ies' : 'y'
           }}
@@ -199,22 +190,22 @@ const filteredBounties = computed(() => {
       </div>
 
       <!-- Most Wanted Section -->
-      <div class="bg-arc-navy rounded-lg p-6 mb-8">
-        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+      <div class="most-wanted-section">
+        <h2 class="section-title">
           <Target class="text-arc-red" />
           Most Wanted
         </h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="most-wanted-grid">
           <div
             v-for="(player, index) in mostWanted"
             :key="player.target_gamertag"
-            class="bg-gray-700 p-4 rounded-lg border border-arc-red/20"
+            class="most-wanted-card"
           >
-            <div class="flex items-center gap-3">
-              <div class="text-3xl font-bold text-arc-red">#{{ index + 1 }}</div>
+            <div class="most-wanted-content">
+              <div class="player-rank">#{{ index + 1 }}</div>
               <div>
-                <div class="font-bold">{{ player.target_gamertag }}</div>
-                <div class="text-sm text-gray-400">
+                <div class="player-name">{{ player.target_gamertag }}</div>
+                <div class="player-stats">
                   {{ player.total_bounty }} points • {{ player.bounty_count }} bounties
                 </div>
               </div>
@@ -224,11 +215,8 @@ const filteredBounties = computed(() => {
       </div>
 
       <!-- All Bounties -->
-      <div class="space-y-4">
-        <div
-          v-if="filteredBounties.length === 0"
-          class="bg-arc-navy rounded-lg p-8 text-center text-gray-400"
-        >
+      <div class="bounties-list">
+        <div v-if="filteredBounties.length === 0" class="empty-state">
           {{
             searchQuery
               ? 'No bounties match your search'
@@ -239,16 +227,13 @@ const filteredBounties = computed(() => {
         <div
           v-for="bounty in filteredBounties"
           :key="bounty.id"
-          class="bg-arc-navy rounded-lg p-6 hover:bg-arc-navy/80 transition"
+          class="bounty-card"
         >
-          <div class="flex justify-between items-start">
-            <div class="flex-1">
-              <h3 class="text-2xl font-bold mb-2">{{ bounty.target_gamertag }}</h3>
-              <div class="flex items-center gap-4 text-sm flex-wrap">
-                <span
-                  class="flex items-center gap-1"
-                  :class="getExpirationColor(bounty.expires_at)"
-                >
+          <div class="bounty-content">
+            <div class="bounty-info">
+              <h3 class="bounty-target">{{ bounty.target_gamertag }}</h3>
+              <div class="bounty-meta">
+                <span class="expiration-info" :class="getExpirationColor(bounty.expires_at)">
                   <Clock :size="16" />
                   <template v-if="getTimeRemaining(bounty.expires_at).isExpired">
                     Expired
@@ -267,7 +252,7 @@ const filteredBounties = computed(() => {
                 </span>
 
                 <!-- Hunter Count -->
-                <span class="flex items-center gap-1 text-arc-red">
+                <span class="hunter-count">
                   <Users :size="16" />
                   {{ hunterCounts[bounty.id] || 0 }} hunter{{
                     (hunterCounts[bounty.id] || 0) !== 1 ? 's' : ''
@@ -282,25 +267,25 @@ const filteredBounties = computed(() => {
                     getTimeRemaining(bounty.expires_at).totalHours < 48
                   "
                   @click="handleExtendBounty(bounty.id)"
-                  class="text-xs bg-arc-yellow hover:bg-arc-yellow/80 px-3 py-1 rounded transition"
+                  class="extend-btn"
                   title="Extend by 7 days"
                 >
                   + 7 days
                 </button>
               </div>
             </div>
-            <div class="text-right">
-              <div class="text-3xl font-bold text-arc-red">{{ bounty.bounty_amount }}</div>
-              <div class="text-sm text-gray-400 mb-2">points</div>
+            <div class="bounty-actions">
+              <div class="bounty-amount">{{ bounty.bounty_amount }}</div>
+              <div class="bounty-points-label">points</div>
 
               <!-- Hunt/Claim Buttons -->
-              <div class="flex flex-col gap-2">
+              <div class="action-buttons">
                 <template v-if="currentUser">
                   <button
                     v-if="!huntingStatus[bounty.id]"
                     @click="handleJoinHunt(bounty.id)"
                     :disabled="joiningHunt === bounty.id || myActiveHunts >= 3"
-                    class="bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 px-4 py-2 rounded text-sm font-semibold flex items-center justify-center gap-2 transition"
+                    class="join-hunt-btn"
                     :title="myActiveHunts >= 3 ? 'Maximum 3 active hunts' : 'Join hunt'"
                   >
                     <UserPlus :size="16" />
@@ -311,17 +296,14 @@ const filteredBounties = computed(() => {
                     v-else
                     @click="handleLeaveHunt(bounty.id)"
                     :disabled="joiningHunt === bounty.id"
-                    class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded text-sm font-semibold flex items-center justify-center gap-2 transition"
+                    class="leave-hunt-btn"
                   >
                     <UserMinus :size="16" />
                     Leave Hunt
                   </button>
                 </template>
 
-                <RouterLink
-                  :to="`/claim/${bounty.id}`"
-                  class="bg-arc-red hover:bg-arc-red/80 px-4 py-2 rounded text-sm font-semibold text-center transition"
-                >
+                <RouterLink :to="`/claim/${bounty.id}`" class="claim-btn">
                   Claim Bounty
                 </RouterLink>
               </div>
@@ -332,3 +314,165 @@ const filteredBounties = computed(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.page-container {
+  @apply min-h-screen bg-arc-dark text-white;
+}
+
+.loading-container {
+  @apply flex items-center justify-center min-h-screen;
+}
+
+.loading-text {
+  @apply text-white text-xl;
+}
+
+.content-wrapper {
+  @apply container mx-auto px-4 py-8;
+}
+
+.header {
+  @apply flex justify-between items-center mb-8;
+}
+
+.title {
+  @apply text-4xl font-bold;
+}
+
+.hunt-status {
+  @apply text-gray-400 mt-2;
+}
+
+.new-bounty-btn {
+  @apply bg-arc-red hover:bg-arc-red/80 px-6 py-2 rounded-lg font-semibold;
+}
+
+.filters-section {
+  @apply bg-arc-navy rounded-lg p-4 mb-8;
+}
+
+.filters-grid {
+  @apply grid md:grid-cols-2 gap-4;
+}
+
+.search-container {
+  @apply relative;
+}
+
+.search-icon {
+  @apply absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400;
+}
+
+.search-input {
+  @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-arc-red;
+}
+
+.sort-select {
+  @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-arc-red;
+}
+
+.search-results {
+  @apply mt-3 text-sm text-gray-400;
+}
+
+.most-wanted-section {
+  @apply bg-arc-navy rounded-lg p-6 mb-8;
+}
+
+.section-title {
+  @apply text-2xl font-bold mb-4 flex items-center gap-2;
+}
+
+.most-wanted-grid {
+  @apply grid md:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.most-wanted-card {
+  @apply bg-gray-700 p-4 rounded-lg border border-arc-red/20;
+}
+
+.most-wanted-content {
+  @apply flex items-center gap-3;
+}
+
+.player-rank {
+  @apply text-3xl font-bold text-arc-red;
+}
+
+.player-name {
+  @apply font-bold;
+}
+
+.player-stats {
+  @apply text-sm text-gray-400;
+}
+
+.bounties-list {
+  @apply space-y-4;
+}
+
+.empty-state {
+  @apply bg-arc-navy rounded-lg p-8 text-center text-gray-400;
+}
+
+.bounty-card {
+  @apply bg-arc-navy rounded-lg p-6 hover:bg-arc-navy/80 transition;
+}
+
+.bounty-content {
+  @apply flex justify-between items-start;
+}
+
+.bounty-info {
+  @apply flex-1;
+}
+
+.bounty-target {
+  @apply text-2xl font-bold mb-2;
+}
+
+.bounty-meta {
+  @apply flex items-center gap-4 text-sm flex-wrap;
+}
+
+.expiration-info {
+  @apply flex items-center gap-1;
+}
+
+.hunter-count {
+  @apply flex items-center gap-1 text-arc-red;
+}
+
+.extend-btn {
+  @apply text-xs bg-arc-yellow hover:bg-arc-yellow/80 px-3 py-1 rounded transition;
+}
+
+.bounty-actions {
+  @apply text-right;
+}
+
+.bounty-amount {
+  @apply text-3xl font-bold text-arc-red;
+}
+
+.bounty-points-label {
+  @apply text-sm text-gray-400 mb-2;
+}
+
+.action-buttons {
+  @apply flex flex-col gap-2;
+}
+
+.join-hunt-btn {
+  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 px-4 py-2 rounded text-sm font-semibold flex items-center justify-center gap-2 transition;
+}
+
+.leave-hunt-btn {
+  @apply bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded text-sm font-semibold flex items-center justify-center gap-2 transition;
+}
+
+.claim-btn {
+  @apply bg-arc-red hover:bg-arc-red/80 px-4 py-2 rounded text-sm font-semibold text-center transition;
+}
+</style>

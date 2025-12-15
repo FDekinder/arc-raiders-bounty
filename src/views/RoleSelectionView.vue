@@ -56,33 +56,31 @@ async function confirmRole() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-arc-dark">
+  <div class="page-container">
     <RoleSelector v-model="selectedRole" @select="handleRoleSelect" />
 
     <!-- Confirm Button -->
-    <div class="fixed bottom-0 left-0 right-0 bg-arc-navy border-t-2 border-arc-red/20 p-6">
-      <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <div>
-          <p v-if="selectedRole" class="text-white font-bold">
+    <div class="confirm-bar">
+      <div class="confirm-content">
+        <div class="selection-info">
+          <p v-if="selectedRole" class="selected-text">
             Selected:
             <span
-              :class="selectedRole === 'BH' ? 'text-arc-green' : 'text-arc-red'"
+              :class="selectedRole === 'BH' ? 'role-bh' : 'role-pr'"
             >
               {{ selectedRole === 'BH' ? 'Bounty Hunter (BH)' : 'Proud Rat (PR)' }}
             </span>
           </p>
-          <p v-else class="text-gray-400">Select your role to continue</p>
-          <p v-if="error" class="text-arc-red text-sm mt-1">{{ error }}</p>
+          <p v-else class="placeholder-text">Select your role to continue</p>
+          <p v-if="error" class="error-text">{{ error }}</p>
         </div>
 
         <button
           @click="confirmRole"
           :disabled="!selectedRole || saving"
           :class="[
-            'px-8 py-3 rounded-lg font-bold text-lg transition-all',
-            selectedRole && !saving
-              ? 'bg-arc-red hover:bg-arc-red/80 text-white cursor-pointer'
-              : 'bg-gray-600 text-gray-400 cursor-not-allowed',
+            'confirm-btn',
+            selectedRole && !saving ? 'confirm-btn-active' : 'confirm-btn-disabled'
           ]"
         >
           {{ saving ? 'Saving...' : 'Confirm Selection' }}
@@ -91,3 +89,53 @@ async function confirmRole() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.page-container {
+  @apply min-h-screen bg-arc-dark;
+}
+
+.confirm-bar {
+  @apply fixed bottom-0 left-0 right-0 bg-arc-navy border-t-2 border-arc-red/20 p-6;
+}
+
+.confirm-content {
+  @apply max-w-7xl mx-auto flex items-center justify-between;
+}
+
+.selection-info {
+  @apply;
+}
+
+.selected-text {
+  @apply text-white font-bold;
+}
+
+.role-bh {
+  @apply text-arc-green;
+}
+
+.role-pr {
+  @apply text-arc-red;
+}
+
+.placeholder-text {
+  @apply text-gray-400;
+}
+
+.error-text {
+  @apply text-arc-red text-sm mt-1;
+}
+
+.confirm-btn {
+  @apply px-8 py-3 rounded-lg font-bold text-lg transition-all;
+}
+
+.confirm-btn-active {
+  @apply bg-arc-red hover:bg-arc-red/80 text-white cursor-pointer;
+}
+
+.confirm-btn-disabled {
+  @apply bg-gray-600 text-gray-400 cursor-not-allowed;
+}
+</style>

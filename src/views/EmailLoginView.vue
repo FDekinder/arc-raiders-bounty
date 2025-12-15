@@ -79,44 +79,44 @@ function goBack() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-arc-dark text-white flex items-center justify-center p-4">
-    <div class="max-w-md w-full">
-      <div class="bg-arc-navy rounded-lg p-8 border-2 border-arc-red/20">
-        <h1 class="text-3xl font-bold mb-6 text-center">Email Login</h1>
+  <div class="page-container">
+    <div class="content-wrapper">
+      <div class="login-card">
+        <h1 class="title">Email Login</h1>
 
-        <form @submit.prevent="handleLogin" class="space-y-4">
+        <form @submit.prevent="handleLogin" class="form-content">
           <!-- Email -->
-          <div>
-            <label class="block text-sm font-medium mb-2">Email</label>
-            <div class="relative">
-              <Mail class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" :size="20" />
+          <div class="form-field">
+            <label class="form-label">Email</label>
+            <div class="input-wrapper">
+              <Mail class="input-icon" :size="20" />
               <input
                 v-model="email"
                 type="email"
                 placeholder="your@email.com"
-                class="w-full bg-arc-dark border border-gray-600 rounded-lg pl-10 pr-4 py-3 focus:border-arc-red focus:outline-none"
+                class="input-field"
                 required
               />
             </div>
           </div>
 
           <!-- Password -->
-          <div>
-            <label class="block text-sm font-medium mb-2">Password</label>
-            <div class="relative">
-              <Lock class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" :size="20" />
+          <div class="form-field">
+            <label class="form-label">Password</label>
+            <div class="input-wrapper">
+              <Lock class="input-icon" :size="20" />
               <input
                 v-model="password"
                 type="password"
                 placeholder="Your password"
-                class="w-full bg-arc-dark border border-gray-600 rounded-lg pl-10 pr-4 py-3 focus:border-arc-red focus:outline-none"
+                class="input-field"
                 required
               />
             </div>
           </div>
 
           <!-- Error Message -->
-          <div v-if="error" class="flex items-center gap-2 text-arc-red text-sm bg-arc-red/10 p-3 rounded-lg">
+          <div v-if="error" class="error-message">
             <AlertCircle :size="16" />
             <span>{{ error }}</span>
           </div>
@@ -125,7 +125,7 @@ function goBack() {
           <button
             type="submit"
             :disabled="loading"
-            class="w-full bg-arc-red hover:bg-arc-red/80 text-white font-bold py-3 rounded-lg transition-all disabled:bg-gray-600 disabled:cursor-not-allowed"
+            class="submit-btn"
           >
             {{ loading ? 'Logging in...' : 'Login' }}
           </button>
@@ -134,7 +134,7 @@ function goBack() {
           <button
             type="button"
             @click="goToRegister"
-            class="w-full text-gray-400 hover:text-white transition-all"
+            class="link-btn"
           >
             Don't have an account? Register
           </button>
@@ -143,7 +143,7 @@ function goBack() {
           <button
             type="button"
             @click="goBack"
-            class="w-full text-gray-400 hover:text-white transition-all text-sm"
+            class="back-btn"
           >
             Back to Login Options
           </button>
@@ -152,3 +152,61 @@ function goBack() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.page-container {
+  @apply min-h-screen bg-arc-dark text-white flex items-center justify-center p-4;
+}
+
+.content-wrapper {
+  @apply max-w-md w-full;
+}
+
+.login-card {
+  @apply bg-arc-navy rounded-lg p-8 border-2 border-arc-red/20;
+}
+
+.title {
+  @apply text-3xl font-bold mb-6 text-center;
+}
+
+.form-content {
+  @apply space-y-4;
+}
+
+.form-field {
+  @apply;
+}
+
+.form-label {
+  @apply block text-sm font-medium mb-2;
+}
+
+.input-wrapper {
+  @apply relative;
+}
+
+.input-icon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400;
+}
+
+.input-field {
+  @apply w-full bg-arc-dark border border-gray-600 rounded-lg pl-10 pr-4 py-3 focus:border-arc-red focus:outline-none;
+}
+
+.error-message {
+  @apply flex items-center gap-2 text-arc-red text-sm bg-arc-red/10 p-3 rounded-lg;
+}
+
+.submit-btn {
+  @apply w-full bg-arc-red hover:bg-arc-red/80 text-white font-bold py-3 rounded-lg transition-all disabled:bg-gray-600 disabled:cursor-not-allowed;
+}
+
+.link-btn {
+  @apply w-full text-gray-400 hover:text-white transition-all;
+}
+
+.back-btn {
+  @apply w-full text-gray-400 hover:text-white transition-all text-sm;
+}
+</style>

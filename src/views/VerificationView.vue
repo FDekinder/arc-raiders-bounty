@@ -186,28 +186,25 @@ function getStatusIcon(status: string) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-arc-dark text-white">
-    <div class="container mx-auto px-4 py-8">
-      <div class="mb-8">
-        <div class="flex items-center gap-3">
-          <h1 class="text-4xl font-bold">Claim Verification</h1>
-          <div
-            v-if="isAdmin"
-            class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold"
-          >
+  <div class="page-container">
+    <div class="content-wrapper">
+      <div class="header">
+        <div class="header-title-row">
+          <h1 class="title">Claim Verification</h1>
+          <div v-if="isAdmin" class="admin-badge">
             Admin
           </div>
         </div>
-        <p class="text-gray-400 mt-2">Review and verify bounty claims from hunters</p>
+        <p class="subtitle">Review and verify bounty claims from hunters</p>
       </div>
 
       <!-- Filter Tabs -->
-      <div class="flex gap-4 mb-8">
+      <div class="filter-tabs">
         <button
           @click="setFilterPending()"
           :class="[
-            'px-6 py-2 rounded-lg font-semibold transition',
-            filter === 'pending' ? 'bg-arc-yellow text-white' : 'bg-arc-navy hover:bg-arc-navy/80',
+            'filter-btn',
+            filter === 'pending' ? 'filter-btn-pending' : 'filter-btn-inactive'
           ]"
         >
           Pending
@@ -215,8 +212,8 @@ function getStatusIcon(status: string) {
         <button
           @click="setFilterApproved()"
           :class="[
-            'px-6 py-2 rounded-lg font-semibold transition',
-            filter === 'approved' ? 'bg-arc-green text-white' : 'bg-arc-navy hover:bg-arc-navy/80',
+            'filter-btn',
+            filter === 'approved' ? 'filter-btn-approved' : 'filter-btn-inactive'
           ]"
         >
           Approved
@@ -224,8 +221,8 @@ function getStatusIcon(status: string) {
         <button
           @click="setFilterRejected()"
           :class="[
-            'px-6 py-2 rounded-lg font-semibold transition',
-            filter === 'rejected' ? 'bg-arc-red text-white' : 'bg-arc-navy hover:bg-arc-navy/80',
+            'filter-btn',
+            filter === 'rejected' ? 'filter-btn-rejected' : 'filter-btn-inactive'
           ]"
         >
           Rejected
@@ -233,8 +230,8 @@ function getStatusIcon(status: string) {
         <button
           @click="setFilterAll()"
           :class="[
-            'px-6 py-2 rounded-lg font-semibold transition',
-            filter === 'all' ? 'bg-arc-red text-white' : 'bg-arc-navy hover:bg-arc-navy/80',
+            'filter-btn',
+            filter === 'all' ? 'filter-btn-all' : 'filter-btn-inactive'
           ]"
         >
           All
@@ -242,40 +239,38 @@ function getStatusIcon(status: string) {
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="text-center py-12">
-        <div class="text-xl">Loading claims...</div>
+      <div v-if="loading" class="loading-state">
+        <div class="loading-text">Loading claims...</div>
       </div>
 
       <!-- Empty State -->
-      <div v-else-if="claims.length === 0" class="text-center py-12">
-        <Clock class="mx-auto mb-4 text-gray-600" :size="48" />
-        <p class="text-gray-400">No {{ filter !== 'all' ? filter : '' }} claims found</p>
+      <div v-else-if="claims.length === 0" class="empty-state">
+        <Clock class="empty-icon" :size="48" />
+        <p class="empty-text">No {{ filter !== 'all' ? filter : '' }} claims found</p>
       </div>
 
       <!-- Claims List -->
-      <div v-else class="space-y-6">
-        <div v-for="claim in claims" :key="claim.id" class="bg-arc-navy rounded-lg p-6">
-          <div class="grid md:grid-cols-2 gap-6">
+      <div v-else class="claims-list">
+        <div v-for="claim in claims" :key="claim.id" class="claim-card">
+          <div class="claim-grid">
             <!-- Left: Screenshot -->
-            <div>
-              <p class="text-sm text-gray-400 mb-2">Screenshot Evidence</p>
-              <a :href="claim.screenshot_url" target="_blank" class="block relative group">
+            <div class="screenshot-section">
+              <p class="screenshot-label">Screenshot Evidence</p>
+              <a :href="claim.screenshot_url" target="_blank" class="screenshot-link">
                 <img
                   :src="claim.screenshot_url"
                   alt="Claim screenshot"
-                  class="w-full rounded-lg border border-arc-red/20 hover:border-arc-red transition"
+                  class="screenshot-img"
                 />
-                <div
-                  class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center rounded-lg"
-                >
-                  <ExternalLink class="text-white" :size="32" />
+                <div class="screenshot-overlay">
+                  <ExternalLink class="overlay-icon" :size="32" />
                 </div>
               </a>
             </div>
 
             <!-- Right: Claim Details -->
-            <div>
-              <div class="flex items-center gap-2 mb-4">
+            <div class="details-section">
+              <div class="status-header">
                 <component
                   :is="getStatusIcon(claim.verification_status)"
                   :class="getStatusColor(claim.verification_status)"
@@ -283,7 +278,7 @@ function getStatusIcon(status: string) {
                 />
                 <span
                   :class="[
-                    'text-lg font-semibold uppercase',
+                    'status-text',
                     getStatusColor(claim.verification_status),
                   ]"
                 >
@@ -291,41 +286,41 @@ function getStatusIcon(status: string) {
                 </span>
               </div>
 
-              <div class="space-y-3 mb-6">
-                <div>
-                  <p class="text-sm text-gray-400">Target</p>
-                  <p class="text-xl font-bold">{{ claim.bounty?.target_gamertag }}</p>
+              <div class="details-list">
+                <div class="detail-item">
+                  <p class="detail-label">Target</p>
+                  <p class="detail-target">{{ claim.bounty?.target_gamertag }}</p>
                 </div>
 
-                <div>
-                  <p class="text-sm text-gray-400">Bounty Amount</p>
-                  <p class="text-2xl font-bold text-arc-red">
+                <div class="detail-item">
+                  <p class="detail-label">Bounty Amount</p>
+                  <p class="detail-amount">
                     {{ claim.bounty?.bounty_amount }} points
                   </p>
                 </div>
 
-                <div>
-                  <p class="text-sm text-gray-400">Submitted</p>
-                  <p>{{ new Date(claim.claimed_at).toLocaleString() }}</p>
+                <div class="detail-item">
+                  <p class="detail-label">Submitted</p>
+                  <p class="detail-value">{{ new Date(claim.claimed_at).toLocaleString() }}</p>
                 </div>
 
-                <div v-if="claim.verified_at">
-                  <p class="text-sm text-gray-400">Verified</p>
-                  <p>{{ new Date(claim.verified_at).toLocaleString() }}</p>
+                <div v-if="claim.verified_at" class="detail-item">
+                  <p class="detail-label">Verified</p>
+                  <p class="detail-value">{{ new Date(claim.verified_at).toLocaleString() }}</p>
                 </div>
 
-                <div v-if="claim.rejection_reason">
-                  <p class="text-sm text-gray-400">Rejection Reason</p>
-                  <p class="text-arc-red">{{ claim.rejection_reason }}</p>
+                <div v-if="claim.rejection_reason" class="detail-item">
+                  <p class="detail-label">Rejection Reason</p>
+                  <p class="detail-rejection">{{ claim.rejection_reason }}</p>
                 </div>
               </div>
 
               <!-- Action Buttons (only for pending claims) -->
-              <div v-if="claim.verification_status === 'pending'" class="flex gap-3">
+              <div v-if="claim.verification_status === 'pending'" class="action-buttons">
                 <button
                   @click="approveClaim(claim)"
                   :disabled="processingId === claim.id"
-                  class="flex-1 bg-arc-green hover:bg-arc-green/80 disabled:bg-gray-600 px-4 py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2"
+                  class="approve-btn"
                 >
                   <CheckCircle :size="20" />
                   {{ processingId === claim.id ? 'Processing...' : 'Approve' }}
@@ -333,7 +328,7 @@ function getStatusIcon(status: string) {
                 <button
                   @click="rejectClaim(claim)"
                   :disabled="processingId === claim.id"
-                  class="flex-1 bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 px-4 py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2"
+                  class="reject-btn"
                 >
                   <XCircle :size="20" />
                   Reject
@@ -346,3 +341,169 @@ function getStatusIcon(status: string) {
     </div>
   </div>
 </template>
+
+<style scoped>
+.page-container {
+  @apply min-h-screen bg-arc-dark text-white;
+}
+
+.content-wrapper {
+  @apply container mx-auto px-4 py-8;
+}
+
+.header {
+  @apply mb-8;
+}
+
+.header-title-row {
+  @apply flex items-center gap-3;
+}
+
+.title {
+  @apply text-4xl font-bold;
+}
+
+.admin-badge {
+  @apply bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold;
+}
+
+.subtitle {
+  @apply text-gray-400 mt-2;
+}
+
+.filter-tabs {
+  @apply flex gap-4 mb-8;
+}
+
+.filter-btn {
+  @apply px-6 py-2 rounded-lg font-semibold transition;
+}
+
+.filter-btn-pending {
+  @apply bg-arc-yellow text-white;
+}
+
+.filter-btn-approved {
+  @apply bg-arc-green text-white;
+}
+
+.filter-btn-rejected {
+  @apply bg-arc-red text-white;
+}
+
+.filter-btn-all {
+  @apply bg-arc-red text-white;
+}
+
+.filter-btn-inactive {
+  @apply bg-arc-navy hover:bg-arc-navy/80;
+}
+
+.loading-state {
+  @apply text-center py-12;
+}
+
+.loading-text {
+  @apply text-xl;
+}
+
+.empty-state {
+  @apply text-center py-12;
+}
+
+.empty-icon {
+  @apply mx-auto mb-4 text-gray-600;
+}
+
+.empty-text {
+  @apply text-gray-400;
+}
+
+.claims-list {
+  @apply space-y-6;
+}
+
+.claim-card {
+  @apply bg-arc-navy rounded-lg p-6;
+}
+
+.claim-grid {
+  @apply grid md:grid-cols-2 gap-6;
+}
+
+.screenshot-section {
+  @apply;
+}
+
+.screenshot-label {
+  @apply text-sm text-gray-400 mb-2;
+}
+
+.screenshot-link {
+  @apply block relative group;
+}
+
+.screenshot-img {
+  @apply w-full rounded-lg border border-arc-red/20 hover:border-arc-red transition;
+}
+
+.screenshot-overlay {
+  @apply absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center rounded-lg;
+}
+
+.overlay-icon {
+  @apply text-white;
+}
+
+.details-section {
+  @apply;
+}
+
+.status-header {
+  @apply flex items-center gap-2 mb-4;
+}
+
+.status-text {
+  @apply text-lg font-semibold uppercase;
+}
+
+.details-list {
+  @apply space-y-3 mb-6;
+}
+
+.detail-item {
+  @apply;
+}
+
+.detail-label {
+  @apply text-sm text-gray-400;
+}
+
+.detail-target {
+  @apply text-xl font-bold;
+}
+
+.detail-amount {
+  @apply text-2xl font-bold text-arc-red;
+}
+
+.detail-value {
+  @apply;
+}
+
+.detail-rejection {
+  @apply text-arc-red;
+}
+
+.action-buttons {
+  @apply flex gap-3;
+}
+
+.approve-btn {
+  @apply flex-1 bg-arc-green hover:bg-arc-green/80 disabled:bg-gray-600 px-4 py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2;
+}
+
+.reject-btn {
+  @apply flex-1 bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 px-4 py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2;
+}
+</style>
