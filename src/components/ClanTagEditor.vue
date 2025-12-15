@@ -99,7 +99,7 @@ async function removeClanTag() {
       <span v-if="user.clan_tag" class="text-arc-red font-bold text-lg">
         {{ displayClanTag }}
       </span>
-      <span v-else-if="isOwnProfile" class="text-gray-500 text-sm italic">
+      <span v-else-if="isOwnProfile" class="text-gray-600 text-sm italic">
         No clan tag
       </span>
 
@@ -110,7 +110,7 @@ async function removeClanTag() {
         class="p-1 hover:bg-arc-red/20 rounded transition-colors"
         title="Edit clan tag"
       >
-        <Edit2 :size="16" class="text-gray-400 hover:text-arc-red" />
+        <Edit2 :size="16" class="text-arc-brown hover:text-arc-red" />
       </button>
     </div>
 
@@ -126,7 +126,7 @@ async function removeClanTag() {
             type="text"
             maxlength="5"
             placeholder="CLAN"
-            class="bg-arc-dark border border-arc-red/30 rounded px-3 py-2 text-white focus:border-arc-red focus:outline-none w-32 text-center font-bold uppercase"
+            class="bg-arc-cream border border-arc-red/30 rounded px-3 py-2 text-arc-dark focus:border-arc-red focus:outline-none w-32 text-center font-bold uppercase"
             style="padding-left: 1.5rem; padding-right: 1.5rem"
             @keyup.enter="saveClanTag"
             @keyup.escape="cancelEditing"
@@ -142,16 +142,16 @@ async function removeClanTag() {
           class="p-2 bg-arc-green hover:bg-arc-green/80 rounded transition-colors disabled:opacity-50"
           title="Save"
         >
-          <Check :size="16" class="text-white" />
+          <Check :size="16" class="text-arc-dark" />
         </button>
 
         <button
           @click="cancelEditing"
           :disabled="saving"
-          class="p-2 bg-gray-600 hover:bg-gray-500 rounded transition-colors disabled:opacity-50"
+          class="p-2 bg-gray-100 hover:bg-gray-100 rounded transition-colors disabled:opacity-50"
           title="Cancel"
         >
-          <X :size="16" class="text-white" />
+          <X :size="16" class="text-arc-dark" />
         </button>
 
         <button
@@ -161,7 +161,7 @@ async function removeClanTag() {
           class="p-2 bg-arc-red hover:bg-arc-red/80 rounded transition-colors disabled:opacity-50"
           title="Remove clan tag"
         >
-          <X :size="16" class="text-white" />
+          <X :size="16" class="text-arc-dark" />
         </button>
       </div>
 
@@ -172,7 +172,7 @@ async function removeClanTag() {
       </div>
 
       <!-- Helper Text -->
-      <div v-else class="text-xs text-gray-500">
+      <div v-else class="text-xs text-gray-600">
         Max 5 characters. Letters and numbers only.
       </div>
     </div>

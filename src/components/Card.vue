@@ -32,19 +32,19 @@ withDefaults(defineProps<Props>(), {
 
 /* Variants */
 .card-default {
-  @apply bg-arc-navy border border-arc-red/20;
+  @apply bg-arc-card border border-arc-brown/20;
 }
 
 .card-bordered {
-  @apply bg-arc-navy border-2 border-arc-red;
+  @apply bg-arc-card border-2 border-arc-brown;
 }
 
 .card-glass {
-  @apply bg-gray-800/50 backdrop-blur-sm border border-white/10;
+  @apply bg-white/50 backdrop-blur-sm border border-arc-brown/20;
 }
 
 .card-flat {
-  @apply bg-gray-700/50;
+  @apply bg-arc-beige/50;
 }
 
 /* Padding */
@@ -67,7 +67,7 @@ withDefaults(defineProps<Props>(), {
 /* Hover effect */
 .card-hover {
   @apply cursor-pointer;
-  @apply hover:shadow-lg hover:shadow-arc-red/10;
+  @apply hover:shadow-lg hover:shadow-arc-brown/20;
   @apply hover:-translate-y-1;
 }
 </style>

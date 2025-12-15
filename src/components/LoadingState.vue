@@ -41,7 +41,7 @@ withDefaults(
 }
 
 .loading-text {
-  @apply text-xl text-gray-300;
+  @apply text-xl text-gray-600;
 }
 
 .loading-state-sm .loading-text {

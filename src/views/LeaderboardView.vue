@@ -40,7 +40,7 @@ onMounted(async () => {
 
 function getMedalColor(index: number) {
   if (index === 0) return 'text-arc-yellow'
-  if (index === 1) return 'text-gray-400'
+  if (index === 1) return 'text-arc-brown'
   if (index === 2) return 'text-arc-yellow'
   return 'text-gray-600'
 }
@@ -72,7 +72,7 @@ function getMedalColor(index: number) {
 
           <!-- Avatar placeholder -->
           <div class="avatar">
-            <Target :size="32" class="text-gray-500" />
+            <Target :size="32" class="text-gray-600" />
           </div>
 
           <!-- Info -->
@@ -124,7 +124,7 @@ function getMedalColor(index: number) {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-dark text-white;
+  @apply min-h-screen bg-arc-cream text-arc-dark;
 }
 
 .content-wrapper {
@@ -136,15 +136,15 @@ function getMedalColor(index: number) {
 }
 
 .title {
-  @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 flex items-center justify-center gap-2 sm:gap-3;
+  @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 flex items-center justify-center gap-2 sm:gap-3 text-arc-dark;
 }
 
 .subtitle {
-  @apply text-gray-400 text-sm sm:text-base px-4;
+  @apply text-arc-brown text-sm sm:text-base px-4;
 }
 
 .loading-state {
-  @apply text-center text-lg sm:text-xl;
+  @apply text-center text-lg sm:text-xl text-arc-dark;
 }
 
 .hunters-list {
@@ -152,7 +152,7 @@ function getMedalColor(index: number) {
 }
 
 .hunter-card {
-  @apply bg-arc-navy rounded-lg p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 hover:bg-arc-navy/80 transition;
+  @apply bg-arc-card rounded-lg p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 hover:bg-white transition border border-arc-brown/10;
 }
 
 .rank {
@@ -160,7 +160,7 @@ function getMedalColor(index: number) {
 }
 
 .avatar {
-  @apply w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0;
+  @apply w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-arc-beige flex items-center justify-center flex-shrink-0;
 }
 
 .hunter-info {
@@ -172,7 +172,7 @@ function getMedalColor(index: number) {
 }
 
 .hunter-name {
-  @apply text-lg sm:text-xl md:text-2xl font-bold hover:text-arc-red transition break-words;
+  @apply text-lg sm:text-xl md:text-2xl font-bold hover:text-arc-red transition break-words text-arc-dark;
 }
 
 .clan-tag {
@@ -180,7 +180,7 @@ function getMedalColor(index: number) {
 }
 
 .hunter-stats {
-  @apply flex gap-2 sm:gap-4 text-xs sm:text-sm text-gray-400 mt-1;
+  @apply flex gap-2 sm:gap-4 text-xs sm:text-sm text-arc-brown mt-1;
 }
 
 .achievements {
@@ -200,10 +200,10 @@ function getMedalColor(index: number) {
 }
 
 .points-label {
-  @apply text-xs sm:text-sm text-gray-400;
+  @apply text-xs sm:text-sm text-arc-brown;
 }
 
 .empty-state {
-  @apply text-center text-gray-400 py-8 sm:py-12 px-4 text-sm sm:text-base;
+  @apply text-center text-arc-brown py-8 sm:py-12 px-4 text-sm sm:text-base;
 }
 </style>

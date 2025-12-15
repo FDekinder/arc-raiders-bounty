@@ -92,11 +92,11 @@ async function confirmRole() {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-dark;
+  @apply min-h-screen bg-arc-cream;
 }
 
 .confirm-bar {
-  @apply fixed bottom-0 left-0 right-0 bg-arc-navy border-t-2 border-arc-red/20 p-6;
+  @apply fixed bottom-0 left-0 right-0 bg-arc-card border-t-2 border-arc-red/20 p-6 shadow-lg;
 }
 
 .confirm-content {
@@ -108,7 +108,7 @@ async function confirmRole() {
 }
 
 .selected-text {
-  @apply text-white font-bold;
+  @apply text-arc-dark font-bold;
 }
 
 .role-bh {
@@ -120,7 +120,7 @@ async function confirmRole() {
 }
 
 .placeholder-text {
-  @apply text-gray-400;
+  @apply text-arc-brown;
 }
 
 .error-text {
@@ -132,10 +132,10 @@ async function confirmRole() {
 }
 
 .confirm-btn-active {
-  @apply bg-arc-red hover:bg-arc-red/80 text-white cursor-pointer;
+  @apply bg-arc-red hover:bg-arc-red/80 text-arc-dark cursor-pointer;
 }
 
 .confirm-btn-disabled {
-  @apply bg-gray-600 text-gray-400 cursor-not-allowed;
+  @apply bg-arc-brown/40 text-arc-brown cursor-not-allowed;
 }
 </style>

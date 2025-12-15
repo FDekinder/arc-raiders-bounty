@@ -253,7 +253,7 @@ function handlePlatformChange() {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-dark text-white;
+  @apply min-h-screen bg-arc-cream text-arc-dark;
 }
 
 .content-wrapper {
@@ -269,15 +269,15 @@ function handlePlatformChange() {
 }
 
 .title {
-  @apply text-3xl sm:text-4xl font-bold mb-2;
+  @apply text-3xl sm:text-4xl font-bold mb-2 text-arc-dark;
 }
 
 .subtitle {
-  @apply text-gray-400 text-sm sm:text-base;
+  @apply text-arc-brown text-sm sm:text-base;
 }
 
 .form-card {
-  @apply bg-arc-navy rounded-lg p-4 sm:p-6 md:p-8;
+  @apply bg-arc-card rounded-lg p-4 sm:p-6 md:p-8 border border-arc-brown/10;
 }
 
 .form-content {
@@ -289,7 +289,7 @@ function handlePlatformChange() {
 }
 
 .form-label {
-  @apply block text-sm font-medium mb-2;
+  @apply block text-sm font-medium mb-2 text-arc-dark;
 }
 
 .platform-grid {
@@ -301,11 +301,11 @@ function handlePlatformChange() {
 }
 
 .platform-btn-active {
-  @apply border-arc-red bg-arc-red/10;
+  @apply border-arc-red bg-arc-red/10 text-arc-dark;
 }
 
 .platform-btn-inactive {
-  @apply border-gray-600 hover:border-gray-500;
+  @apply border-arc-brown/30 hover:border-arc-brown/50 text-arc-brown;
 }
 
 .platform-icon {
@@ -313,7 +313,7 @@ function handlePlatformChange() {
 }
 
 .platform-hint {
-  @apply text-gray-400 text-xs ml-2 block sm:inline;
+  @apply text-arc-brown text-xs ml-2 block sm:inline;
 }
 
 .input-group {
@@ -325,7 +325,7 @@ function handlePlatformChange() {
 }
 
 .input-field {
-  @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:border-arc-red;
+  @apply w-full bg-white border border-arc-brown/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:border-arc-brown text-arc-dark;
 }
 
 .input-icon {
@@ -341,7 +341,7 @@ function handlePlatformChange() {
 }
 
 .verify-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base w-full sm:w-auto;
+  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 disabled:cursor-not-allowed px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base w-full sm:w-auto text-arc-dark;
 }
 
 .spinner {
@@ -349,7 +349,7 @@ function handlePlatformChange() {
 }
 
 .player-card {
-  @apply mt-4 bg-gray-700 rounded-lg p-3 sm:p-4 flex items-center gap-3 sm:gap-4;
+  @apply mt-4 bg-arc-beige rounded-lg p-3 sm:p-4 flex items-center gap-3 sm:gap-4 border border-arc-brown/20;
 }
 
 .player-avatar {
@@ -357,7 +357,7 @@ function handlePlatformChange() {
 }
 
 .player-avatar-placeholder {
-  @apply w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gray-600 flex items-center justify-center text-xl sm:text-2xl flex-shrink-0;
+  @apply w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-arc-card flex items-center justify-center text-xl sm:text-2xl flex-shrink-0;
 }
 
 .player-info {
@@ -365,11 +365,11 @@ function handlePlatformChange() {
 }
 
 .player-name {
-  @apply font-bold text-base sm:text-lg break-words;
+  @apply font-bold text-base sm:text-lg break-words text-arc-dark;
 }
 
 .player-platform {
-  @apply text-xs sm:text-sm text-gray-400;
+  @apply text-xs sm:text-sm text-arc-brown;
 }
 
 .player-link {
@@ -381,7 +381,7 @@ function handlePlatformChange() {
 }
 
 .help-text {
-  @apply text-xs sm:text-sm text-gray-400 mt-2;
+  @apply text-xs sm:text-sm text-arc-brown mt-2;
 }
 
 .error-alert {
@@ -389,6 +389,6 @@ function handlePlatformChange() {
 }
 
 .submit-btn {
-  @apply w-full bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base;
+  @apply w-full bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 disabled:cursor-not-allowed px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base text-arc-dark;
 }
 </style>

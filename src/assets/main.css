@@ -3,45 +3,45 @@
 @tailwind utilities;
 
 @layer base {
-  /* All dark theme */
+  /* Light theme inspired by ARC Raiders website */
   body {
-    @apply bg-arc-dark text-white;
+    @apply bg-arc-cream text-arc-dark;
   }
 }
 
 @layer utilities {
-  /* Card/panel utilities - dark purple/navy */
+  /* Card/panel utilities - light cream/beige */
   .bg-card {
-    @apply bg-arc-navy;
+    @apply bg-arc-card;
   }
 
   .bg-card-hover {
-    @apply bg-arc-navy hover:bg-arc-navy/80;
+    @apply bg-arc-card hover:bg-arc-card-hover;
   }
 
   .bg-nested {
-    @apply bg-arc-dark/50;
+    @apply bg-arc-beige;
   }
 
   /* Text utilities */
   .text-primary {
-    @apply text-white;
+    @apply text-arc-dark;
   }
 
   .text-secondary {
-    @apply text-white/80;
+    @apply text-arc-brown;
   }
 
   .text-muted {
-    @apply text-white/60;
+    @apply text-arc-brown/70;
   }
 
   /* Border utilities */
   .border-subtle {
-    @apply border-white/10;
+    @apply border-arc-brown/10;
   }
 
   .border-visible {
-    @apply border-white/20;
+    @apply border-arc-brown/30;
   }
 }

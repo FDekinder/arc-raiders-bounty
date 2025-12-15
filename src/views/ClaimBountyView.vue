@@ -227,7 +227,7 @@ async function handleSubmit() {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-dark text-white;
+  @apply min-h-screen bg-arc-cream text-arc-dark;
 }
 
 .loading-container {
@@ -255,11 +255,11 @@ async function handleSubmit() {
 }
 
 .error-message {
-  @apply text-gray-400 mb-4;
+  @apply text-arc-brown mb-4;
 }
 
 .back-btn {
-  @apply bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded-lg;
+  @apply bg-gray-100 hover:bg-gray-100 px-6 py-2 rounded-lg;
 }
 
 .content-wrapper {
@@ -279,7 +279,7 @@ async function handleSubmit() {
 }
 
 .claim-form {
-  @apply bg-arc-navy rounded-lg p-8;
+  @apply bg-arc-card rounded-lg p-8;
 }
 
 .form-title {
@@ -287,7 +287,7 @@ async function handleSubmit() {
 }
 
 .form-subtitle {
-  @apply text-gray-400 mb-8;
+  @apply text-arc-brown mb-8;
 }
 
 .target-name {
@@ -295,7 +295,7 @@ async function handleSubmit() {
 }
 
 .bounty-info-card {
-  @apply bg-gray-700 rounded-lg p-6 mb-8 border border-arc-red/20;
+  @apply bg-gray-100 rounded-lg p-6 mb-8 border border-arc-red/20;
 }
 
 .bounty-info-content {
@@ -303,7 +303,7 @@ async function handleSubmit() {
 }
 
 .info-label {
-  @apply text-sm text-gray-400;
+  @apply text-sm text-arc-brown;
 }
 
 .info-target {
@@ -315,7 +315,7 @@ async function handleSubmit() {
 }
 
 .reward-label {
-  @apply text-sm text-gray-400;
+  @apply text-sm text-arc-brown;
 }
 
 .reward-amount {
@@ -323,7 +323,7 @@ async function handleSubmit() {
 }
 
 .reward-points {
-  @apply text-sm text-gray-400;
+  @apply text-sm text-arc-brown;
 }
 
 .error-alert {
@@ -351,15 +351,15 @@ async function handleSubmit() {
 }
 
 .upload-icon {
-  @apply mx-auto mb-4 text-gray-400;
+  @apply mx-auto mb-4 text-arc-brown;
 }
 
 .upload-text-primary {
-  @apply text-gray-300 mb-2;
+  @apply text-gray-600 mb-2;
 }
 
 .upload-text-secondary {
-  @apply text-sm text-gray-500;
+  @apply text-sm text-gray-600;
 }
 
 .preview-section {
@@ -367,7 +367,7 @@ async function handleSubmit() {
 }
 
 .preview-label {
-  @apply text-sm text-gray-400 mb-2;
+  @apply text-sm text-arc-brown mb-2;
 }
 
 .preview-image {
@@ -375,11 +375,11 @@ async function handleSubmit() {
 }
 
 .preview-filename {
-  @apply text-sm text-gray-400 mt-2 text-center;
+  @apply text-sm text-arc-brown mt-2 text-center;
 }
 
 .requirements-card {
-  @apply bg-gray-700 p-4 rounded-lg mb-6 border border-arc-red/20;
+  @apply bg-gray-100 p-4 rounded-lg mb-6 border border-arc-red/20;
 }
 
 .requirements-title {
@@ -387,7 +387,7 @@ async function handleSubmit() {
 }
 
 .requirements-list {
-  @apply text-sm text-gray-300 space-y-1 list-disc list-inside;
+  @apply text-sm text-gray-600 space-y-1 list-disc list-inside;
 }
 
 .action-buttons {
@@ -399,6 +399,6 @@ async function handleSubmit() {
 }
 
 .cancel-btn {
-  @apply px-6 py-3 rounded-lg font-semibold bg-gray-700 hover:bg-gray-600 transition;
+  @apply px-6 py-3 rounded-lg font-semibold bg-gray-100 hover:bg-gray-100 transition;
 }
 </style>

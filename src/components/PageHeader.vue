@@ -60,7 +60,7 @@ withDefaults(
 }
 
 .subtitle {
-  @apply text-gray-400 text-sm sm:text-base md:text-lg;
+  @apply text-arc-brown text-sm sm:text-base md:text-lg;
 }
 
 .header-actions {

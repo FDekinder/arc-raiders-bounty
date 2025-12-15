@@ -86,7 +86,7 @@ function goToRegister() {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-gradient-to-b from-arc-dark to-arc-navy text-white flex items-center justify-center;
+  @apply min-h-screen bg-gradient-to-b from-arc-cream to-arc-beige text-arc-dark flex items-center justify-center;
 }
 
 .content-wrapper {
@@ -94,7 +94,7 @@ function goToRegister() {
 }
 
 .login-card {
-  @apply bg-arc-navy rounded-lg p-8 shadow-2xl;
+  @apply bg-arc-card rounded-lg p-8 shadow-2xl border border-arc-brown/10;
 }
 
 .header {
@@ -106,11 +106,11 @@ function goToRegister() {
 }
 
 .subtitle {
-  @apply text-gray-400;
+  @apply text-arc-brown;
 }
 
 .steam-btn {
-  @apply w-full bg-arc-red hover:bg-arc-red-600 text-white font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-red/30;
+  @apply w-full bg-arc-red hover:bg-arc-red/80 text-arc-dark font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-red/30;
 }
 
 .steam-icon {
@@ -126,7 +126,7 @@ function goToRegister() {
 }
 
 .divider-border {
-  @apply w-full border-t border-gray-600;
+  @apply w-full border-t border-arc-brown/30;
 }
 
 .divider-text-wrapper {
@@ -134,11 +134,11 @@ function goToRegister() {
 }
 
 .divider-text {
-  @apply px-2 bg-arc-navy text-gray-400;
+  @apply px-2 bg-arc-card text-arc-brown;
 }
 
 .email-btn {
-  @apply w-full bg-arc-cyan hover:bg-arc-cyan/80 text-white font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-cyan/30;
+  @apply w-full bg-arc-cyan hover:bg-arc-cyan/80 text-arc-dark font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-cyan/30;
 }
 
 .register-section {
@@ -146,15 +146,15 @@ function goToRegister() {
 }
 
 .register-text {
-  @apply text-gray-400 text-sm;
+  @apply text-arc-brown text-sm;
 }
 
 .register-link {
-  @apply text-arc-red hover:text-arc-red/80 font-bold transition-colors;
+  @apply text-arc-red hover:bg-arc-red/80 font-bold transition-colors;
 }
 
 .footer-text {
-  @apply mt-6 text-center text-sm text-gray-400;
+  @apply mt-6 text-center text-sm text-arc-brown;
 }
 
 .footer-subtext {

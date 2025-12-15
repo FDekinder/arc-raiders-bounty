@@ -4,97 +4,51 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Arc Raiders color palette based on game logo
+        // Arc Raiders light color palette inspired by official website
+        'arc-cream': {
+          DEFAULT: '#ece2d0', // Main background - warm cream
+          light: '#f5f0e6',
+          dark: '#e0d4bf',
+        },
+        'arc-beige': {
+          DEFAULT: '#d9cdb8', // Card background
+          light: '#e6dccb',
+          dark: '#c9bbaa',
+        },
+        'arc-brown': {
+          DEFAULT: '#8b7355', // Text and borders
+          light: '#a68968',
+          dark: '#6e5943',
+        },
         'arc-cyan': {
-          DEFAULT: '#00d4ff',
-          50: '#e6f9ff',
-          100: '#ccf3ff',
-          200: '#99e7ff',
-          300: '#66dbff',
-          400: '#33cfff',
-          500: '#00d4ff',
-          600: '#00a9cc',
-          700: '#007f99',
-          800: '#005566',
-          900: '#002a33',
+          DEFAULT: '#5fffff', // Bright cyan accent
+          light: '#8fffff',
+          dark: '#00d4ff',
         },
         'arc-green': {
-          DEFAULT: '#00ff88',
-          50: '#e6fff5',
-          100: '#ccffeb',
-          200: '#99ffd6',
-          300: '#66ffc2',
-          400: '#33ffad',
-          500: '#00ff88',
-          600: '#00cc6d',
-          700: '#009952',
-          800: '#006636',
-          900: '#00331b',
+          DEFAULT: '#05ff74', // Bright green accent
+          light: '#3aff8f',
+          dark: '#00cc5d',
         },
         'arc-yellow': {
-          DEFAULT: '#ffd500',
-          50: '#fffae6',
-          100: '#fff5cc',
-          200: '#ffeb99',
-          300: '#ffe066',
-          400: '#ffd633',
-          500: '#ffd500',
-          600: '#ccaa00',
-          700: '#998000',
-          800: '#665500',
-          900: '#332b00',
+          DEFAULT: '#ffea00', // Bright yellow accent
+          light: '#fff04d',
+          dark: '#ccbb00',
         },
         'arc-red': {
-          DEFAULT: '#ff3355',
-          50: '#ffe8ec',
-          100: '#ffd1d9',
-          200: '#ffa3b3',
-          300: '#ff758c',
-          400: '#ff4766',
-          500: '#ff3355',
-          600: '#cc2944',
-          700: '#991f33',
-          800: '#661422',
-          900: '#330a11',
+          DEFAULT: '#ff0000', // Bright red accent
+          light: '#ff3333',
+          dark: '#cc0000',
         },
         'arc-dark': {
-          DEFAULT: '#16161f', // Very dark background
-          50: '#f5f5f7',
-          100: '#e8e8ed',
-          200: '#d1d1db',
-          300: '#babac9',
-          400: '#a3a3b7',
-          500: '#8c8ca5',
-          600: '#707084',
-          700: '#545463',
-          800: '#383842',
-          900: '#16161f',
+          DEFAULT: '#130918', // Dark text
+          light: '#2a1f2e',
+          lighter: '#4a3f4e',
         },
-        'arc-navy': {
-          DEFAULT: '#1e1e2d', // Dark purple/navy for cards
-          50: '#f7f7f9',
-          100: '#efeff3',
-          200: '#dfdfe7',
-          300: '#cfcfdb',
-          400: '#bfbfcf',
-          500: '#afafc3',
-          600: '#8c8c9c',
-          700: '#696975',
-          800: '#46464e',
-          900: '#1e1e2d',
-        },
-        'arc-purple': {
-          DEFAULT: '#252538', // Slightly lighter for nested elements
-          50: '#f9f9fa',
-          100: '#f3f3f5',
-          200: '#e7e7eb',
-          300: '#dbdbe1',
-          400: '#cfcfd7',
-          500: '#c3c3cd',
-          600: '#9c9ca4',
-          700: '#75757b',
-          800: '#4e4e52',
-          900: '#252538',
+        'arc-card': {
+          DEFAULT: '#f8f4eb', // Light card background
+          hover: '#ffffff',
+          border: '#d9cdb8',
         },
       },
     },

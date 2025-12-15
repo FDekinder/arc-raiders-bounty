@@ -85,7 +85,7 @@ function getStatusColor(status: string) {
     case 'pending':
       return 'text-arc-yellow'
     default:
-      return 'text-gray-500'
+      return 'text-gray-600'
   }
 }
 
@@ -98,7 +98,7 @@ function getStatusBg(status: string) {
     case 'pending':
       return 'bg-arc-yellow/10 border-arc-yellow'
     default:
-      return 'bg-gray-500/10 border-gray-500'
+      return 'bg-gray-100/10 border-gray-300'
   }
 }
 
@@ -250,7 +250,7 @@ function getStatusIcon(status: string) {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-dark text-white;
+  @apply min-h-screen bg-arc-cream text-arc-dark;
 }
 
 .content-wrapper {
@@ -290,7 +290,7 @@ function getStatusIcon(status: string) {
 }
 
 .claim-timestamp {
-  @apply text-sm text-gray-400;
+  @apply text-sm text-arc-brown;
 }
 
 .claim-stats {
@@ -298,7 +298,7 @@ function getStatusIcon(status: string) {
 }
 
 .stat-label-small {
-  @apply text-sm text-gray-400;
+  @apply text-sm text-arc-brown;
 }
 
 .stat-bounty-amount {

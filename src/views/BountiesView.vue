@@ -319,7 +319,7 @@ const filteredBounties = computed(() => {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-dark text-white;
+  @apply min-h-screen bg-arc-cream text-arc-dark;
 }
 
 .content-wrapper {
@@ -327,15 +327,15 @@ const filteredBounties = computed(() => {
 }
 
 .hunt-status {
-  @apply text-gray-400 mt-2 text-sm sm:text-base;
+  @apply text-arc-brown mt-2 text-sm sm:text-base;
 }
 
 .new-bounty-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-semibold text-sm sm:text-base whitespace-nowrap;
+  @apply bg-arc-red hover:bg-arc-red/80 px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-semibold text-sm sm:text-base whitespace-nowrap text-arc-dark;
 }
 
 .filters-section {
-  @apply bg-arc-navy rounded-lg p-3 sm:p-4 mb-6 sm:mb-8;
+  @apply bg-arc-card rounded-lg p-3 sm:p-4 mb-6 sm:mb-8 border border-arc-brown/10;
 }
 
 .filters-grid {
@@ -344,19 +344,19 @@ const filteredBounties = computed(() => {
 
 
 .sort-select {
-  @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:border-arc-red;
+  @apply w-full bg-white border border-arc-brown/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-arc-dark focus:outline-none focus:border-arc-brown;
 }
 
 .search-results {
-  @apply mt-3 text-xs sm:text-sm text-gray-400;
+  @apply mt-3 text-xs sm:text-sm text-arc-brown;
 }
 
 .most-wanted-section {
-  @apply bg-arc-navy rounded-lg p-4 sm:p-6 mb-6 sm:mb-8;
+  @apply bg-arc-card rounded-lg p-4 sm:p-6 mb-6 sm:mb-8 border border-arc-brown/10;
 }
 
 .section-title {
-  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2;
+  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2 text-arc-dark;
 }
 
 .most-wanted-grid {
@@ -364,7 +364,7 @@ const filteredBounties = computed(() => {
 }
 
 .most-wanted-card {
-  @apply bg-gray-700 p-3 sm:p-4 rounded-lg border border-arc-red/20;
+  @apply bg-arc-beige p-3 sm:p-4 rounded-lg border border-arc-brown/20;
 }
 
 .most-wanted-content {
@@ -376,11 +376,11 @@ const filteredBounties = computed(() => {
 }
 
 .player-name {
-  @apply font-bold text-sm sm:text-base break-words;
+  @apply font-bold text-sm sm:text-base break-words text-arc-dark;
 }
 
 .player-stats {
-  @apply text-xs sm:text-sm text-gray-400;
+  @apply text-xs sm:text-sm text-arc-brown;
 }
 
 .bounties-list {
@@ -397,7 +397,7 @@ const filteredBounties = computed(() => {
 }
 
 .bounty-target {
-  @apply text-xl sm:text-2xl font-bold mb-2 break-words;
+  @apply text-xl sm:text-2xl font-bold mb-2 break-words text-arc-dark;
 }
 
 .bounty-meta {
@@ -405,7 +405,7 @@ const filteredBounties = computed(() => {
 }
 
 .expiration-info {
-  @apply flex items-center gap-1;
+  @apply flex items-center gap-1 text-arc-brown;
 }
 
 .hunter-count {
@@ -413,7 +413,7 @@ const filteredBounties = computed(() => {
 }
 
 .extend-btn {
-  @apply text-xs bg-arc-yellow hover:bg-arc-yellow/80 px-2 sm:px-3 py-1 rounded transition;
+  @apply text-xs bg-arc-yellow hover:bg-arc-yellow/80 px-2 sm:px-3 py-1 rounded transition text-arc-dark;
 }
 
 .bounty-actions {
@@ -425,7 +425,7 @@ const filteredBounties = computed(() => {
 }
 
 .bounty-points-label {
-  @apply text-xs sm:text-sm text-gray-400 mb-2;
+  @apply text-xs sm:text-sm text-arc-brown mb-2;
 }
 
 .action-buttons {
@@ -433,14 +433,14 @@ const filteredBounties = computed(() => {
 }
 
 .join-hunt-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none;
+  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none text-arc-dark;
 }
 
 .leave-hunt-btn {
-  @apply bg-gray-600 hover:bg-gray-700 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none;
+  @apply bg-arc-brown hover:bg-arc-brown/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none text-arc-dark;
 }
 
 .claim-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold text-center transition flex-1 sm:flex-none whitespace-nowrap;
+  @apply bg-arc-red hover:bg-arc-red/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold text-center transition flex-1 sm:flex-none whitespace-nowrap text-arc-dark;
 }
 </style>

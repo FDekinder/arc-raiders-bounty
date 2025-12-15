@@ -25,23 +25,23 @@ const platforms = [
   {
     id: 'steam' as Platform,
     name: 'Steam',
-    color: 'from-blue-500/20 to-purple-500/20',
-    borderColor: 'border-blue-500',
-    textColor: 'text-blue-400',
+    color: 'from-blue/20 to-purple/20',
+    borderColor: 'border-blue-600',
+    textColor: 'text-blue-600',
   },
   {
     id: 'xbox' as Platform,
     name: 'Xbox',
-    color: 'from-green-500/20 to-emerald-500/20',
-    borderColor: 'border-green-500',
-    textColor: 'text-green-400',
+    color: 'from-green/20 to-emerald/20',
+    borderColor: 'border-green-600',
+    textColor: 'text-green-600',
   },
   {
     id: 'playstation' as Platform,
     name: 'PlayStation',
-    color: 'from-blue-600/20 to-indigo-600/20',
+    color: 'from-blue/20 to-indigo/20',
     borderColor: 'border-blue-600',
-    textColor: 'text-blue-500',
+    textColor: 'text-blue-600',
   },
 ]
 </script>
@@ -55,17 +55,17 @@ const platforms = [
         :key="platform.id"
         @click="selectPlatform(platform.id)"
         :class="[
-          'p-6 rounded-lg border-2 transition-all duration-300 transform hover:scale-105',
+          'p-6 rounded-lg border-2 transition-all duration transform hover:scale-105',
           'bg-gradient-to-br',
           platform.color,
           selectedPlatform === platform.id
             ? `${platform.borderColor} ring-2 ring-offset-2 ring-offset-arc-dark scale-105`
-            : 'border-gray-600 hover:border-gray-400',
+            : 'border-gray-300 hover:border-gray-300',
         ]"
       >
         <div class="flex flex-col items-center gap-3">
-          <Gamepad2 :size="48" :class="selectedPlatform === platform.id ? platform.textColor : 'text-gray-400'" />
-          <span :class="['font-bold text-lg', selectedPlatform === platform.id ? platform.textColor : 'text-white']">
+          <Gamepad2 :size="48" :class="selectedPlatform === platform.id ? platform.textColor : 'text-arc-brown'" />
+          <span :class="['font-bold text-lg', selectedPlatform === platform.id ? platform.textColor : 'text-arc-dark']">
             {{ platform.name }}
           </span>
           <div v-if="selectedPlatform === platform.id" :class="['text-sm', platform.textColor]">

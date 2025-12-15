@@ -76,7 +76,7 @@ const iconClass = computed(() => {
     case 'red':
       return 'text-arc-red'
     default:
-      return 'text-gray-400'
+      return 'text-arc-brown'
   }
 })
 
@@ -108,7 +108,7 @@ const sizeClass = computed(() => `stat-card-${props.size}`)
 }
 
 .stat-card-default {
-  @apply bg-arc-navy;
+  @apply bg-arc-card;
 }
 
 .stat-card-yellow {
@@ -128,7 +128,7 @@ const sizeClass = computed(() => `stat-card-${props.size}`)
 }
 
 .stat-value {
-  @apply text-xl sm:text-2xl font-bold text-white;
+  @apply text-xl sm:text-2xl font-bold text-arc-dark;
 }
 
 .stat-card-sm .stat-value {
@@ -152,7 +152,7 @@ const sizeClass = computed(() => `stat-card-${props.size}`)
 }
 
 .stat-label {
-  @apply text-xs sm:text-sm text-gray-400 mt-1;
+  @apply text-xs sm:text-sm text-arc-brown mt-1;
 }
 
 .stat-card-sm .stat-label {

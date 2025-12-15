@@ -44,11 +44,11 @@ function getColorClasses(type: Toast['type']) {
           getColorClasses(toast.type),
         ]"
       >
-        <component :is="getIcon(toast.type)" :size="20" class="flex-shrink-0 text-white" />
-        <p class="flex-1 text-white font-medium">{{ toast.message }}</p>
+        <component :is="getIcon(toast.type)" :size="20" class="flex-shrink-0 text-arc-dark" />
+        <p class="flex-1 text-arc-dark font-medium">{{ toast.message }}</p>
         <button
           @click="removeToast(toast.id)"
-          class="flex-shrink-0 text-white/80 hover:text-white transition"
+          class="flex-shrink-0 text-arc-dark/80 hover:text-arc-dark transition"
         >
           <X :size="18" />
         </button>

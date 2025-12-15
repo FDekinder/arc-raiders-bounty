@@ -246,7 +246,7 @@ function goBack() {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-dark text-white flex items-center justify-center p-4;
+  @apply min-h-screen bg-arc-cream text-arc-dark flex items-center justify-center p-4;
 }
 
 .content-wrapper {
@@ -254,11 +254,11 @@ function goBack() {
 }
 
 .register-card {
-  @apply bg-arc-navy rounded-lg p-8 border-2 border-arc-red/20;
+  @apply bg-arc-card rounded-lg p-8 border-2 border-arc-brown/20;
 }
 
 .title {
-  @apply text-3xl font-bold mb-6 text-center;
+  @apply text-3xl font-bold mb-6 text-center text-arc-dark;
 }
 
 .form-content {
@@ -270,7 +270,7 @@ function goBack() {
 }
 
 .form-label {
-  @apply block text-sm font-medium mb-2;
+  @apply block text-sm font-medium mb-2 text-arc-dark;
 }
 
 .input-wrapper {
@@ -278,11 +278,11 @@ function goBack() {
 }
 
 .input-icon {
-  @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400;
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-arc-brown;
 }
 
 .input-field {
-  @apply w-full bg-arc-dark border border-gray-600 rounded-lg pl-10 pr-4 py-3 focus:border-arc-red focus:outline-none;
+  @apply w-full bg-white border border-arc-brown/30 rounded-lg pl-10 pr-4 py-3 focus:border-arc-brown focus:outline-none text-arc-dark;
 }
 
 .error-message {
@@ -294,11 +294,11 @@ function goBack() {
 }
 
 .submit-btn {
-  @apply w-full bg-arc-red hover:bg-arc-red/80 text-white font-bold py-3 rounded-lg transition-all;
+  @apply w-full bg-arc-red hover:bg-arc-red/80 text-arc-dark font-bold py-3 rounded-lg transition-all;
 }
 
 .link-btn {
-  @apply w-full text-gray-400 hover:text-white transition-all;
+  @apply w-full text-arc-brown hover:text-arc-dark transition-all;
 }
 
 .button-group {
@@ -306,10 +306,10 @@ function goBack() {
 }
 
 .back-btn-secondary {
-  @apply flex-1 bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 rounded-lg transition-all;
+  @apply flex-1 bg-arc-brown hover:bg-arc-brown/80 text-arc-dark font-bold py-3 rounded-lg transition-all;
 }
 
 .create-btn {
-  @apply flex-1 bg-arc-red hover:bg-arc-red/80 text-white font-bold py-3 rounded-lg transition-all disabled:bg-gray-600 disabled:cursor-not-allowed;
+  @apply flex-1 bg-arc-red hover:bg-arc-red/80 text-arc-dark font-bold py-3 rounded-lg transition-all disabled:bg-arc-brown/40 disabled:cursor-not-allowed;
 }
 </style>

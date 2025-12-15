@@ -45,7 +45,7 @@ const statusColor = computed(() => {
     case 'active':
       return 'text-arc-yellow'
     default:
-      return 'text-gray-500'
+      return 'text-gray-600'
   }
 })
 

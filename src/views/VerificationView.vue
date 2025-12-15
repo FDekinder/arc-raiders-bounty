@@ -165,7 +165,7 @@ function getStatusColor(status: string) {
     case 'pending':
       return 'text-arc-yellow'
     default:
-      return 'text-gray-500'
+      return 'text-gray-600'
   }
 }
 
@@ -292,7 +292,7 @@ function getStatusIcon(status: string) {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-dark text-white;
+  @apply min-h-screen bg-arc-cream text-arc-dark;
 }
 
 .content-wrapper {
@@ -300,7 +300,7 @@ function getStatusIcon(status: string) {
 }
 
 .admin-badge {
-  @apply bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold;
+  @apply bg-purple-600 text-arc-dark px-3 py-1 rounded-full text-sm font-semibold;
 }
 
 .claims-list {
@@ -312,7 +312,7 @@ function getStatusIcon(status: string) {
 }
 
 .screenshot-label {
-  @apply text-sm text-gray-400 mb-2;
+  @apply text-sm text-arc-brown mb-2;
 }
 
 .screenshot-link {
@@ -332,7 +332,7 @@ function getStatusIcon(status: string) {
 }
 
 .overlay-icon {
-  @apply text-white;
+  @apply text-arc-dark;
 }
 
 .details-list {
@@ -340,7 +340,7 @@ function getStatusIcon(status: string) {
 }
 
 .detail-label {
-  @apply text-sm text-gray-400;
+  @apply text-sm text-arc-brown;
 }
 
 .detail-target {

@@ -222,7 +222,7 @@ function getActivityText(activity: Activity) {
 
 <style scoped>
 .activity-page {
-  @apply min-h-screen bg-arc-dark text-white;
+  @apply min-h-screen bg-arc-cream text-arc-dark;
 }
 
 .activity-container {
@@ -238,7 +238,7 @@ function getActivityText(activity: Activity) {
 }
 
 .subtitle {
-  @apply text-gray-400;
+  @apply text-arc-brown;
 }
 
 .loading-state {
@@ -250,7 +250,7 @@ function getActivityText(activity: Activity) {
 }
 
 .activity-card {
-  @apply bg-arc-navy rounded-lg p-6 hover:bg-arc-navy/80 transition;
+  @apply bg-arc-card rounded-lg p-6 hover:bg-arc-card/80 transition;
 }
 
 .activity-content {
@@ -274,11 +274,11 @@ function getActivityText(activity: Activity) {
 }
 
 .icon-claim-rejected {
-  @apply text-gray-500 bg-gray-500/10;
+  @apply text-gray-600 bg-gray-100/10;
 }
 
 .icon-default {
-  @apply text-gray-500 bg-gray-500/10;
+  @apply text-gray-600 bg-gray-100/10;
 }
 
 .activity-details {
@@ -294,11 +294,11 @@ function getActivityText(activity: Activity) {
 }
 
 .activity-description {
-  @apply text-gray-400;
+  @apply text-arc-brown;
 }
 
 .activity-timestamp {
-  @apply text-sm text-gray-500 flex items-center gap-1;
+  @apply text-sm text-gray-600 flex items-center gap-1;
 }
 
 .activity-action {
@@ -326,6 +326,6 @@ function getActivityText(activity: Activity) {
 }
 
 .empty-text {
-  @apply text-gray-400;
+  @apply text-arc-brown;
 }
 </style>

@@ -14,25 +14,25 @@ const props = defineProps<{
 
 const rarityColors = {
   common: {
-    bg: 'bg-gray-700/50',
-    border: 'border-gray-500',
-    text: 'text-gray-300',
-    glow: 'shadow-gray-500/20'
+    bg: 'bg-gray-100/50',
+    border: 'border-gray-300',
+    text: 'text-gray-600',
+    glow: 'shadow-gray/20'
   },
   rare: {
-    bg: 'bg-blue-900/50',
-    border: 'border-blue-400',
-    text: 'text-blue-300',
-    glow: 'shadow-blue-500/30'
+    bg: 'bg-blue-600/50',
+    border: 'border-blue-600',
+    text: 'text-blue-600',
+    glow: 'shadow-blue/30'
   },
   epic: {
-    bg: 'bg-purple-900/50',
-    border: 'border-purple-400',
-    text: 'text-purple-300',
-    glow: 'shadow-purple-500/40'
+    bg: 'bg-purple-600/50',
+    border: 'border-purple-600',
+    text: 'text-purple-600',
+    glow: 'shadow-purple/40'
   },
   legendary: {
-    bg: 'bg-yellow-900/50',
+    bg: 'bg-yellow-600/50',
     border: 'border-arc-yellow',
     text: 'text-arc-yellow',
     glow: 'shadow-arc-yellow/50'
@@ -67,8 +67,8 @@ const formattedDate = computed(() => {
       :class="[
         'rounded-lg border-2 flex items-center justify-center transition-all',
         sizeClass,
-        earned ? colors.bg : 'bg-arc-navy/30',
-        earned ? colors.border : 'border-gray-700',
+        earned ? colors.bg : 'bg-arc-card/30',
+        earned ? colors.border : 'border-gray-300',
         earned ? colors.glow : '',
         earned ? 'shadow-lg' : 'opacity-40 grayscale'
       ]"
@@ -84,10 +84,10 @@ const formattedDate = computed(() => {
 
     <!-- Badge Name (optional) -->
     <div v-if="showName" class="mt-2 text-center">
-      <p :class="['font-medium text-sm', earned ? colors.text : 'text-gray-500']">
+      <p :class="['font-medium text-sm', earned ? colors.text : 'text-gray-600']">
         {{ achievement.name }}
       </p>
-      <p v-if="earnedAt" class="text-xs text-gray-500 mt-1">
+      <p v-if="earnedAt" class="text-xs text-gray-600 mt-1">
         {{ formattedDate }}
       </p>
     </div>
@@ -98,17 +98,17 @@ const formattedDate = computed(() => {
     >
       <div :class="['px-3 py-2 rounded-lg border whitespace-nowrap', colors.bg, colors.border]">
         <p :class="['font-semibold text-sm', colors.text]">{{ achievement.name }}</p>
-        <p v-if="showDescription || !showName" class="text-xs text-gray-300 mt-1 max-w-xs whitespace-normal">
+        <p v-if="showDescription || !showName" class="text-xs text-gray-600 mt-1 max-w-xs whitespace-normal">
           {{ achievement.description }}
         </p>
-        <p class="text-xs mt-1 text-gray-400">
+        <p class="text-xs mt-1 text-arc-brown">
           <span :class="['font-medium', colors.text]">{{ achievement.rarity.toUpperCase() }}</span>
           • +{{ achievement.points_reward }} pts
         </p>
         <p v-if="earnedAt" class="text-xs text-arc-green mt-1">
           ✓ Earned {{ formattedDate }}
         </p>
-        <p v-else class="text-xs text-gray-500 mt-1">
+        <p v-else class="text-xs text-gray-600 mt-1">
           🔒 Not earned yet
         </p>
       </div>

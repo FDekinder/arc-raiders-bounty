@@ -45,7 +45,7 @@ defineEmits<{
 }
 
 .empty-text {
-  @apply text-gray-400 mb-4 text-lg;
+  @apply text-arc-brown mb-4 text-lg;
 }
 
 .empty-action {

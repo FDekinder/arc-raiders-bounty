@@ -63,23 +63,23 @@ const getTabLabel = (tab: Tab) => {
 }
 
 .filter-btn-active {
-  @apply bg-arc-red border-arc-red text-white shadow-lg shadow-arc-red/20;
+  @apply bg-arc-red border-arc-red text-arc-dark shadow-lg shadow-arc-red/20;
 }
 
 .filter-btn-active-yellow {
-  @apply bg-yellow-500 border-yellow-500 text-black shadow-lg shadow-yellow-500/20;
+  @apply bg-yellow-600 border-yellow-600 text-black shadow-lg shadow-yellow-600/20;
 }
 
 .filter-btn-active-green {
-  @apply bg-green-500 border-green-500 text-white shadow-lg shadow-green-500/20;
+  @apply bg-green-600 border-green-600 text-arc-dark shadow-lg shadow-green-600/20;
 }
 
 .filter-btn-active-red {
-  @apply bg-red-500 border-red-500 text-white shadow-lg shadow-red-500/20;
+  @apply bg-red-600 border-red-600 text-arc-dark shadow-lg shadow-red-600/20;
 }
 
 .filter-btn-inactive {
-  @apply bg-gray-700/50 border-gray-600 text-gray-300;
-  @apply hover:bg-gray-700 hover:border-gray-500;
+  @apply bg-gray-100/50 border-gray-300 text-gray-600;
+  @apply hover:bg-gray-100 hover:border-gray-300;
 }
 </style>

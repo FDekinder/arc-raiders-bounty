@@ -81,7 +81,7 @@ onMounted(async () => {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-gray-900 text-white flex items-center justify-center;
+  @apply min-h-screen bg-gray-100 text-arc-dark flex items-center justify-center;
 }
 
 .content-wrapper {
@@ -89,7 +89,7 @@ onMounted(async () => {
 }
 
 .spinner {
-  @apply animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-500 mx-auto mb-4;
+  @apply animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-600 mx-auto mb-4;
 }
 
 .status-text {

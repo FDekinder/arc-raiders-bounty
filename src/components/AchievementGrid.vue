@@ -80,19 +80,19 @@ const completionPercentage = computed(() => {
 <template>
   <div class="achievement-grid">
     <!-- Stats Header -->
-    <div class="bg-arc-navy rounded-lg p-6 mb-6 border border-gray-800">
+    <div class="bg-arc-card rounded-lg p-6 mb-6 border border-gray-300">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-xl font-bold text-white">Achievements</h3>
+        <h3 class="text-xl font-bold text-arc-dark">Achievements</h3>
         <div class="text-right">
           <p class="text-2xl font-bold text-arc-cyan">{{ stats.earnedCount }}/{{ stats.totalCount }}</p>
-          <p class="text-sm text-gray-400">{{ completionPercentage }}% Complete</p>
+          <p class="text-sm text-arc-brown">{{ completionPercentage }}% Complete</p>
         </div>
       </div>
 
       <!-- Progress Bar -->
-      <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
+      <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
         <div
-          class="h-full bg-gradient-to-r from-arc-cyan to-arc-green transition-all duration-500"
+          class="h-full bg-gradient-to-r from-arc-cyan to-arc-green transition-all duration"
           :style="{ width: `${completionPercentage}%` }"
         ></div>
       </div>
@@ -100,20 +100,20 @@ const completionPercentage = computed(() => {
       <!-- Rarity Breakdown -->
       <div class="grid grid-cols-4 gap-4 mt-4">
         <div class="text-center">
-          <p class="text-lg font-bold text-gray-300">{{ stats.byRarity.common }}</p>
-          <p class="text-xs text-gray-500">Common</p>
+          <p class="text-lg font-bold text-gray-600">{{ stats.byRarity.common }}</p>
+          <p class="text-xs text-gray-600">Common</p>
         </div>
         <div class="text-center">
-          <p class="text-lg font-bold text-blue-400">{{ stats.byRarity.rare }}</p>
-          <p class="text-xs text-gray-500">Rare</p>
+          <p class="text-lg font-bold text-blue-600">{{ stats.byRarity.rare }}</p>
+          <p class="text-xs text-gray-600">Rare</p>
         </div>
         <div class="text-center">
-          <p class="text-lg font-bold text-purple-400">{{ stats.byRarity.epic }}</p>
-          <p class="text-xs text-gray-500">Epic</p>
+          <p class="text-lg font-bold text-purple-600">{{ stats.byRarity.epic }}</p>
+          <p class="text-xs text-gray-600">Epic</p>
         </div>
         <div class="text-center">
           <p class="text-lg font-bold text-arc-yellow">{{ stats.byRarity.legendary }}</p>
-          <p class="text-xs text-gray-500">Legendary</p>
+          <p class="text-xs text-gray-600">Legendary</p>
         </div>
       </div>
     </div>
@@ -126,8 +126,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-4 py-2 rounded-lg font-medium text-sm transition-all',
             selectedFilter === 'all'
-              ? 'bg-arc-red text-white'
-              : 'bg-arc-navy text-gray-400 hover:text-white'
+              ? 'bg-arc-red text-arc-dark'
+              : 'bg-arc-card text-arc-brown hover:text-arc-dark'
           ]"
         >
           All
@@ -137,8 +137,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-4 py-2 rounded-lg font-medium text-sm transition-all',
             selectedFilter === 'earned'
-              ? 'bg-arc-red text-white'
-              : 'bg-arc-navy text-gray-400 hover:text-white'
+              ? 'bg-arc-red text-arc-dark'
+              : 'bg-arc-card text-arc-brown hover:text-arc-dark'
           ]"
         >
           Earned
@@ -148,8 +148,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-4 py-2 rounded-lg font-medium text-sm transition-all',
             selectedFilter === 'locked'
-              ? 'bg-arc-red text-white'
-              : 'bg-arc-navy text-gray-400 hover:text-white'
+              ? 'bg-arc-red text-arc-dark'
+              : 'bg-arc-card text-arc-brown hover:text-arc-dark'
           ]"
         >
           Locked
@@ -162,8 +162,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-3 py-2 rounded-lg text-sm transition-all',
             selectedRarity === 'all'
-              ? 'bg-gray-700 text-white'
-              : 'bg-arc-navy text-gray-500 hover:text-white'
+              ? 'bg-gray-100 text-arc-dark'
+              : 'bg-arc-card text-gray-600 hover:text-arc-dark'
           ]"
         >
           All Rarities
@@ -173,8 +173,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-3 py-2 rounded-lg text-sm transition-all',
             selectedRarity === 'legendary'
-              ? 'bg-yellow-900 text-arc-yellow border border-arc-yellow'
-              : 'bg-arc-navy text-gray-500 hover:text-arc-yellow'
+              ? 'bg-yellow-600 text-arc-yellow border border-arc-yellow'
+              : 'bg-arc-card text-gray-600 hover:text-arc-yellow'
           ]"
         >
           Legendary
@@ -184,8 +184,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-3 py-2 rounded-lg text-sm transition-all',
             selectedRarity === 'epic'
-              ? 'bg-purple-900 text-purple-400 border border-purple-400'
-              : 'bg-arc-navy text-gray-500 hover:text-purple-400'
+              ? 'bg-purple-600 text-purple-600 border border-purple-600'
+              : 'bg-arc-card text-gray-600 hover:text-purple-600'
           ]"
         >
           Epic
@@ -195,8 +195,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-3 py-2 rounded-lg text-sm transition-all',
             selectedRarity === 'rare'
-              ? 'bg-blue-900 text-blue-400 border border-blue-400'
-              : 'bg-arc-navy text-gray-500 hover:text-blue-400'
+              ? 'bg-blue-600 text-blue-600 border border-blue-600'
+              : 'bg-arc-card text-gray-600 hover:text-blue-600'
           ]"
         >
           Rare
@@ -206,7 +206,7 @@ const completionPercentage = computed(() => {
 
     <!-- Achievement Grid -->
     <div v-if="loading" class="text-center py-12">
-      <p class="text-gray-400">Loading achievements...</p>
+      <p class="text-arc-brown">Loading achievements...</p>
     </div>
 
     <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -222,7 +222,7 @@ const completionPercentage = computed(() => {
     </div>
 
     <div v-if="filteredAchievements.length === 0" class="text-center py-12">
-      <p class="text-gray-400">No achievements found with current filters.</p>
+      <p class="text-arc-brown">No achievements found with current filters.</p>
     </div>
   </div>
 </template>

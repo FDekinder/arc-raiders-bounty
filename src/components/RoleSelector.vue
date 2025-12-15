@@ -52,12 +52,12 @@ function getRoleInfo(role: UserRole) {
 </script>
 
 <template>
-  <div class="role-selector min-h-screen bg-arc-dark text-white p-8">
+  <div class="role-selector min-h-screen bg-arc-cream text-arc-dark p-8">
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
       <div class="text-center mb-12">
         <h1 class="text-5xl font-bold mb-4">Choose Your Path</h1>
-        <p class="text-xl text-gray-400">
+        <p class="text-xl text-arc-brown">
           This choice defines your journey in Arc Raiders. Choose wisely.
         </p>
       </div>
@@ -70,7 +70,7 @@ function getRoleInfo(role: UserRole) {
           @mouseenter="hoveredRole = 'BH'"
           @mouseleave="hoveredRole = null"
           :class="[
-            'role-card relative overflow-hidden rounded-lg cursor-pointer transition-all duration-500 transform',
+            'role-card relative overflow-hidden rounded-lg cursor-pointer transition-all duration transform',
             selectedRole === 'BH'
               ? 'ring-4 ring-arc-green scale-105 shadow-2xl shadow-arc-green/50'
               : hoveredRole === 'BH'
@@ -89,7 +89,7 @@ function getRoleInfo(role: UserRole) {
               onerror="this.style.display='none'"
             />
             <div
-              class="absolute inset-0 bg-gradient-to-t from-arc-dark via-arc-dark/80 to-transparent"
+              class="absolute inset-0 bg-gradient-to-t from-arc-cream via-arc-dark/80 to-transparent"
             ></div>
           </div>
 
@@ -106,7 +106,7 @@ function getRoleInfo(role: UserRole) {
                 </div>
               </div>
 
-              <p class="text-lg mb-6 text-gray-300">
+              <p class="text-lg mb-6 text-gray-600">
                 {{ getRoleInfo('BH').description }}
               </p>
             </div>
@@ -142,7 +142,7 @@ function getRoleInfo(role: UserRole) {
           @mouseenter="hoveredRole = 'PR'"
           @mouseleave="hoveredRole = null"
           :class="[
-            'role-card relative overflow-hidden rounded-lg cursor-pointer transition-all duration-500 transform',
+            'role-card relative overflow-hidden rounded-lg cursor-pointer transition-all duration transform',
             selectedRole === 'PR'
               ? 'ring-4 ring-arc-red scale-105 shadow-2xl shadow-arc-red/50'
               : hoveredRole === 'PR'
@@ -161,7 +161,7 @@ function getRoleInfo(role: UserRole) {
               onerror="this.style.display='none'"
             />
             <div
-              class="absolute inset-0 bg-gradient-to-t from-arc-dark via-arc-dark/80 to-transparent"
+              class="absolute inset-0 bg-gradient-to-t from-arc-cream via-arc-dark/80 to-transparent"
             ></div>
           </div>
 
@@ -178,7 +178,7 @@ function getRoleInfo(role: UserRole) {
                 </div>
               </div>
 
-              <p class="text-lg mb-6 text-gray-300">
+              <p class="text-lg mb-6 text-gray-600">
                 {{ getRoleInfo('PR').description }}
               </p>
             </div>
@@ -211,7 +211,7 @@ function getRoleInfo(role: UserRole) {
 
       <!-- Info Note -->
       <div v-if="selectedRole" class="mt-8 text-center">
-        <p class="text-gray-400 text-sm">
+        <p class="text-arc-brown text-sm">
           Don't worry, you can change your role later in your profile settings
         </p>
       </div>

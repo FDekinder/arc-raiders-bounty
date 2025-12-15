@@ -89,6 +89,6 @@ const defaultIcon = computed(() => {
 }
 
 .alert-info {
-  @apply bg-blue-500/10 border border-blue-500 text-blue-400;
+  @apply bg-blue-600/10 border border-blue-600 text-blue-600;
 }
 </style>

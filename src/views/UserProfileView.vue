@@ -230,19 +230,19 @@ function handleClanTagUpdate(clanTag: string | null) {
           </h3>
           <div class="space-y-3">
             <div class="flex justify-between">
-              <span class="text-gray-400">Claims Approved</span>
+              <span class="text-arc-brown">Claims Approved</span>
               <span class="font-bold text-arc-green">{{ stats?.approvedClaims || 0 }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-gray-400">Claims Pending</span>
+              <span class="text-arc-brown">Claims Pending</span>
               <span class="font-bold text-arc-yellow">{{ stats?.pendingClaims || 0 }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-gray-400">Claims Rejected</span>
+              <span class="text-arc-brown">Claims Rejected</span>
               <span class="font-bold text-arc-red">{{ stats?.rejectedClaims || 0 }}</span>
             </div>
             <div class="flex justify-between border-t border-arc-red/20 pt-3">
-              <span class="text-gray-400">Success Rate</span>
+              <span class="text-arc-brown">Success Rate</span>
               <span class="font-bold">{{ stats?.successRate || 0 }}%</span>
             </div>
           </div>
@@ -256,15 +256,15 @@ function handleClanTagUpdate(clanTag: string | null) {
           </h3>
           <div class="space-y-3">
             <div class="flex justify-between">
-              <span class="text-gray-400">Total Bounties</span>
+              <span class="text-arc-brown">Total Bounties</span>
               <span class="font-bold">{{ stats?.bountiesCreatedTotal || 0 }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-gray-400">Active</span>
+              <span class="text-arc-brown">Active</span>
               <span class="font-bold text-arc-yellow">{{ stats?.activeBounties || 0 }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-gray-400">Completed</span>
+              <span class="text-arc-brown">Completed</span>
               <span class="font-bold text-arc-green">{{ stats?.completedBounties || 0 }}</span>
             </div>
           </div>
@@ -275,11 +275,11 @@ function handleClanTagUpdate(clanTag: string | null) {
           <h3 class="text-xl font-bold mb-4">Other Stats</h3>
           <div class="space-y-3">
             <div class="flex justify-between">
-              <span class="text-gray-400">Times Hunted</span>
+              <span class="text-arc-brown">Times Hunted</span>
               <span class="font-bold">{{ stats?.timesHunted || 0 }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-gray-400">Total Points</span>
+              <span class="text-arc-brown">Total Points</span>
               <span class="font-bold text-arc-yellow">{{ stats?.totalPoints || 0 }}</span>
             </div>
           </div>
@@ -292,7 +292,7 @@ function handleClanTagUpdate(clanTag: string | null) {
 
         <!-- Recent Claims -->
         <div class="mb-8">
-          <h4 class="text-lg font-bold mb-4 text-gray-300">Recent Claims</h4>
+          <h4 class="text-lg font-bold mb-4 text-gray-600">Recent Claims</h4>
           <EmptyState
             v-if="claimsSubmitted.length === 0"
             :icon="Clock"
@@ -302,11 +302,11 @@ function handleClanTagUpdate(clanTag: string | null) {
             <div
               v-for="claim in claimsSubmitted.slice(0, 5)"
               :key="claim.id"
-              class="bg-gray-700 rounded-lg p-4 flex justify-between items-center border border-arc-red/20"
+              class="bg-gray-100 rounded-lg p-4 flex justify-between items-center border border-arc-red/20"
             >
               <div>
                 <div class="font-bold">{{ claim.bounty?.target_gamertag }}</div>
-                <div class="text-sm text-gray-400">
+                <div class="text-sm text-arc-brown">
                   {{ formatDistanceToNow(new Date(claim.claimed_at), { addSuffix: true }) }}
                 </div>
               </div>
@@ -328,7 +328,7 @@ function handleClanTagUpdate(clanTag: string | null) {
 
         <!-- Recent Bounties Created -->
         <div>
-          <h4 class="text-lg font-bold mb-4 text-gray-300">Bounties Created</h4>
+          <h4 class="text-lg font-bold mb-4 text-gray-600">Bounties Created</h4>
           <EmptyState
             v-if="bountiesCreated.length === 0"
             :icon="Target"
@@ -338,11 +338,11 @@ function handleClanTagUpdate(clanTag: string | null) {
             <div
               v-for="bounty in bountiesCreated.slice(0, 5)"
               :key="bounty.id"
-              class="bg-gray-700 rounded-lg p-4 flex justify-between items-center border border-arc-red/20"
+              class="bg-gray-100 rounded-lg p-4 flex justify-between items-center border border-arc-red/20"
             >
               <div>
                 <div class="font-bold">{{ bounty.target_gamertag }}</div>
-                <div class="text-sm text-gray-400">
+                <div class="text-sm text-arc-brown">
                   {{ formatDistanceToNow(new Date(bounty.created_at), { addSuffix: true }) }}
                 </div>
               </div>
