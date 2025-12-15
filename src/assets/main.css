@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 @layer base {
-  /* Light theme inspired by ARC Raiders website */
+  /* Dark background with light cards theme */
   body {
-    @apply bg-arc-cream text-arc-dark;
+    @apply bg-arc-dark text-white;
+    background-image: url('/Arc_raiders_BG.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
   }
 }
 

@@ -292,7 +292,7 @@ function getStatusIcon(status: string) {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-cream text-arc-dark;
+  @apply min-h-screen bg-transparent text-white;
 }
 
 .content-wrapper {
@@ -300,7 +300,7 @@ function getStatusIcon(status: string) {
 }
 
 .admin-badge {
-  @apply bg-purple-600 text-arc-dark px-3 py-1 rounded-full text-sm font-semibold;
+  @apply bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold;
 }
 
 .claims-list {
@@ -332,7 +332,7 @@ function getStatusIcon(status: string) {
 }
 
 .overlay-icon {
-  @apply text-arc-dark;
+  @apply text-white;
 }
 
 .details-list {

@@ -86,7 +86,7 @@ function goToRegister() {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-gradient-to-b from-arc-cream to-arc-beige text-arc-dark flex items-center justify-center;
+  @apply min-h-screen bg-gradient-to-b from-arc-cream to-arc-beige text-white flex items-center justify-center;
 }
 
 .content-wrapper {
@@ -110,7 +110,7 @@ function goToRegister() {
 }
 
 .steam-btn {
-  @apply w-full bg-arc-red hover:bg-arc-red/80 text-arc-dark font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-red/30;
+  @apply w-full bg-arc-red hover:bg-arc-red/80 text-white font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-red/30;
 }
 
 .steam-icon {
@@ -138,7 +138,7 @@ function goToRegister() {
 }
 
 .email-btn {
-  @apply w-full bg-arc-cyan hover:bg-arc-cyan/80 text-arc-dark font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-cyan/30;
+  @apply w-full bg-arc-cyan hover:bg-arc-cyan/80 text-white font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-cyan/30;
 }
 
 .register-section {

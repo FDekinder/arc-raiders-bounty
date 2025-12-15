@@ -208,7 +208,7 @@ function getMedalEmoji(index: number) {
 <style scoped>
 /* Hero Section */
 .hero-section {
-  @apply min-h-screen bg-gradient-to-b from-arc-cream to-arc-beige text-arc-dark;
+  @apply min-h-screen bg-gradient-to-b from-arc-cream to-arc-beige text-white;
 }
 
 .hero-container {
@@ -232,11 +232,11 @@ function getMedalEmoji(index: number) {
 }
 
 .btn-primary {
-  @apply bg-arc-red hover:bg-arc-red/80 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition transform hover:scale-105 text-arc-dark shadow-lg shadow-arc-red/30 min-w-[140px] sm:min-w-0;
+  @apply bg-arc-red hover:bg-arc-red/80 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition transform hover:scale-105 text-white shadow-lg shadow-arc-red/30 min-w-[140px] sm:min-w-0;
 }
 
 .btn-secondary {
-  @apply bg-arc-card border-2 border-arc-red hover:bg-arc-red hover:text-arc-dark hover:shadow-lg hover:shadow-arc-red/30 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition transform hover:scale-105 min-w-[140px] sm:min-w-0 text-arc-dark;
+  @apply bg-arc-card border-2 border-arc-red hover:bg-arc-red hover:text-white hover:shadow-lg hover:shadow-arc-red/30 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition transform hover:scale-105 min-w-[140px] sm:min-w-0 text-white;
 }
 
 /* Most Wanted Section */
@@ -261,7 +261,7 @@ function getMedalEmoji(index: number) {
 }
 
 .loading-state {
-  @apply text-center py-8 sm:py-12 text-arc-dark;
+  @apply text-center py-8 sm:py-12 text-white;
 }
 
 .bounty-grid {
@@ -319,7 +319,7 @@ function getMedalEmoji(index: number) {
 }
 
 .bounty-gamertag {
-  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4 break-words text-arc-dark;
+  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4 break-words text-white;
 }
 
 .bounty-stats {
@@ -335,7 +335,7 @@ function getMedalEmoji(index: number) {
 }
 
 .stat-value-medium {
-  @apply text-lg sm:text-xl font-bold text-arc-dark;
+  @apply text-lg sm:text-xl font-bold text-white;
 }
 
 .stat-label {
@@ -343,7 +343,7 @@ function getMedalEmoji(index: number) {
 }
 
 .bounty-btn {
-  @apply block w-full bg-arc-red hover:bg-arc-red/80 text-arc-dark py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition shadow-md;
+  @apply block w-full bg-arc-red hover:bg-arc-red/80 text-white py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition shadow-md;
 }
 
 /* Empty State */
@@ -352,11 +352,11 @@ function getMedalEmoji(index: number) {
 }
 
 .empty-state-text {
-  @apply text-lg sm:text-xl mb-4 text-arc-dark;
+  @apply text-lg sm:text-xl mb-4 text-white;
 }
 
 .empty-state-btn {
-  @apply inline-block bg-arc-red hover:bg-arc-red/80 text-arc-dark px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition shadow-md shadow-arc-red/30;
+  @apply inline-block bg-arc-red hover:bg-arc-red/80 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition shadow-md shadow-arc-red/30;
 }
 
 /* Features Section */
@@ -401,7 +401,7 @@ function getMedalEmoji(index: number) {
 }
 
 .feature-title {
-  @apply text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-arc-dark;
+  @apply text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-white;
 }
 
 .feature-description {
@@ -418,7 +418,7 @@ function getMedalEmoji(index: number) {
 }
 
 .cta-title {
-  @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 text-arc-dark;
+  @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 text-white;
 }
 
 .cta-subtitle {
@@ -426,6 +426,6 @@ function getMedalEmoji(index: number) {
 }
 
 .cta-btn {
-  @apply inline-block bg-arc-red hover:bg-arc-red/80 text-arc-dark px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition transform hover:scale-105 shadow-lg shadow-arc-red/40;
+  @apply inline-block bg-arc-red hover:bg-arc-red/80 text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition transform hover:scale-105 shadow-lg shadow-arc-red/40;
 }
 </style>

@@ -246,7 +246,7 @@ function goBack() {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-cream text-arc-dark flex items-center justify-center p-4;
+  @apply min-h-screen bg-transparent text-white flex items-center justify-center p-4;
 }
 
 .content-wrapper {
@@ -258,7 +258,7 @@ function goBack() {
 }
 
 .title {
-  @apply text-3xl font-bold mb-6 text-center text-arc-dark;
+  @apply text-3xl font-bold mb-6 text-center text-white;
 }
 
 .form-content {
@@ -270,7 +270,7 @@ function goBack() {
 }
 
 .form-label {
-  @apply block text-sm font-medium mb-2 text-arc-dark;
+  @apply block text-sm font-medium mb-2 text-white;
 }
 
 .input-wrapper {
@@ -282,7 +282,7 @@ function goBack() {
 }
 
 .input-field {
-  @apply w-full bg-white border border-arc-brown/30 rounded-lg pl-10 pr-4 py-3 focus:border-arc-brown focus:outline-none text-arc-dark;
+  @apply w-full bg-white border border-arc-brown/30 rounded-lg pl-10 pr-4 py-3 focus:border-arc-brown focus:outline-none text-white;
 }
 
 .error-message {
@@ -294,11 +294,11 @@ function goBack() {
 }
 
 .submit-btn {
-  @apply w-full bg-arc-red hover:bg-arc-red/80 text-arc-dark font-bold py-3 rounded-lg transition-all;
+  @apply w-full bg-arc-red hover:bg-arc-red/80 text-white font-bold py-3 rounded-lg transition-all;
 }
 
 .link-btn {
-  @apply w-full text-arc-brown hover:text-arc-dark transition-all;
+  @apply w-full text-arc-brown hover:text-white transition-all;
 }
 
 .button-group {
@@ -306,10 +306,10 @@ function goBack() {
 }
 
 .back-btn-secondary {
-  @apply flex-1 bg-arc-brown hover:bg-arc-brown/80 text-arc-dark font-bold py-3 rounded-lg transition-all;
+  @apply flex-1 bg-arc-brown hover:bg-arc-brown/80 text-white font-bold py-3 rounded-lg transition-all;
 }
 
 .create-btn {
-  @apply flex-1 bg-arc-red hover:bg-arc-red/80 text-arc-dark font-bold py-3 rounded-lg transition-all disabled:bg-arc-brown/40 disabled:cursor-not-allowed;
+  @apply flex-1 bg-arc-red hover:bg-arc-red/80 text-white font-bold py-3 rounded-lg transition-all disabled:bg-arc-brown/40 disabled:cursor-not-allowed;
 }
 </style>

@@ -29,7 +29,7 @@ function closeMobileMenu() {
 
     <!-- Navigation -->
     <nav
-      class="bg-arc-card text-arc-dark border-b-2 border-gradient-to-r from-arc-cyan via-arc-yellow to-arc-red sticky top-0 z-50 shadow-sm"
+      class="bg-arc-dark/95 backdrop-blur-sm text-white border-b-2 border-gradient-to-r from-arc-cyan via-arc-yellow to-arc-red sticky top-0 z-50 shadow-lg"
       style="border-image: linear-gradient(to right, #00d4ff, #ffd500, #ff3355) 1"
     >
       <div class="container mx-auto px-4">
@@ -94,7 +94,7 @@ function closeMobileMenu() {
               </RouterLink>
               <button
                 @click="logout"
-                class="flex items-center gap-1 text-arc-brown hover:text-arc-red transition"
+                class="flex items-center gap-1 text-gray-300 hover:text-arc-red transition"
                 title="Logout"
               >
                 <LogOut :size="18" />
@@ -105,7 +105,7 @@ function closeMobileMenu() {
           <!-- Mobile Menu Button -->
           <button
             @click="toggleMobileMenu"
-            class="lg:hidden p-2 hover:bg-arc-beige rounded transition"
+            class="lg:hidden p-2 hover:bg-white/10 rounded transition"
             aria-label="Toggle menu"
           >
             <Menu v-if="!mobileMenuOpen" :size="24" />
@@ -121,40 +121,40 @@ function closeMobileMenu() {
           <div class="flex flex-col space-y-2 pt-4">
             <RouterLink
               to="/"
-              class="px-4 py-3 hover:bg-arc-beige rounded transition"
-              active-class="bg-arc-red text-arc-dark"
+              class="px-4 py-3 hover:bg-white/10 rounded transition"
+              active-class="bg-arc-red text-white"
               @click="closeMobileMenu"
             >
               Home
             </RouterLink>
             <RouterLink
               to="/bounties"
-              class="px-4 py-3 hover:bg-arc-beige rounded transition"
-              active-class="bg-arc-red text-arc-dark"
+              class="px-4 py-3 hover:bg-white/10 rounded transition"
+              active-class="bg-arc-red text-white"
               @click="closeMobileMenu"
             >
               Bounties
             </RouterLink>
             <RouterLink
               to="/activity"
-              class="px-4 py-3 hover:bg-arc-beige rounded transition"
-              active-class="bg-arc-red text-arc-dark"
+              class="px-4 py-3 hover:bg-white/10 rounded transition"
+              active-class="bg-arc-red text-white"
               @click="closeMobileMenu"
             >
               Activity
             </RouterLink>
             <RouterLink
               to="/my-claims"
-              class="px-4 py-3 hover:bg-arc-beige rounded transition"
-              active-class="bg-arc-red text-arc-dark"
+              class="px-4 py-3 hover:bg-white/10 rounded transition"
+              active-class="bg-arc-red text-white"
               @click="closeMobileMenu"
             >
               My Claims
             </RouterLink>
             <RouterLink
               to="/leaderboard"
-              class="px-4 py-3 hover:bg-arc-beige rounded transition"
-              active-class="bg-arc-red text-arc-dark"
+              class="px-4 py-3 hover:bg-white/10 rounded transition"
+              active-class="bg-arc-red text-white"
               @click="closeMobileMenu"
             >
               Leaderboard
@@ -162,8 +162,8 @@ function closeMobileMenu() {
             <RouterLink
               v-if="currentUser?.role === 'admin'"
               to="/verify"
-              class="px-4 py-3 hover:bg-arc-beige rounded transition"
-              active-class="bg-arc-red text-arc-dark"
+              class="px-4 py-3 hover:bg-white/10 rounded transition"
+              active-class="bg-arc-red text-white"
               @click="closeMobileMenu"
             >
               Verify
@@ -173,7 +173,7 @@ function closeMobileMenu() {
             <div v-if="currentUser" class="border-t border-arc-red/20 pt-4 mt-4">
               <RouterLink
                 :to="`/profile/${currentUser.id}`"
-                class="px-4 py-3 hover:bg-arc-beige rounded transition flex items-center gap-2"
+                class="px-4 py-3 hover:bg-white/10 rounded transition flex items-center gap-2"
                 @click="closeMobileMenu"
               >
                 <RoleBadge v-if="currentUser.game_role" :role="currentUser.game_role" size="sm" />
@@ -182,7 +182,7 @@ function closeMobileMenu() {
               </RouterLink>
               <button
                 @click="logout(); closeMobileMenu()"
-                class="w-full px-4 py-3 hover:bg-arc-beige rounded transition flex items-center gap-2 text-arc-brown"
+                class="w-full px-4 py-3 hover:bg-white/10 rounded transition flex items-center gap-2 text-gray-300"
               >
                 <LogOut :size="18" />
                 <span>Logout</span>

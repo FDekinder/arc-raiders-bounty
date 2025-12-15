@@ -124,7 +124,7 @@ function getMedalColor(index: number) {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-cream text-arc-dark;
+  @apply min-h-screen bg-transparent text-white;
 }
 
 .content-wrapper {
@@ -136,7 +136,7 @@ function getMedalColor(index: number) {
 }
 
 .title {
-  @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 flex items-center justify-center gap-2 sm:gap-3 text-arc-dark;
+  @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 flex items-center justify-center gap-2 sm:gap-3 text-white;
 }
 
 .subtitle {
@@ -144,7 +144,7 @@ function getMedalColor(index: number) {
 }
 
 .loading-state {
-  @apply text-center text-lg sm:text-xl text-arc-dark;
+  @apply text-center text-lg sm:text-xl text-white;
 }
 
 .hunters-list {
@@ -172,7 +172,7 @@ function getMedalColor(index: number) {
 }
 
 .hunter-name {
-  @apply text-lg sm:text-xl md:text-2xl font-bold hover:text-arc-red transition break-words text-arc-dark;
+  @apply text-lg sm:text-xl md:text-2xl font-bold hover:text-arc-red transition break-words text-white;
 }
 
 .clan-tag {

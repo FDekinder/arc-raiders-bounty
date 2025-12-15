@@ -52,7 +52,7 @@ function getRoleInfo(role: UserRole) {
 </script>
 
 <template>
-  <div class="role-selector min-h-screen bg-arc-cream text-arc-dark p-8">
+  <div class="role-selector min-h-screen bg-transparent text-white p-8">
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
       <div class="text-center mb-12">

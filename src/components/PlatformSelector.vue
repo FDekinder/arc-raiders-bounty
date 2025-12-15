@@ -65,7 +65,7 @@ const platforms = [
       >
         <div class="flex flex-col items-center gap-3">
           <Gamepad2 :size="48" :class="selectedPlatform === platform.id ? platform.textColor : 'text-arc-brown'" />
-          <span :class="['font-bold text-lg', selectedPlatform === platform.id ? platform.textColor : 'text-arc-dark']">
+          <span :class="['font-bold text-lg', selectedPlatform === platform.id ? platform.textColor : 'text-white']">
             {{ platform.name }}
           </span>
           <div v-if="selectedPlatform === platform.id" :class="['text-sm', platform.textColor]">

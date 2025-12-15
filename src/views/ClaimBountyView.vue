@@ -227,7 +227,7 @@ async function handleSubmit() {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-cream text-arc-dark;
+  @apply min-h-screen bg-transparent text-white;
 }
 
 .loading-container {

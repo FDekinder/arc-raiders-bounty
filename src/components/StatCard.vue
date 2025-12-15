@@ -128,7 +128,7 @@ const sizeClass = computed(() => `stat-card-${props.size}`)
 }
 
 .stat-value {
-  @apply text-xl sm:text-2xl font-bold text-arc-dark;
+  @apply text-xl sm:text-2xl font-bold text-white;
 }
 
 .stat-card-sm .stat-value {

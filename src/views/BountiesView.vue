@@ -319,7 +319,7 @@ const filteredBounties = computed(() => {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-cream text-arc-dark;
+  @apply min-h-screen bg-transparent text-white;
 }
 
 .content-wrapper {
@@ -331,7 +331,7 @@ const filteredBounties = computed(() => {
 }
 
 .new-bounty-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-semibold text-sm sm:text-base whitespace-nowrap text-arc-dark;
+  @apply bg-arc-red hover:bg-arc-red/80 px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-semibold text-sm sm:text-base whitespace-nowrap text-white;
 }
 
 .filters-section {
@@ -344,7 +344,7 @@ const filteredBounties = computed(() => {
 
 
 .sort-select {
-  @apply w-full bg-white border border-arc-brown/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-arc-dark focus:outline-none focus:border-arc-brown;
+  @apply w-full bg-white border border-arc-brown/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:border-arc-brown;
 }
 
 .search-results {
@@ -356,7 +356,7 @@ const filteredBounties = computed(() => {
 }
 
 .section-title {
-  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2 text-arc-dark;
+  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2 text-white;
 }
 
 .most-wanted-grid {
@@ -376,7 +376,7 @@ const filteredBounties = computed(() => {
 }
 
 .player-name {
-  @apply font-bold text-sm sm:text-base break-words text-arc-dark;
+  @apply font-bold text-sm sm:text-base break-words text-white;
 }
 
 .player-stats {
@@ -397,7 +397,7 @@ const filteredBounties = computed(() => {
 }
 
 .bounty-target {
-  @apply text-xl sm:text-2xl font-bold mb-2 break-words text-arc-dark;
+  @apply text-xl sm:text-2xl font-bold mb-2 break-words text-white;
 }
 
 .bounty-meta {
@@ -413,7 +413,7 @@ const filteredBounties = computed(() => {
 }
 
 .extend-btn {
-  @apply text-xs bg-arc-yellow hover:bg-arc-yellow/80 px-2 sm:px-3 py-1 rounded transition text-arc-dark;
+  @apply text-xs bg-arc-yellow hover:bg-arc-yellow/80 px-2 sm:px-3 py-1 rounded transition text-white;
 }
 
 .bounty-actions {
@@ -433,14 +433,14 @@ const filteredBounties = computed(() => {
 }
 
 .join-hunt-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none text-arc-dark;
+  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none text-white;
 }
 
 .leave-hunt-btn {
-  @apply bg-arc-brown hover:bg-arc-brown/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none text-arc-dark;
+  @apply bg-arc-brown hover:bg-arc-brown/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none text-white;
 }
 
 .claim-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold text-center transition flex-1 sm:flex-none whitespace-nowrap text-arc-dark;
+  @apply bg-arc-red hover:bg-arc-red/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold text-center transition flex-1 sm:flex-none whitespace-nowrap text-white;
 }
 </style>

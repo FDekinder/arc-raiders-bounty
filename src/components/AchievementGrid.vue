@@ -82,7 +82,7 @@ const completionPercentage = computed(() => {
     <!-- Stats Header -->
     <div class="bg-arc-card rounded-lg p-6 mb-6 border border-gray-300">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-xl font-bold text-arc-dark">Achievements</h3>
+        <h3 class="text-xl font-bold text-white">Achievements</h3>
         <div class="text-right">
           <p class="text-2xl font-bold text-arc-cyan">{{ stats.earnedCount }}/{{ stats.totalCount }}</p>
           <p class="text-sm text-arc-brown">{{ completionPercentage }}% Complete</p>
@@ -126,8 +126,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-4 py-2 rounded-lg font-medium text-sm transition-all',
             selectedFilter === 'all'
-              ? 'bg-arc-red text-arc-dark'
-              : 'bg-arc-card text-arc-brown hover:text-arc-dark'
+              ? 'bg-arc-red text-white'
+              : 'bg-arc-card text-arc-brown hover:text-white'
           ]"
         >
           All
@@ -137,8 +137,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-4 py-2 rounded-lg font-medium text-sm transition-all',
             selectedFilter === 'earned'
-              ? 'bg-arc-red text-arc-dark'
-              : 'bg-arc-card text-arc-brown hover:text-arc-dark'
+              ? 'bg-arc-red text-white'
+              : 'bg-arc-card text-arc-brown hover:text-white'
           ]"
         >
           Earned
@@ -148,8 +148,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-4 py-2 rounded-lg font-medium text-sm transition-all',
             selectedFilter === 'locked'
-              ? 'bg-arc-red text-arc-dark'
-              : 'bg-arc-card text-arc-brown hover:text-arc-dark'
+              ? 'bg-arc-red text-white'
+              : 'bg-arc-card text-arc-brown hover:text-white'
           ]"
         >
           Locked
@@ -162,8 +162,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-3 py-2 rounded-lg text-sm transition-all',
             selectedRarity === 'all'
-              ? 'bg-gray-100 text-arc-dark'
-              : 'bg-arc-card text-gray-600 hover:text-arc-dark'
+              ? 'bg-gray-100 text-white'
+              : 'bg-arc-card text-gray-600 hover:text-white'
           ]"
         >
           All Rarities

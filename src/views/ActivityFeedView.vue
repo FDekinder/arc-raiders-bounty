@@ -222,7 +222,7 @@ function getActivityText(activity: Activity) {
 
 <style scoped>
 .activity-page {
-  @apply min-h-screen bg-arc-cream text-arc-dark;
+  @apply min-h-screen bg-transparent text-white;
 }
 
 .activity-container {

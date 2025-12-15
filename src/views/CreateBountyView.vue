@@ -253,7 +253,7 @@ function handlePlatformChange() {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-arc-cream text-arc-dark;
+  @apply min-h-screen bg-transparent text-white;
 }
 
 .content-wrapper {
@@ -269,7 +269,7 @@ function handlePlatformChange() {
 }
 
 .title {
-  @apply text-3xl sm:text-4xl font-bold mb-2 text-arc-dark;
+  @apply text-3xl sm:text-4xl font-bold mb-2 text-white;
 }
 
 .subtitle {
@@ -289,7 +289,7 @@ function handlePlatformChange() {
 }
 
 .form-label {
-  @apply block text-sm font-medium mb-2 text-arc-dark;
+  @apply block text-sm font-medium mb-2 text-white;
 }
 
 .platform-grid {
@@ -301,7 +301,7 @@ function handlePlatformChange() {
 }
 
 .platform-btn-active {
-  @apply border-arc-red bg-arc-red/10 text-arc-dark;
+  @apply border-arc-red bg-arc-red/10 text-white;
 }
 
 .platform-btn-inactive {
@@ -325,7 +325,7 @@ function handlePlatformChange() {
 }
 
 .input-field {
-  @apply w-full bg-white border border-arc-brown/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:border-arc-brown text-arc-dark;
+  @apply w-full bg-white border border-arc-brown/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:border-arc-brown text-white;
 }
 
 .input-icon {
@@ -341,7 +341,7 @@ function handlePlatformChange() {
 }
 
 .verify-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 disabled:cursor-not-allowed px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base w-full sm:w-auto text-arc-dark;
+  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 disabled:cursor-not-allowed px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base w-full sm:w-auto text-white;
 }
 
 .spinner {
@@ -365,7 +365,7 @@ function handlePlatformChange() {
 }
 
 .player-name {
-  @apply font-bold text-base sm:text-lg break-words text-arc-dark;
+  @apply font-bold text-base sm:text-lg break-words text-white;
 }
 
 .player-platform {
@@ -389,6 +389,6 @@ function handlePlatformChange() {
 }
 
 .submit-btn {
-  @apply w-full bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 disabled:cursor-not-allowed px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base text-arc-dark;
+  @apply w-full bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 disabled:cursor-not-allowed px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base text-white;
 }
 </style>

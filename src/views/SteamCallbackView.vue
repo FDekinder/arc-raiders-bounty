@@ -81,7 +81,7 @@ onMounted(async () => {
 
 <style scoped>
 .page-container {
-  @apply min-h-screen bg-gray-100 text-arc-dark flex items-center justify-center;
+  @apply min-h-screen bg-gray-100 text-white flex items-center justify-center;
 }
 
 .content-wrapper {
