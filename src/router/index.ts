@@ -83,12 +83,15 @@ router.beforeEach((to, from, next) => {
   const authRequired = !publicPages.includes(to.path)
   const currentUser = getCurrentUser()
 
-  // Check authentication
-  if (authRequired && !currentUser) {
+  // In development, skip authentication checks (except for admin routes)
+  const isDevelopment = import.meta.env.DEV
+
+  // Check authentication (skip in development)
+  if (authRequired && !currentUser && !isDevelopment) {
     return next('/login')
   }
 
-  // Check admin-only routes
+  // Check admin-only routes (always enforce, even in dev)
   const adminOnlyRoutes = ['/verify']
   if (adminOnlyRoutes.includes(to.path)) {
     if (!currentUser || currentUser.role !== 'admin') {
