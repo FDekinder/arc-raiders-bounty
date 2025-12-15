@@ -331,7 +331,7 @@ const filteredBounties = computed(() => {
 }
 
 .new-bounty-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-semibold text-sm sm:text-base whitespace-nowrap text-white;
+  @apply bg-arc-red hover:bg-arc-red/80 px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-semibold text-sm sm:text-base whitespace-nowrap text-black;
 }
 
 .filters-section {
@@ -344,7 +344,7 @@ const filteredBounties = computed(() => {
 
 
 .sort-select {
-  @apply w-full bg-white border border-arc-brown/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:border-arc-brown;
+  @apply w-full bg-white border border-arc-brown/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 focus:outline-none focus:border-arc-brown;
 }
 
 .search-results {
@@ -376,11 +376,11 @@ const filteredBounties = computed(() => {
 }
 
 .player-name {
-  @apply font-bold text-sm sm:text-base break-words text-white;
+  @apply font-bold text-sm sm:text-base break-words text-gray-900;
 }
 
 .player-stats {
-  @apply text-xs sm:text-sm text-arc-brown;
+  @apply text-xs sm:text-sm text-gray-700;
 }
 
 .bounties-list {
@@ -397,7 +397,7 @@ const filteredBounties = computed(() => {
 }
 
 .bounty-target {
-  @apply text-xl sm:text-2xl font-bold mb-2 break-words text-white;
+  @apply text-xl sm:text-2xl font-bold mb-2 break-words text-gray-900;
 }
 
 .bounty-meta {
@@ -413,7 +413,7 @@ const filteredBounties = computed(() => {
 }
 
 .extend-btn {
-  @apply text-xs bg-arc-yellow hover:bg-arc-yellow/80 px-2 sm:px-3 py-1 rounded transition text-white;
+  @apply text-xs bg-arc-yellow hover:bg-arc-yellow/80 px-2 sm:px-3 py-1 rounded transition text-black;
 }
 
 .bounty-actions {
@@ -433,14 +433,14 @@ const filteredBounties = computed(() => {
 }
 
 .join-hunt-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none text-white;
+  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none text-black disabled:text-gray-600;
 }
 
 .leave-hunt-btn {
-  @apply bg-arc-brown hover:bg-arc-brown/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none text-white;
+  @apply bg-arc-brown hover:bg-arc-brown/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none text-black;
 }
 
 .claim-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold text-center transition flex-1 sm:flex-none whitespace-nowrap text-white;
+  @apply bg-arc-red hover:bg-arc-red/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold text-center transition flex-1 sm:flex-none whitespace-nowrap text-black;
 }
 </style>

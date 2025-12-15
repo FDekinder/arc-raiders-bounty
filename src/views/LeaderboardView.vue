@@ -172,7 +172,7 @@ function getMedalColor(index: number) {
 }
 
 .hunter-name {
-  @apply text-lg sm:text-xl md:text-2xl font-bold hover:text-arc-red transition break-words text-white;
+  @apply text-lg sm:text-xl md:text-2xl font-bold hover:text-arc-red transition break-words text-gray-900;
 }
 
 .clan-tag {

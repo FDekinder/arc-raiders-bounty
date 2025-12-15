@@ -300,7 +300,7 @@ function getStatusIcon(status: string) {
 }
 
 .admin-badge {
-  @apply bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold;
+  @apply bg-purple-600 text-black px-3 py-1 rounded-full text-sm font-semibold;
 }
 
 .claims-list {
@@ -332,7 +332,7 @@ function getStatusIcon(status: string) {
 }
 
 .overlay-icon {
-  @apply text-white;
+  @apply text-gray-200;
 }
 
 .details-list {

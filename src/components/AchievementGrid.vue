@@ -126,8 +126,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-4 py-2 rounded-lg font-medium text-sm transition-all',
             selectedFilter === 'all'
-              ? 'bg-arc-red text-white'
-              : 'bg-arc-card text-arc-brown hover:text-white'
+              ? 'bg-arc-red text-black'
+              : 'bg-arc-card text-arc-brown hover:text-gray-900'
           ]"
         >
           All
@@ -137,8 +137,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-4 py-2 rounded-lg font-medium text-sm transition-all',
             selectedFilter === 'earned'
-              ? 'bg-arc-red text-white'
-              : 'bg-arc-card text-arc-brown hover:text-white'
+              ? 'bg-arc-red text-black'
+              : 'bg-arc-card text-arc-brown hover:text-gray-900'
           ]"
         >
           Earned
@@ -148,8 +148,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-4 py-2 rounded-lg font-medium text-sm transition-all',
             selectedFilter === 'locked'
-              ? 'bg-arc-red text-white'
-              : 'bg-arc-card text-arc-brown hover:text-white'
+              ? 'bg-arc-red text-black'
+              : 'bg-arc-card text-arc-brown hover:text-gray-900'
           ]"
         >
           Locked
@@ -162,8 +162,8 @@ const completionPercentage = computed(() => {
           :class="[
             'px-3 py-2 rounded-lg text-sm transition-all',
             selectedRarity === 'all'
-              ? 'bg-gray-100 text-white'
-              : 'bg-arc-card text-gray-600 hover:text-white'
+              ? 'bg-gray-100 text-gray-900'
+              : 'bg-arc-card text-gray-600 hover:text-gray-900'
           ]"
         >
           All Rarities

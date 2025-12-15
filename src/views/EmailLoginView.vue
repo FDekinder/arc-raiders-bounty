@@ -179,7 +179,7 @@ function goBack() {
 }
 
 .form-label {
-  @apply block text-sm font-medium mb-2 text-white;
+  @apply block text-sm font-medium mb-2 text-gray-900;
 }
 
 .input-wrapper {
@@ -191,7 +191,7 @@ function goBack() {
 }
 
 .input-field {
-  @apply w-full bg-white border border-arc-brown/30 rounded-lg pl-10 pr-4 py-3 focus:border-arc-brown focus:outline-none text-white;
+  @apply w-full bg-white border border-arc-brown/30 rounded-lg pl-10 pr-4 py-3 focus:border-arc-brown focus:outline-none text-gray-900;
 }
 
 .error-message {
@@ -199,7 +199,7 @@ function goBack() {
 }
 
 .submit-btn {
-  @apply w-full bg-arc-red hover:bg-arc-red/80 text-white font-bold py-3 rounded-lg transition-all disabled:bg-arc-brown/40 disabled:cursor-not-allowed;
+  @apply w-full bg-arc-red hover:bg-arc-red/80 text-black font-bold py-3 rounded-lg transition-all disabled:bg-arc-brown/40 disabled:cursor-not-allowed disabled:text-gray-600;
 }
 
 .link-btn {

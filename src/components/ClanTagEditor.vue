@@ -126,7 +126,7 @@ async function removeClanTag() {
             type="text"
             maxlength="5"
             placeholder="CLAN"
-            class="bg-transparent border border-arc-red/30 rounded px-3 py-2 text-white focus:border-arc-red focus:outline-none w-32 text-center font-bold uppercase"
+            class="bg-transparent border border-arc-red/30 rounded px-3 py-2 text-gray-900 focus:border-arc-red focus:outline-none w-32 text-center font-bold uppercase"
             style="padding-left: 1.5rem; padding-right: 1.5rem"
             @keyup.enter="saveClanTag"
             @keyup.escape="cancelEditing"
@@ -142,7 +142,7 @@ async function removeClanTag() {
           class="p-2 bg-arc-green hover:bg-arc-green/80 rounded transition-colors disabled:opacity-50"
           title="Save"
         >
-          <Check :size="16" class="text-white" />
+          <Check :size="16" class="text-black" />
         </button>
 
         <button
@@ -151,7 +151,7 @@ async function removeClanTag() {
           class="p-2 bg-gray-100 hover:bg-gray-100 rounded transition-colors disabled:opacity-50"
           title="Cancel"
         >
-          <X :size="16" class="text-white" />
+          <X :size="16" class="text-gray-900" />
         </button>
 
         <button
@@ -161,7 +161,7 @@ async function removeClanTag() {
           class="p-2 bg-arc-red hover:bg-arc-red/80 rounded transition-colors disabled:opacity-50"
           title="Remove clan tag"
         >
-          <X :size="16" class="text-white" />
+          <X :size="16" class="text-black" />
         </button>
       </div>
 

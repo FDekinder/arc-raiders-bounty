@@ -122,7 +122,7 @@ function closeMobileMenu() {
             <RouterLink
               to="/"
               class="px-4 py-3 hover:bg-white/10 rounded transition"
-              active-class="bg-arc-red text-white"
+              active-class="bg-arc-red text-black"
               @click="closeMobileMenu"
             >
               Home
@@ -130,7 +130,7 @@ function closeMobileMenu() {
             <RouterLink
               to="/bounties"
               class="px-4 py-3 hover:bg-white/10 rounded transition"
-              active-class="bg-arc-red text-white"
+              active-class="bg-arc-red text-black"
               @click="closeMobileMenu"
             >
               Bounties
@@ -138,7 +138,7 @@ function closeMobileMenu() {
             <RouterLink
               to="/activity"
               class="px-4 py-3 hover:bg-white/10 rounded transition"
-              active-class="bg-arc-red text-white"
+              active-class="bg-arc-red text-black"
               @click="closeMobileMenu"
             >
               Activity
@@ -146,7 +146,7 @@ function closeMobileMenu() {
             <RouterLink
               to="/my-claims"
               class="px-4 py-3 hover:bg-white/10 rounded transition"
-              active-class="bg-arc-red text-white"
+              active-class="bg-arc-red text-black"
               @click="closeMobileMenu"
             >
               My Claims
@@ -154,7 +154,7 @@ function closeMobileMenu() {
             <RouterLink
               to="/leaderboard"
               class="px-4 py-3 hover:bg-white/10 rounded transition"
-              active-class="bg-arc-red text-white"
+              active-class="bg-arc-red text-black"
               @click="closeMobileMenu"
             >
               Leaderboard
@@ -163,7 +163,7 @@ function closeMobileMenu() {
               v-if="currentUser?.role === 'admin'"
               to="/verify"
               class="px-4 py-3 hover:bg-white/10 rounded transition"
-              active-class="bg-arc-red text-white"
+              active-class="bg-arc-red text-black"
               @click="closeMobileMenu"
             >
               Verify

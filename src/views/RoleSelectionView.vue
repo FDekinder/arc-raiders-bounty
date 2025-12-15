@@ -108,7 +108,7 @@ async function confirmRole() {
 }
 
 .selected-text {
-  @apply text-white font-bold;
+  @apply text-gray-900 font-bold;
 }
 
 .role-bh {
@@ -132,7 +132,7 @@ async function confirmRole() {
 }
 
 .confirm-btn-active {
-  @apply bg-arc-red hover:bg-arc-red/80 text-white cursor-pointer;
+  @apply bg-arc-red hover:bg-arc-red/80 text-black cursor-pointer;
 }
 
 .confirm-btn-disabled {

@@ -259,7 +259,7 @@ async function handleSubmit() {
 }
 
 .back-btn {
-  @apply bg-gray-100 hover:bg-gray-100 px-6 py-2 rounded-lg;
+  @apply bg-gray-100 hover:bg-gray-100 px-6 py-2 rounded-lg text-gray-900;
 }
 
 .content-wrapper {
@@ -307,7 +307,7 @@ async function handleSubmit() {
 }
 
 .info-target {
-  @apply text-2xl font-bold;
+  @apply text-2xl font-bold text-gray-900;
 }
 
 .info-reward {
@@ -383,7 +383,7 @@ async function handleSubmit() {
 }
 
 .requirements-title {
-  @apply font-semibold mb-2;
+  @apply font-semibold mb-2 text-gray-900;
 }
 
 .requirements-list {
@@ -395,10 +395,10 @@ async function handleSubmit() {
 }
 
 .submit-btn {
-  @apply flex-1 bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold transition;
+  @apply flex-1 bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold transition text-black disabled:text-gray-300;
 }
 
 .cancel-btn {
-  @apply px-6 py-3 rounded-lg font-semibold bg-gray-100 hover:bg-gray-100 transition;
+  @apply px-6 py-3 rounded-lg font-semibold bg-gray-100 hover:bg-gray-100 transition text-gray-900;
 }
 </style>

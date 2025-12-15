@@ -63,7 +63,7 @@ const getTabLabel = (tab: Tab) => {
 }
 
 .filter-btn-active {
-  @apply bg-arc-red border-arc-red text-white shadow-lg shadow-arc-red/20;
+  @apply bg-arc-red border-arc-red text-black shadow-lg shadow-arc-red/20;
 }
 
 .filter-btn-active-yellow {
@@ -71,11 +71,11 @@ const getTabLabel = (tab: Tab) => {
 }
 
 .filter-btn-active-green {
-  @apply bg-green-600 border-green-600 text-white shadow-lg shadow-green-600/20;
+  @apply bg-green-600 border-green-600 text-black shadow-lg shadow-green-600/20;
 }
 
 .filter-btn-active-red {
-  @apply bg-red-600 border-red-600 text-white shadow-lg shadow-red-600/20;
+  @apply bg-red-600 border-red-600 text-black shadow-lg shadow-red-600/20;
 }
 
 .filter-btn-inactive {

@@ -289,7 +289,7 @@ function handlePlatformChange() {
 }
 
 .form-label {
-  @apply block text-sm font-medium mb-2 text-white;
+  @apply block text-sm font-medium mb-2 text-gray-900;
 }
 
 .platform-grid {
@@ -301,7 +301,7 @@ function handlePlatformChange() {
 }
 
 .platform-btn-active {
-  @apply border-arc-red bg-arc-red/10 text-white;
+  @apply border-arc-red bg-arc-red/10 text-gray-900;
 }
 
 .platform-btn-inactive {
@@ -325,7 +325,7 @@ function handlePlatformChange() {
 }
 
 .input-field {
-  @apply w-full bg-white border border-arc-brown/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:border-arc-brown text-white;
+  @apply w-full bg-white border border-arc-brown/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:border-arc-brown text-gray-900;
 }
 
 .input-icon {
@@ -341,7 +341,7 @@ function handlePlatformChange() {
 }
 
 .verify-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 disabled:cursor-not-allowed px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base w-full sm:w-auto text-white;
+  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 disabled:cursor-not-allowed px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base w-full sm:w-auto text-black disabled:text-gray-600;
 }
 
 .spinner {
@@ -365,7 +365,7 @@ function handlePlatformChange() {
 }
 
 .player-name {
-  @apply font-bold text-base sm:text-lg break-words text-white;
+  @apply font-bold text-base sm:text-lg break-words text-gray-900;
 }
 
 .player-platform {
@@ -389,6 +389,6 @@ function handlePlatformChange() {
 }
 
 .submit-btn {
-  @apply w-full bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 disabled:cursor-not-allowed px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base text-white;
+  @apply w-full bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 disabled:cursor-not-allowed px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base text-black disabled:text-gray-600;
 }
 </style>

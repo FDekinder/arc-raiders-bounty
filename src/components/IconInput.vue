@@ -60,7 +60,7 @@ const emit = defineEmits<{
 
 .input-field {
   @apply w-full bg-gray-100 border border-arc-red/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3;
-  @apply text-white placeholder-gray-600 text-sm sm:text-base;
+  @apply text-gray-900 placeholder-gray-600 text-sm sm:text-base;
   @apply focus:outline-none focus:ring-2 focus:ring-arc-red/50 focus:border-arc-red;
   @apply transition-all duration-200;
   @apply disabled:opacity-50 disabled:cursor-not-allowed;
