@@ -96,15 +96,15 @@ const sizeClass = computed(() => `stat-card-${props.size}`)
 
 <style scoped>
 .stat-card {
-  @apply rounded-lg p-4 transition hover:bg-opacity-80;
+  @apply rounded-lg p-3 sm:p-4 transition hover:bg-opacity-80;
 }
 
 .stat-card-sm {
-  @apply p-3;
+  @apply p-2 sm:p-3;
 }
 
 .stat-card-lg {
-  @apply p-6;
+  @apply p-4 sm:p-6;
 }
 
 .stat-card-default {
@@ -124,35 +124,35 @@ const sizeClass = computed(() => `stat-card-${props.size}`)
 }
 
 .stat-value-row {
-  @apply flex items-center gap-2 mb-1;
+  @apply flex items-center gap-1 sm:gap-2 mb-1;
 }
 
 .stat-value {
-  @apply text-2xl font-bold text-white;
+  @apply text-xl sm:text-2xl font-bold text-white;
 }
 
 .stat-card-sm .stat-value {
-  @apply text-xl;
+  @apply text-lg sm:text-xl;
 }
 
 .stat-card-lg .stat-value {
-  @apply text-3xl;
+  @apply text-2xl sm:text-3xl;
 }
 
 .stat-value-yellow {
-  @apply text-2xl font-bold text-arc-yellow;
+  @apply text-xl sm:text-2xl font-bold text-arc-yellow;
 }
 
 .stat-value-green {
-  @apply text-2xl font-bold text-arc-green;
+  @apply text-xl sm:text-2xl font-bold text-arc-green;
 }
 
 .stat-value-red {
-  @apply text-2xl font-bold text-arc-red;
+  @apply text-xl sm:text-2xl font-bold text-arc-red;
 }
 
 .stat-label {
-  @apply text-sm text-gray-400 mt-1;
+  @apply text-xs sm:text-sm text-gray-400 mt-1;
 }
 
 .stat-card-sm .stat-label {

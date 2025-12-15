@@ -128,51 +128,51 @@ function getMedalColor(index: number) {
 }
 
 .content-wrapper {
-  @apply container mx-auto px-4 py-8;
+  @apply container mx-auto px-4 py-6 sm:py-8;
 }
 
 .header {
-  @apply text-center mb-12;
+  @apply text-center mb-8 sm:mb-12;
 }
 
 .title {
-  @apply text-5xl font-bold mb-4 flex items-center justify-center gap-3;
+  @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 flex items-center justify-center gap-2 sm:gap-3;
 }
 
 .subtitle {
-  @apply text-gray-400;
+  @apply text-gray-400 text-sm sm:text-base px-4;
 }
 
 .loading-state {
-  @apply text-center text-xl;
+  @apply text-center text-lg sm:text-xl;
 }
 
 .hunters-list {
-  @apply max-w-4xl mx-auto space-y-4;
+  @apply max-w-4xl mx-auto space-y-3 sm:space-y-4;
 }
 
 .hunter-card {
-  @apply bg-arc-navy rounded-lg p-6 flex items-center gap-6 hover:bg-arc-navy/80 transition;
+  @apply bg-arc-navy rounded-lg p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 hover:bg-arc-navy/80 transition;
 }
 
 .rank {
-  @apply text-4xl font-bold w-16 text-center;
+  @apply text-3xl sm:text-4xl font-bold w-12 sm:w-16 text-center flex-shrink-0;
 }
 
 .avatar {
-  @apply w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center;
+  @apply w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0;
 }
 
 .hunter-info {
-  @apply flex-1;
+  @apply flex-1 w-full sm:w-auto min-w-0;
 }
 
 .hunter-name-row {
-  @apply flex items-center gap-2 mb-1;
+  @apply flex items-center gap-2 mb-1 flex-wrap;
 }
 
 .hunter-name {
-  @apply text-2xl font-bold hover:text-arc-red transition;
+  @apply text-lg sm:text-xl md:text-2xl font-bold hover:text-arc-red transition break-words;
 }
 
 .clan-tag {
@@ -180,30 +180,30 @@ function getMedalColor(index: number) {
 }
 
 .hunter-stats {
-  @apply flex gap-4 text-sm text-gray-400 mt-1;
+  @apply flex gap-2 sm:gap-4 text-xs sm:text-sm text-gray-400 mt-1;
 }
 
 .achievements {
-  @apply flex gap-2 mt-2;
+  @apply flex gap-1 sm:gap-2 mt-2 flex-wrap;
 }
 
 .points-section {
-  @apply text-right;
+  @apply text-center sm:text-right w-full sm:w-auto flex-shrink-0;
 }
 
 .points-display {
-  @apply flex items-center gap-2 justify-end mb-1;
+  @apply flex items-center gap-2 justify-center sm:justify-end mb-1;
 }
 
 .points-value {
-  @apply text-3xl font-bold text-arc-yellow;
+  @apply text-2xl sm:text-3xl font-bold text-arc-yellow;
 }
 
 .points-label {
-  @apply text-sm text-gray-400;
+  @apply text-xs sm:text-sm text-gray-400;
 }
 
 .empty-state {
-  @apply text-center text-gray-400 py-12;
+  @apply text-center text-gray-400 py-8 sm:py-12 px-4 text-sm sm:text-base;
 }
 </style>

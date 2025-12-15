@@ -53,15 +53,15 @@ withDefaults(defineProps<Props>(), {
 }
 
 .card-padding-sm {
-  @apply p-4;
+  @apply p-3 sm:p-4;
 }
 
 .card-padding-md {
-  @apply p-6;
+  @apply p-4 sm:p-6;
 }
 
 .card-padding-lg {
-  @apply p-8;
+  @apply p-6 sm:p-8;
 }
 
 /* Hover effect */

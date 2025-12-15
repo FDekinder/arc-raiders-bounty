@@ -36,7 +36,7 @@ withDefaults(
 
 <style scoped>
 .page-header {
-  @apply mb-8 flex justify-between items-start gap-4;
+  @apply mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4;
 }
 
 .page-header-centered {
@@ -44,7 +44,7 @@ withDefaults(
 }
 
 .header-content {
-  @apply flex-1;
+  @apply flex-1 w-full sm:w-auto;
 }
 
 .page-header-centered .header-content {
@@ -52,7 +52,7 @@ withDefaults(
 }
 
 .title {
-  @apply text-4xl font-bold mb-2 flex items-center gap-3;
+  @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-2 flex items-center gap-2 sm:gap-3 flex-wrap;
 }
 
 .page-header-centered .title {
@@ -60,11 +60,11 @@ withDefaults(
 }
 
 .subtitle {
-  @apply text-gray-400 text-lg;
+  @apply text-gray-400 text-sm sm:text-base md:text-lg;
 }
 
 .header-actions {
-  @apply flex items-center gap-3;
+  @apply flex items-center gap-2 sm:gap-3 w-full sm:w-auto;
 }
 
 .page-header-centered .header-actions {

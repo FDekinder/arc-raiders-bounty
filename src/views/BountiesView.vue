@@ -323,85 +323,85 @@ const filteredBounties = computed(() => {
 }
 
 .content-wrapper {
-  @apply container mx-auto px-4 py-8;
+  @apply container mx-auto px-4 py-6 sm:py-8;
 }
 
 .hunt-status {
-  @apply text-gray-400 mt-2;
+  @apply text-gray-400 mt-2 text-sm sm:text-base;
 }
 
 .new-bounty-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 px-6 py-2 rounded-lg font-semibold;
+  @apply bg-arc-red hover:bg-arc-red/80 px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-semibold text-sm sm:text-base whitespace-nowrap;
 }
 
 .filters-section {
-  @apply bg-arc-navy rounded-lg p-4 mb-8;
+  @apply bg-arc-navy rounded-lg p-3 sm:p-4 mb-6 sm:mb-8;
 }
 
 .filters-grid {
-  @apply grid md:grid-cols-2 gap-4;
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4;
 }
 
 
 .sort-select {
-  @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-arc-red;
+  @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:border-arc-red;
 }
 
 .search-results {
-  @apply mt-3 text-sm text-gray-400;
+  @apply mt-3 text-xs sm:text-sm text-gray-400;
 }
 
 .most-wanted-section {
-  @apply bg-arc-navy rounded-lg p-6 mb-8;
+  @apply bg-arc-navy rounded-lg p-4 sm:p-6 mb-6 sm:mb-8;
 }
 
 .section-title {
-  @apply text-2xl font-bold mb-4 flex items-center gap-2;
+  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2;
 }
 
 .most-wanted-grid {
-  @apply grid md:grid-cols-2 lg:grid-cols-3 gap-4;
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4;
 }
 
 .most-wanted-card {
-  @apply bg-gray-700 p-4 rounded-lg border border-arc-red/20;
+  @apply bg-gray-700 p-3 sm:p-4 rounded-lg border border-arc-red/20;
 }
 
 .most-wanted-content {
-  @apply flex items-center gap-3;
+  @apply flex items-center gap-2 sm:gap-3;
 }
 
 .player-rank {
-  @apply text-3xl font-bold text-arc-red;
+  @apply text-2xl sm:text-3xl font-bold text-arc-red flex-shrink-0;
 }
 
 .player-name {
-  @apply font-bold;
+  @apply font-bold text-sm sm:text-base break-words;
 }
 
 .player-stats {
-  @apply text-sm text-gray-400;
+  @apply text-xs sm:text-sm text-gray-400;
 }
 
 .bounties-list {
-  @apply space-y-4;
+  @apply space-y-3 sm:space-y-4;
 }
 
 
 .bounty-content {
-  @apply flex justify-between items-start;
+  @apply flex flex-col sm:flex-row justify-between items-start gap-4;
 }
 
 .bounty-info {
-  @apply flex-1;
+  @apply flex-1 w-full sm:w-auto;
 }
 
 .bounty-target {
-  @apply text-2xl font-bold mb-2;
+  @apply text-xl sm:text-2xl font-bold mb-2 break-words;
 }
 
 .bounty-meta {
-  @apply flex items-center gap-4 text-sm flex-wrap;
+  @apply flex items-center gap-2 sm:gap-4 text-xs sm:text-sm flex-wrap;
 }
 
 .expiration-info {
@@ -413,34 +413,34 @@ const filteredBounties = computed(() => {
 }
 
 .extend-btn {
-  @apply text-xs bg-arc-yellow hover:bg-arc-yellow/80 px-3 py-1 rounded transition;
+  @apply text-xs bg-arc-yellow hover:bg-arc-yellow/80 px-2 sm:px-3 py-1 rounded transition;
 }
 
 .bounty-actions {
-  @apply text-right;
+  @apply text-center sm:text-right w-full sm:w-auto flex-shrink-0;
 }
 
 .bounty-amount {
-  @apply text-3xl font-bold text-arc-red;
+  @apply text-2xl sm:text-3xl font-bold text-arc-red;
 }
 
 .bounty-points-label {
-  @apply text-sm text-gray-400 mb-2;
+  @apply text-xs sm:text-sm text-gray-400 mb-2;
 }
 
 .action-buttons {
-  @apply flex flex-col gap-2;
+  @apply flex flex-row sm:flex-col gap-2;
 }
 
 .join-hunt-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 px-4 py-2 rounded text-sm font-semibold flex items-center justify-center gap-2 transition;
+  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none;
 }
 
 .leave-hunt-btn {
-  @apply bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded text-sm font-semibold flex items-center justify-center gap-2 transition;
+  @apply bg-gray-600 hover:bg-gray-700 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold flex items-center justify-center gap-1 sm:gap-2 transition flex-1 sm:flex-none;
 }
 
 .claim-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 px-4 py-2 rounded text-sm font-semibold text-center transition;
+  @apply bg-arc-red hover:bg-arc-red/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold text-center transition flex-1 sm:flex-none whitespace-nowrap;
 }
 </style>

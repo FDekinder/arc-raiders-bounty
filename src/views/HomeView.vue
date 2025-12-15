@@ -212,11 +212,11 @@ function getMedalEmoji(index: number) {
 }
 
 .hero-container {
-  @apply container mx-auto px-4 py-20 text-center;
+  @apply container mx-auto px-4 py-12 sm:py-16 md:py-20 text-center;
 }
 
 .hero-title {
-  @apply text-6xl md:text-7xl font-bold mb-6;
+  @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight;
 }
 
 .hero-title-gradient {
@@ -224,32 +224,32 @@ function getMedalEmoji(index: number) {
 }
 
 .hero-subtitle {
-  @apply text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto;
+  @apply text-lg sm:text-xl md:text-2xl text-gray-300 mb-8 sm:mb-12 max-w-3xl mx-auto px-4;
 }
 
 .hero-buttons {
-  @apply flex gap-4 justify-center flex-wrap;
+  @apply flex gap-3 sm:gap-4 justify-center flex-wrap px-4;
 }
 
 .btn-primary {
-  @apply bg-arc-red hover:bg-arc-red-600 px-8 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105 text-white shadow-lg shadow-arc-red/30;
+  @apply bg-arc-red hover:bg-arc-red-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition transform hover:scale-105 text-white shadow-lg shadow-arc-red/30 min-w-[140px] sm:min-w-0;
 }
 
 .btn-secondary {
-  @apply bg-arc-navy border-2 border-arc-red hover:bg-arc-red hover:shadow-lg hover:shadow-arc-red/30 px-8 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105;
+  @apply bg-arc-navy border-2 border-arc-red hover:bg-arc-red hover:shadow-lg hover:shadow-arc-red/30 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition transform hover:scale-105 min-w-[140px] sm:min-w-0;
 }
 
 /* Most Wanted Section */
 .most-wanted-section {
-  @apply container mx-auto px-4 py-16;
+  @apply container mx-auto px-4 py-8 sm:py-12 md:py-16;
 }
 
 .section-header {
-  @apply text-center mb-12;
+  @apply text-center mb-8 sm:mb-12;
 }
 
 .section-title {
-  @apply text-4xl font-bold mb-4 flex items-center justify-center gap-3;
+  @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 flex items-center justify-center gap-2 sm:gap-3;
 }
 
 .section-title-gradient {
@@ -257,15 +257,15 @@ function getMedalEmoji(index: number) {
 }
 
 .section-subtitle {
-  @apply text-gray-400 text-lg;
+  @apply text-gray-400 text-base sm:text-lg px-4;
 }
 
 .loading-state {
-  @apply text-center py-12;
+  @apply text-center py-8 sm:py-12;
 }
 
 .bounty-grid {
-  @apply grid md:grid-cols-3 gap-8 max-w-6xl mx-auto;
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto;
 }
 
 .bounty-card-wrapper {
@@ -274,11 +274,11 @@ function getMedalEmoji(index: number) {
 
 /* Medal Badge */
 .medal-badge {
-  @apply absolute -top-4 left-1/2 transform -translate-x-1/2 z-10;
+  @apply absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 z-10;
 }
 
 .medal-circle {
-  @apply text-5xl w-20 h-20 rounded-full flex items-center justify-center shadow-2xl bg-gradient-to-br;
+  @apply text-4xl sm:text-5xl w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center shadow-2xl bg-gradient-to-br;
 }
 
 .medal-gold {
@@ -295,19 +295,19 @@ function getMedalEmoji(index: number) {
 
 /* Bounty Card */
 .bounty-card {
-  @apply bg-arc-navy rounded-xl p-8 pt-16 text-center hover:bg-arc-dark transition transform hover:scale-105 border-2 border-arc-red/30 hover:border-arc-red hover:shadow-lg hover:shadow-arc-red/30;
+  @apply bg-arc-navy rounded-xl p-6 sm:p-8 pt-14 sm:pt-16 text-center hover:bg-arc-dark transition transform hover:scale-105 border-2 border-arc-red/30 hover:border-arc-red hover:shadow-lg hover:shadow-arc-red/30;
 }
 
 .bounty-rank {
-  @apply text-6xl font-bold text-arc-red/20 mb-2;
+  @apply text-4xl sm:text-6xl font-bold text-arc-red/20 mb-2;
 }
 
 .bounty-avatar-container {
-  @apply flex justify-center mb-4;
+  @apply flex justify-center mb-3 sm:mb-4;
 }
 
 .bounty-avatar {
-  @apply w-24 h-24 rounded-full border-4 border-arc-red overflow-hidden bg-arc-dark;
+  @apply w-20 h-20 sm:w-24 sm:h-24 rounded-full border-[3px] sm:border-4 border-arc-red overflow-hidden bg-arc-dark;
 }
 
 .bounty-avatar-img {
@@ -315,61 +315,61 @@ function getMedalEmoji(index: number) {
 }
 
 .bounty-avatar-fallback {
-  @apply w-full h-full flex items-center justify-center text-4xl font-bold text-arc-red;
+  @apply w-full h-full flex items-center justify-center text-3xl sm:text-4xl font-bold text-arc-red;
 }
 
 .bounty-gamertag {
-  @apply text-2xl font-bold mb-4;
+  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4 break-words;
 }
 
 .bounty-stats {
-  @apply space-y-3 mb-6;
+  @apply space-y-2 sm:space-y-3 mb-4 sm:mb-6;
 }
 
 .stat-box {
-  @apply bg-arc-dark rounded-lg p-3 border border-arc-red/30;
+  @apply bg-arc-dark rounded-lg p-2 sm:p-3 border border-arc-red/30;
 }
 
 .stat-value-large {
-  @apply text-3xl font-bold text-arc-red;
+  @apply text-2xl sm:text-3xl font-bold text-arc-red;
 }
 
 .stat-value-medium {
-  @apply text-xl font-bold;
+  @apply text-lg sm:text-xl font-bold;
 }
 
 .stat-label {
-  @apply text-sm text-gray-400;
+  @apply text-xs sm:text-sm text-gray-400;
 }
 
 .bounty-btn {
-  @apply block w-full bg-arc-red hover:bg-arc-red-600 text-white py-3 rounded-lg font-semibold transition shadow-md;
+  @apply block w-full bg-arc-red hover:bg-arc-red-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition shadow-md;
 }
 
 /* Empty State */
 .empty-state {
-  @apply text-center py-12 text-gray-400;
+  @apply text-center py-8 sm:py-12 text-gray-400 px-4;
 }
 
 .empty-state-text {
-  @apply text-xl mb-4;
+  @apply text-lg sm:text-xl mb-4;
 }
 
 .empty-state-btn {
-  @apply inline-block bg-arc-red hover:bg-arc-red-600 text-white px-6 py-3 rounded-lg font-semibold transition shadow-md shadow-arc-red/30;
+  @apply inline-block bg-arc-red hover:bg-arc-red-600 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition shadow-md shadow-arc-red/30;
 }
 
 /* Features Section */
 .features-section {
-  @apply container mx-auto px-4 py-16;
+  @apply container mx-auto px-4 py-8 sm:py-12 md:py-16;
 }
 
 .features-grid {
-  @apply grid md:grid-cols-3 gap-8;
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8;
 }
 
 .feature-card {
-  @apply bg-arc-navy rounded-lg p-8 text-center hover:bg-arc-dark transition;
+  @apply bg-arc-navy rounded-lg p-6 sm:p-8 text-center hover:bg-arc-dark transition;
 }
 
 .feature-card-red {
@@ -385,7 +385,7 @@ function getMedalEmoji(index: number) {
 }
 
 .feature-icon {
-  @apply inline-block p-4 rounded-full mb-4;
+  @apply inline-block p-3 sm:p-4 rounded-full mb-3 sm:mb-4;
 }
 
 .feature-icon-red {
@@ -401,31 +401,31 @@ function getMedalEmoji(index: number) {
 }
 
 .feature-title {
-  @apply text-2xl font-bold mb-3;
+  @apply text-xl sm:text-2xl font-bold mb-2 sm:mb-3;
 }
 
 .feature-description {
-  @apply text-gray-400;
+  @apply text-gray-400 text-sm sm:text-base;
 }
 
 /* CTA Section */
 .cta-section {
-  @apply container mx-auto px-4 py-20 text-center;
+  @apply container mx-auto px-4 py-12 sm:py-16 md:py-20 text-center;
 }
 
 .cta-box {
-  @apply bg-gradient-to-r from-arc-red/10 via-arc-green/10 via-arc-yellow/10 to-arc-red/10 border-2 border-arc-red/30 rounded-2xl p-12 shadow-lg shadow-arc-red/20;
+  @apply bg-gradient-to-r from-arc-red/10 via-arc-green/10 via-arc-yellow/10 to-arc-red/10 border-2 border-arc-red/30 rounded-2xl p-8 sm:p-12 shadow-lg shadow-arc-red/20;
 }
 
 .cta-title {
-  @apply text-4xl font-bold mb-4;
+  @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4;
 }
 
 .cta-subtitle {
-  @apply text-xl text-gray-300 mb-8;
+  @apply text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 px-4;
 }
 
 .cta-btn {
-  @apply inline-block bg-arc-red hover:bg-arc-red-600 text-white px-10 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105 shadow-lg shadow-arc-red/40;
+  @apply inline-block bg-arc-red hover:bg-arc-red-600 text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition transform hover:scale-105 shadow-lg shadow-arc-red/40;
 }
 </style>

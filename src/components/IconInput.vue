@@ -59,28 +59,28 @@ const emit = defineEmits<{
 }
 
 .input-field {
-  @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg px-4 py-3;
-  @apply text-white placeholder-gray-400;
+  @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3;
+  @apply text-white placeholder-gray-400 text-sm sm:text-base;
   @apply focus:outline-none focus:ring-2 focus:ring-arc-red/50 focus:border-arc-red;
   @apply transition-all duration-200;
   @apply disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
 .input-with-icon-left {
-  @apply pl-12;
+  @apply pl-10 sm:pl-12;
 }
 
 .input-with-icon-right {
-  @apply pr-12;
+  @apply pr-10 sm:pr-12;
 }
 
 .input-icon-left {
-  @apply absolute left-4 top-1/2 -translate-y-1/2;
+  @apply absolute left-3 sm:left-4 top-1/2 -translate-y-1/2;
   @apply text-gray-400 pointer-events-none;
 }
 
 .input-icon-right {
-  @apply absolute right-4 top-1/2 -translate-y-1/2;
+  @apply absolute right-3 sm:right-4 top-1/2 -translate-y-1/2;
   @apply text-gray-400 pointer-events-none;
 }
 </style>

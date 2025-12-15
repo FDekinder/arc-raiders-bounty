@@ -257,7 +257,7 @@ function handlePlatformChange() {
 }
 
 .content-wrapper {
-  @apply container mx-auto px-4 py-8;
+  @apply container mx-auto px-4 py-6 sm:py-8;
 }
 
 .content-inner {
@@ -265,23 +265,23 @@ function handlePlatformChange() {
 }
 
 .header {
-  @apply mb-8;
+  @apply mb-6 sm:mb-8;
 }
 
 .title {
-  @apply text-4xl font-bold mb-2;
+  @apply text-3xl sm:text-4xl font-bold mb-2;
 }
 
 .subtitle {
-  @apply text-gray-400;
+  @apply text-gray-400 text-sm sm:text-base;
 }
 
 .form-card {
-  @apply bg-arc-navy rounded-lg p-8;
+  @apply bg-arc-navy rounded-lg p-4 sm:p-6 md:p-8;
 }
 
 .form-content {
-  @apply space-y-6;
+  @apply space-y-5 sm:space-y-6;
 }
 
 .form-section {
@@ -293,11 +293,11 @@ function handlePlatformChange() {
 }
 
 .platform-grid {
-  @apply grid grid-cols-3 gap-3;
+  @apply grid grid-cols-3 gap-2 sm:gap-3;
 }
 
 .platform-btn {
-  @apply p-4 rounded-lg border-2 transition font-semibold flex flex-col items-center gap-2;
+  @apply p-3 sm:p-4 rounded-lg border-2 transition font-semibold flex flex-col items-center gap-1 sm:gap-2 text-xs sm:text-base;
 }
 
 .platform-btn-active {
@@ -309,15 +309,15 @@ function handlePlatformChange() {
 }
 
 .platform-icon {
-  @apply text-2xl;
+  @apply text-xl sm:text-2xl;
 }
 
 .platform-hint {
-  @apply text-gray-400 text-xs ml-2;
+  @apply text-gray-400 text-xs ml-2 block sm:inline;
 }
 
 .input-group {
-  @apply flex gap-2;
+  @apply flex flex-col sm:flex-row gap-2;
 }
 
 .input-wrapper {
@@ -325,7 +325,7 @@ function handlePlatformChange() {
 }
 
 .input-field {
-  @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg px-4 py-3 focus:outline-none focus:border-arc-red;
+  @apply w-full bg-gray-700 border border-arc-red/30 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:border-arc-red;
 }
 
 .input-icon {
@@ -341,7 +341,7 @@ function handlePlatformChange() {
 }
 
 .verify-btn {
-  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition;
+  @apply bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base w-full sm:w-auto;
 }
 
 .spinner {
@@ -349,46 +349,46 @@ function handlePlatformChange() {
 }
 
 .player-card {
-  @apply mt-4 bg-gray-700 rounded-lg p-4 flex items-center gap-4;
+  @apply mt-4 bg-gray-700 rounded-lg p-3 sm:p-4 flex items-center gap-3 sm:gap-4;
 }
 
 .player-avatar {
-  @apply w-16 h-16 rounded-full;
+  @apply w-12 h-12 sm:w-16 sm:h-16 rounded-full flex-shrink-0;
 }
 
 .player-avatar-placeholder {
-  @apply w-16 h-16 rounded-full bg-gray-600 flex items-center justify-center text-2xl;
+  @apply w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gray-600 flex items-center justify-center text-xl sm:text-2xl flex-shrink-0;
 }
 
 .player-info {
-  @apply flex-1;
+  @apply flex-1 min-w-0;
 }
 
 .player-name {
-  @apply font-bold text-lg;
+  @apply font-bold text-base sm:text-lg break-words;
 }
 
 .player-platform {
-  @apply text-sm text-gray-400;
+  @apply text-xs sm:text-sm text-gray-400;
 }
 
 .player-link {
-  @apply text-sm text-arc-red hover:text-arc-red/80;
+  @apply text-xs sm:text-sm text-arc-red hover:text-arc-red/80 break-all;
 }
 
 .verified-icon {
-  @apply text-arc-green;
+  @apply text-arc-green flex-shrink-0;
 }
 
 .help-text {
-  @apply text-sm text-gray-400 mt-2;
+  @apply text-xs sm:text-sm text-gray-400 mt-2;
 }
 
 .error-alert {
-  @apply bg-arc-red/10 border border-arc-red rounded-lg p-4 text-arc-red;
+  @apply bg-arc-red/10 border border-arc-red rounded-lg p-3 sm:p-4 text-arc-red text-sm sm:text-base;
 }
 
 .submit-btn {
-  @apply w-full bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition;
+  @apply w-full bg-arc-red hover:bg-arc-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base;
 }
 </style>

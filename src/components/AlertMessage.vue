@@ -61,7 +61,7 @@ const defaultIcon = computed(() => {
 
 <style scoped>
 .alert {
-  @apply flex items-center gap-2 p-4 rounded-lg mb-4;
+  @apply flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg mb-3 sm:mb-4 text-sm sm:text-base;
 }
 
 .alert-icon {
@@ -69,11 +69,11 @@ const defaultIcon = computed(() => {
 }
 
 .alert-message {
-  @apply flex-1;
+  @apply flex-1 leading-snug break-words;
 }
 
 .alert-dismiss {
-  @apply flex-shrink-0 text-xl hover:opacity-70 transition;
+  @apply flex-shrink-0 text-xl sm:text-2xl hover:opacity-70 transition w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center cursor-pointer;
 }
 
 .alert-error {
