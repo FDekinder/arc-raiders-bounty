@@ -130,6 +130,15 @@ function goBack() {
             {{ loading ? 'Logging in...' : 'Login' }}
           </button>
 
+          <!-- Forgot Password Link -->
+          <button
+            type="button"
+            @click="router.push('/forgot-password')"
+            class="forgot-password-btn"
+          >
+            Forgot your password?
+          </button>
+
           <!-- Register Link -->
           <button
             type="button"
@@ -200,6 +209,10 @@ function goBack() {
 
 .submit-btn {
   @apply w-full bg-arc-red hover:bg-arc-red/80 text-black font-bold py-3 rounded-lg transition-all disabled:bg-arc-brown/40 disabled:cursor-not-allowed disabled:text-gray-600;
+}
+
+.forgot-password-btn {
+  @apply w-full text-arc-red hover:text-arc-red/80 transition-all text-sm font-medium;
 }
 
 .link-btn {

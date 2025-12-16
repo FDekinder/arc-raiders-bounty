@@ -80,11 +80,21 @@ const router = createRouter({
       name: 'email-login',
       component: () => import('../views/EmailLoginView.vue'),
     },
+    {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      component: () => import('../views/ForgotPasswordView.vue'),
+    },
+    {
+      path: '/reset-password',
+      name: 'reset-password',
+      component: () => import('../views/ResetPasswordView.vue'),
+    },
   ],
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/auth/steam/callback', '/register', '/email-login', '/select-role']
+  const publicPages = ['/login', '/auth/steam/callback', '/register', '/email-login', '/select-role', '/forgot-password', '/reset-password']
   const authRequired = !publicPages.includes(to.path)
   const currentUser = getCurrentUser()
 

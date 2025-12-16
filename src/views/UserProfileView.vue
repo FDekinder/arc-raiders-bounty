@@ -196,6 +196,7 @@ function handleClanTagUpdate(clanTag: string | null) {
           </h3>
           <div class="flex gap-2">
             <router-link
+              v-if="user.game_role === 'PR'"
               :to="`/profile/${userId}/trophies`"
               class="view-all-btn bg-arc-yellow/20 border border-arc-yellow text-arc-dark hover:bg-arc-yellow/30"
             >

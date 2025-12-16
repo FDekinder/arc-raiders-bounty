@@ -73,6 +73,12 @@ function goToRegister() {
               Register here
             </button>
           </p>
+          <p class="register-text">
+            Forgot your password?
+            <button @click="router.push('/forgot-password')" class="forgot-link">
+              Reset it here
+            </button>
+          </p>
         </div>
 
         <div class="footer-text">
@@ -150,6 +156,10 @@ function goToRegister() {
 }
 
 .register-link {
+  @apply text-arc-red hover:bg-arc-red/80 font-bold transition-colors;
+}
+
+.forgot-link {
   @apply text-arc-red hover:bg-arc-red/80 font-bold transition-colors;
 }
 

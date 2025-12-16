@@ -49,6 +49,12 @@ async function loadTrophyData() {
     // Get trophy stats
     const stats = await getTrophyStats(userId)
     if (stats) {
+      // Check if user is a Proud Rat (PR)
+      if (stats.game_role !== 'PR') {
+        // Redirect to profile if not a Proud Rat
+        router.push(`/profile/${userId}`)
+        return
+      }
       trophyStats.value = stats
     }
 
@@ -122,11 +128,19 @@ function goBack() {
         </button>
       </div>
 
-      <PageHeader
-        title="Hall of Infamy"
-        :subtitle="`${trophyStats.username}'s Trophy Wall`"
-        :icon="Trophy"
-      />
+      <div class="space-y-2">
+        <PageHeader
+          title="Hall of Infamy"
+          subtitle="Proud Rat Trophy Showcase"
+          :icon="Trophy"
+        />
+        <div class="flex items-center justify-center sm:justify-start">
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-arc-red/20 border-2 border-arc-red rounded-lg">
+            <Skull class="w-5 h-5 text-arc-red" />
+            <span class="text-arc-red font-bold uppercase tracking-wider text-sm">Proud Rat Exclusive</span>
+          </div>
+        </div>
+      </div>
 
       <!-- Player Identity Card -->
       <Card variant="bordered">
