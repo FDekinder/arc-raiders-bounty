@@ -187,6 +187,29 @@ function handleClanTagUpdate(clanTag: string | null) {
         </div>
       </div>
 
+      <!-- Trophy Wall Section (Proud Rats Only) -->
+      <div v-if="user.game_role === 'PR'" class="achievements-section">
+        <router-link
+          :to="`/profile/${userId}/trophies`"
+          class="trophy-wall-banner"
+        >
+          <div class="flex items-center gap-4">
+            <div class="trophy-icon-wrapper">
+              <Trophy :size="32" />
+            </div>
+            <div class="flex-1">
+              <h3 class="text-xl font-bold text-arc-dark">Hall of Infamy</h3>
+              <p class="text-arc-brown text-sm">View your complete trophy collection and notoriety level</p>
+            </div>
+            <div class="text-arc-red">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+        </router-link>
+      </div>
+
       <!-- Top Achievements Section -->
       <div v-if="topAchievements.length > 0" class="achievements-section">
         <div class="achievements-header">
@@ -195,14 +218,6 @@ function handleClanTagUpdate(clanTag: string | null) {
             Achievements
           </h3>
           <div class="flex gap-2">
-            <router-link
-              v-if="user.game_role === 'PR'"
-              :to="`/profile/${userId}/trophies`"
-              class="view-all-btn bg-arc-yellow/20 border border-arc-yellow text-arc-dark hover:bg-arc-yellow/30"
-            >
-              <Trophy :size="16" />
-              <span>Trophy Wall</span>
-            </router-link>
             <button
               @click="showAllAchievements = !showAllAchievements"
               class="view-all-btn"
@@ -479,6 +494,15 @@ function handleClanTagUpdate(clanTag: string | null) {
 
 .achievements-preview {
   @apply flex flex-wrap gap-4 justify-center md:justify-start;
+}
+
+/* Trophy Wall Banner */
+.trophy-wall-banner {
+  @apply block w-full bg-gradient-to-r from-arc-yellow/20 to-arc-red/20 rounded-lg p-6 border-2 border-arc-yellow hover:border-arc-red transition-all duration-300 hover:shadow-lg hover:shadow-arc-yellow/30 cursor-pointer;
+}
+
+.trophy-icon-wrapper {
+  @apply bg-arc-yellow text-arc-dark rounded-full p-3 flex items-center justify-center;
 }
 
 /* Stats Grid */
