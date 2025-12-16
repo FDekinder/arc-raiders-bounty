@@ -356,7 +356,7 @@ const filteredBounties = computed(() => {
 }
 
 .section-title {
-  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2 text-white;
+  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2 text-gray-900;
 }
 
 .most-wanted-grid {

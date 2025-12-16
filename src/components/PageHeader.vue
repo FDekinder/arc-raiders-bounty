@@ -52,7 +52,7 @@ withDefaults(
 }
 
 .title {
-  @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-2 flex items-center gap-2 sm:gap-3 flex-wrap;
+  @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-2 flex items-center gap-2 sm:gap-3 flex-wrap text-white;
 }
 
 .page-header-centered .title {

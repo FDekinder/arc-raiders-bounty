@@ -234,7 +234,7 @@ function getActivityText(activity: Activity) {
 }
 
 .title {
-  @apply text-4xl font-bold mb-2;
+  @apply text-4xl font-bold mb-2 text-white;
 }
 
 .subtitle {
@@ -290,7 +290,7 @@ function getActivityText(activity: Activity) {
 }
 
 .activity-title {
-  @apply text-lg font-bold;
+  @apply text-lg font-bold text-gray-900;
 }
 
 .activity-description {
@@ -306,7 +306,7 @@ function getActivityText(activity: Activity) {
 }
 
 .btn-view-bounty {
-  @apply inline-block bg-arc-red hover:bg-arc-red/80 px-4 py-2 rounded text-sm font-semibold transition;
+  @apply inline-block bg-arc-red hover:bg-arc-red/80 px-4 py-2 rounded text-sm font-semibold transition text-black;
 }
 
 .points-badge {

@@ -144,7 +144,7 @@ function getMedalColor(index: number) {
 }
 
 .loading-state {
-  @apply text-center text-lg sm:text-xl text-white;
+  @apply text-center text-lg sm:text-xl text-gray-900;
 }
 
 .hunters-list {

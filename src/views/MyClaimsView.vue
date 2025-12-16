@@ -286,7 +286,7 @@ function getStatusIcon(status: string) {
 }
 
 .claim-target {
-  @apply text-2xl font-bold mb-1;
+  @apply text-2xl font-bold mb-1 text-gray-900;
 }
 
 .claim-timestamp {

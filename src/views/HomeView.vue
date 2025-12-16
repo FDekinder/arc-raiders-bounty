@@ -352,7 +352,7 @@ function getMedalEmoji(index: number) {
 }
 
 .empty-state-text {
-  @apply text-lg sm:text-xl mb-4 text-white;
+  @apply text-lg sm:text-xl mb-4 text-gray-900;
 }
 
 .empty-state-btn {

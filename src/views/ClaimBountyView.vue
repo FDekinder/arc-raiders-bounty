@@ -235,7 +235,7 @@ async function handleSubmit() {
 }
 
 .loading-text {
-  @apply text-xl;
+  @apply text-xl text-gray-900;
 }
 
 .error-container {
@@ -251,7 +251,7 @@ async function handleSubmit() {
 }
 
 .error-title {
-  @apply text-2xl font-bold mb-2;
+  @apply text-2xl font-bold mb-2 text-gray-900;
 }
 
 .error-message {
@@ -271,7 +271,7 @@ async function handleSubmit() {
 }
 
 .success-title {
-  @apply text-2xl font-bold mb-2;
+  @apply text-2xl font-bold mb-2 text-gray-900;
 }
 
 .success-text {
@@ -283,7 +283,7 @@ async function handleSubmit() {
 }
 
 .form-title {
-  @apply text-3xl font-bold mb-2;
+  @apply text-3xl font-bold mb-2 text-white;
 }
 
 .form-subtitle {
