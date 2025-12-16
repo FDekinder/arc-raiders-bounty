@@ -33,8 +33,12 @@ async function handleForgotPassword() {
     }
 
     // Send password reset email using Supabase Auth
+    // Make sure to use the full URL with protocol
+    const redirectUrl = `${window.location.origin}/reset-password`
+    console.log('Sending reset email with redirect to:', redirectUrl)
+
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.value, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: redirectUrl,
     })
 
     if (resetError) throw resetError

@@ -22,6 +22,33 @@ const checkingSession = ref(true)
 onMounted(async () => {
   // Check if user has a valid session from the reset link
   try {
+    // First, check if there's a hash in the URL with access_token
+    const hashParams = new URLSearchParams(window.location.hash.substring(1))
+    const accessToken = hashParams.get('access_token')
+    const type = hashParams.get('type')
+
+    // Check for error in hash (like expired token)
+    const errorCode = hashParams.get('error_code')
+    const errorDescription = hashParams.get('error_description')
+
+    if (errorCode) {
+      if (errorCode === 'otp_expired') {
+        error.value = 'This reset link has expired. Please request a new password reset.'
+      } else {
+        error.value = errorDescription || 'Invalid reset link. Please request a new password reset.'
+      }
+      checkingSession.value = false
+      return
+    }
+
+    // If we have an access token and type is recovery, session is valid
+    if (accessToken && type === 'recovery') {
+      validSession.value = true
+      checkingSession.value = false
+      return
+    }
+
+    // Otherwise check for existing session
     const { data: { session } } = await supabase.auth.getSession()
     if (session) {
       validSession.value = true
