@@ -194,12 +194,21 @@ function handleClanTagUpdate(clanTag: string | null) {
             <Award class="title-icon" />
             Achievements
           </h3>
-          <button
-            @click="showAllAchievements = !showAllAchievements"
-            class="view-all-btn"
-          >
-            {{ showAllAchievements ? 'Show Less' : 'View All' }}
-          </button>
+          <div class="flex gap-2">
+            <router-link
+              :to="`/profile/${userId}/trophies`"
+              class="view-all-btn bg-arc-yellow/20 border border-arc-yellow text-arc-dark hover:bg-arc-yellow/30"
+            >
+              <Trophy :size="16" />
+              <span>Trophy Wall</span>
+            </router-link>
+            <button
+              @click="showAllAchievements = !showAllAchievements"
+              class="view-all-btn"
+            >
+              {{ showAllAchievements ? 'Show Less' : 'View All' }}
+            </button>
+          </div>
         </div>
 
         <!-- Top Achievements Preview -->

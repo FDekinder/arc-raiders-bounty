@@ -21,6 +21,9 @@ export interface User {
   total_points: number
   bounties_completed: number
   times_hunted: number
+  bounties_created: number
+  hunts_joined: number
+  achievements_earned: number
   created_at: string
   clan_tag?: string
   game_role?: UserRole
@@ -80,4 +83,36 @@ export interface UserAchievement {
   earned_at: string
   progress: Record<string, any>
   achievement?: Achievement // For joined queries
+}
+
+export interface TrophyStats {
+  userId: string
+  username: string
+  avatar_url?: string
+  clan_tag?: string
+  game_role?: UserRole
+
+  // Core stats
+  totalPoints: number
+  bountiesSurvived: number
+  highestBountyAmount: number
+  bountyHuntersDefeated: number
+  activeBountyStreak: number
+  mostWantedRank: number | null
+  totalBountiesPlaced: number
+
+  // Achievement stats
+  totalAchievements: number
+  legendaryAchievements: number
+  epicAchievements: number
+  rareAchievements: number
+  commonAchievements: number
+
+  // Timeline stats
+  memberSince: string
+  lastActivity: string
+
+  // Notoriety level
+  notorietyLevel: number
+  notorietyTier: 'Rookie' | 'Known' | 'Notorious' | 'Infamous' | 'Legendary'
 }
