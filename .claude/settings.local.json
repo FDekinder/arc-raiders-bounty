@@ -6,7 +6,9 @@
       "Bash(test:*)",
       "Bash(npm run build:*)",
       "Bash(find:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(grep:*)",
+      "Bash(findstr:*)"
     ]
   }
 }

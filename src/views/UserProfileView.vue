@@ -224,47 +224,47 @@ function handleClanTagUpdate(clanTag: string | null) {
       <div class="stats-grid">
         <!-- Hunter Stats -->
         <Card>
-          <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+          <h3 class="text-xl font-bold mb-4 flex items-center gap-2 text-arc-dark">
             <Trophy class="text-arc-green" />
             Hunter Stats
           </h3>
           <div class="space-y-3">
             <div class="flex justify-between">
-              <span class="text-arc-brown">Claims Approved</span>
+              <span class="text-arc-dark/80">Claims Approved</span>
               <span class="font-bold text-arc-green">{{ stats?.approvedClaims || 0 }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-arc-brown">Claims Pending</span>
-              <span class="font-bold text-arc-yellow">{{ stats?.pendingClaims || 0 }}</span>
+              <span class="text-arc-dark/80">Claims Pending</span>
+              <span class="font-bold text-arc-yellow-dark">{{ stats?.pendingClaims || 0 }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-arc-brown">Claims Rejected</span>
+              <span class="text-arc-dark/80">Claims Rejected</span>
               <span class="font-bold text-arc-red">{{ stats?.rejectedClaims || 0 }}</span>
             </div>
-            <div class="flex justify-between border-t border-arc-red/20 pt-3">
-              <span class="text-arc-brown">Success Rate</span>
-              <span class="font-bold">{{ stats?.successRate || 0 }}%</span>
+            <div class="flex justify-between border-t border-arc-brown/20 pt-3">
+              <span class="text-arc-dark/80">Success Rate</span>
+              <span class="font-bold text-arc-dark">{{ stats?.successRate || 0 }}%</span>
             </div>
           </div>
         </Card>
 
         <!-- Bounty Creator Stats -->
         <Card>
-          <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+          <h3 class="text-xl font-bold mb-4 flex items-center gap-2 text-arc-dark">
             <Target class="text-arc-red" />
             Bounty Creator
           </h3>
           <div class="space-y-3">
             <div class="flex justify-between">
-              <span class="text-arc-brown">Total Bounties</span>
-              <span class="font-bold">{{ stats?.bountiesCreatedTotal || 0 }}</span>
+              <span class="text-arc-dark/80">Total Bounties</span>
+              <span class="font-bold text-arc-dark">{{ stats?.bountiesCreatedTotal || 0 }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-arc-brown">Active</span>
-              <span class="font-bold text-arc-yellow">{{ stats?.activeBounties || 0 }}</span>
+              <span class="text-arc-dark/80">Active</span>
+              <span class="font-bold text-arc-yellow-dark">{{ stats?.activeBounties || 0 }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-arc-brown">Completed</span>
+              <span class="text-arc-dark/80">Completed</span>
               <span class="font-bold text-arc-green">{{ stats?.completedBounties || 0 }}</span>
             </div>
           </div>
@@ -272,15 +272,15 @@ function handleClanTagUpdate(clanTag: string | null) {
 
         <!-- Other Stats -->
         <Card>
-          <h3 class="text-xl font-bold mb-4">Other Stats</h3>
+          <h3 class="text-xl font-bold mb-4 text-arc-dark">Other Stats</h3>
           <div class="space-y-3">
             <div class="flex justify-between">
-              <span class="text-arc-brown">Times Hunted</span>
-              <span class="font-bold">{{ stats?.timesHunted || 0 }}</span>
+              <span class="text-arc-dark/80">Times Hunted</span>
+              <span class="font-bold text-arc-dark">{{ stats?.timesHunted || 0 }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-arc-brown">Total Points</span>
-              <span class="font-bold text-arc-yellow">{{ stats?.totalPoints || 0 }}</span>
+              <span class="text-arc-dark/80">Total Points</span>
+              <span class="font-bold text-arc-yellow-dark">{{ stats?.totalPoints || 0 }}</span>
             </div>
           </div>
         </Card>
@@ -288,11 +288,11 @@ function handleClanTagUpdate(clanTag: string | null) {
 
       <!-- Recent Activity Tabs -->
       <Card>
-        <h3 class="text-2xl font-bold mb-6">Recent Activity</h3>
+        <h3 class="text-2xl font-bold mb-6 text-arc-dark">Recent Activity</h3>
 
         <!-- Recent Claims -->
         <div class="mb-8">
-          <h4 class="text-lg font-bold mb-4 text-gray-600">Recent Claims</h4>
+          <h4 class="text-lg font-bold mb-4 text-arc-dark/90">Recent Claims</h4>
           <EmptyState
             v-if="claimsSubmitted.length === 0"
             :icon="Clock"
@@ -302,17 +302,17 @@ function handleClanTagUpdate(clanTag: string | null) {
             <div
               v-for="claim in claimsSubmitted.slice(0, 5)"
               :key="claim.id"
-              class="bg-gray-100 rounded-lg p-4 flex justify-between items-center border border-arc-red/20"
+              class="bg-arc-beige/50 rounded-lg p-4 flex justify-between items-center border border-arc-brown/30"
             >
               <div>
-                <div class="font-bold">{{ claim.bounty?.target_gamertag }}</div>
-                <div class="text-sm text-arc-brown">
+                <div class="font-bold text-arc-dark">{{ claim.bounty?.target_gamertag }}</div>
+                <div class="text-sm text-arc-dark/70">
                   {{ formatDistanceToNow(new Date(claim.claimed_at), { addSuffix: true }) }}
                 </div>
               </div>
               <div class="flex items-center gap-4">
                 <div class="text-right">
-                  <div class="font-bold">{{ claim.bounty?.bounty_amount }} pts</div>
+                  <div class="font-bold text-arc-dark">{{ claim.bounty?.bounty_amount }} pts</div>
                   <div
                     v-if="claim.verification_status === 'approved'"
                     class="text-sm text-arc-green"
@@ -328,7 +328,7 @@ function handleClanTagUpdate(clanTag: string | null) {
 
         <!-- Recent Bounties Created -->
         <div>
-          <h4 class="text-lg font-bold mb-4 text-gray-600">Bounties Created</h4>
+          <h4 class="text-lg font-bold mb-4 text-arc-dark/90">Bounties Created</h4>
           <EmptyState
             v-if="bountiesCreated.length === 0"
             :icon="Target"
@@ -338,19 +338,19 @@ function handleClanTagUpdate(clanTag: string | null) {
             <div
               v-for="bounty in bountiesCreated.slice(0, 5)"
               :key="bounty.id"
-              class="bg-gray-100 rounded-lg p-4 flex justify-between items-center border border-arc-red/20"
+              class="bg-arc-beige/50 rounded-lg p-4 flex justify-between items-center border border-arc-brown/30"
             >
               <div>
-                <div class="font-bold">{{ bounty.target_gamertag }}</div>
-                <div class="text-sm text-arc-brown">
+                <div class="font-bold text-arc-dark">{{ bounty.target_gamertag }}</div>
+                <div class="text-sm text-arc-dark/70">
                   {{ formatDistanceToNow(new Date(bounty.created_at), { addSuffix: true }) }}
                 </div>
               </div>
               <div class="text-right">
                 <div class="font-bold text-arc-red">{{ bounty.bounty_amount }} pts</div>
                 <div
-                  class="text-sm"
-                  :class="bounty.status === 'active' ? 'text-arc-yellow' : 'text-arc-green'"
+                  class="text-sm font-semibold"
+                  :class="bounty.status === 'active' ? 'text-arc-yellow-dark' : 'text-arc-green'"
                 >
                   {{ bounty.status }}
                 </div>
@@ -362,3 +362,117 @@ function handleClanTagUpdate(clanTag: string | null) {
     </div>
   </div>
 </template>
+
+<style scoped>
+.page-container {
+  @apply min-h-screen bg-transparent text-white;
+}
+
+.content-wrapper {
+  @apply container mx-auto px-4 py-8 space-y-8;
+}
+
+/* Profile Header */
+.profile-header {
+  @apply bg-arc-card rounded-xl p-6 md:p-8 border-2 border-arc-brown/20 shadow-lg;
+}
+
+.profile-content {
+  @apply flex flex-col md:flex-row gap-6 items-start;
+}
+
+.profile-avatar {
+  @apply w-20 h-20 md:w-24 md:h-24 rounded-full bg-arc-beige border-4 border-arc-red flex items-center justify-center flex-shrink-0;
+}
+
+.avatar-icon {
+  @apply text-arc-red;
+}
+
+.profile-info {
+  @apply flex-1 w-full;
+}
+
+.profile-title-row {
+  @apply flex flex-wrap items-center gap-3 mb-2;
+}
+
+.profile-username {
+  @apply text-3xl md:text-4xl font-bold text-arc-dark;
+}
+
+.profile-member-since {
+  @apply text-arc-dark/70 mb-4;
+}
+
+/* Quick Stats */
+.quick-stats {
+  @apply grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6;
+}
+
+.quick-stat {
+  @apply bg-arc-beige/50 rounded-lg p-4 border border-arc-brown/30;
+}
+
+.stat-value-row {
+  @apply flex items-center gap-2 mb-1;
+}
+
+.stat-icon-yellow {
+  @apply text-arc-yellow-dark;
+}
+
+.stat-icon-green {
+  @apply text-arc-green;
+}
+
+.stat-icon-red {
+  @apply text-arc-red;
+}
+
+.stat-value-yellow {
+  @apply text-2xl font-bold text-arc-yellow-dark;
+}
+
+.stat-value-green {
+  @apply text-2xl font-bold text-arc-green;
+}
+
+.stat-value-red {
+  @apply text-2xl font-bold text-arc-red;
+}
+
+.stat-label {
+  @apply text-sm text-arc-dark/70;
+}
+
+/* Achievements Section */
+.achievements-section {
+  @apply bg-arc-card rounded-xl p-6 md:p-8 border-2 border-arc-brown/20 shadow-lg;
+}
+
+.achievements-header {
+  @apply flex justify-between items-center mb-6;
+}
+
+.achievements-title {
+  @apply text-2xl font-bold flex items-center gap-2 text-arc-dark;
+}
+
+.title-icon {
+  @apply text-arc-yellow-dark;
+}
+
+.view-all-btn {
+  @apply px-4 py-2 bg-arc-red text-white font-semibold rounded-lg hover:bg-arc-red/80 transition;
+}
+
+.achievements-preview {
+  @apply flex flex-wrap gap-4 justify-center md:justify-start;
+}
+
+/* Stats Grid */
+.stats-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-6;
+}
+</style>
