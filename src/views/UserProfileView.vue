@@ -100,12 +100,14 @@ async function handleAvatarUpload(event: Event) {
     // Validate file type
     if (!file.type.startsWith('image/')) {
       showError('Please upload an image file')
+      uploadingAvatar.value = false
       return
     }
 
     // Validate file size (max 2MB)
     if (file.size > 2 * 1024 * 1024) {
       showError('File size must be less than 2MB')
+      uploadingAvatar.value = false
       return
     }
 
@@ -120,7 +122,10 @@ async function handleAvatarUpload(event: Event) {
         upsert: true
       })
 
-    if (uploadError) throw uploadError
+    if (uploadError) {
+      console.error('Upload error:', uploadError)
+      throw new Error(`Upload failed: ${uploadError.message}`)
+    }
 
     // Get public URL
     const { data: urlData } = supabase.storage
