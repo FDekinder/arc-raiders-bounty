@@ -1,7 +1,7 @@
 <!-- src/views/HomeView.vue -->
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { Target, Trophy, Users, Skull, ChevronDown } from 'lucide-vue-next'
+import { ref, onMounted } from 'vue'
+import { Target, Trophy, Users, Skull } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import { getMostWanted, getUserByUsername, getTopKillers } from '@/lib/db'
 import type { MostWanted, TopKiller } from '@/lib/supabase'
@@ -10,11 +10,6 @@ const topBounties = ref<MostWanted[]>([])
 const topKillers = ref<TopKiller[]>([])
 const loading = ref(true)
 const killersLoading = ref(true)
-const selectedLeaderboard = ref<'bounties' | 'killers'>('bounties')
-
-const isLoading = computed(() => {
-  return selectedLeaderboard.value === 'bounties' ? loading.value : killersLoading.value
-})
 
 onMounted(async () => {
   // Load Most Wanted
@@ -91,48 +86,23 @@ function getMedalEmoji(index: number) {
       </div>
     </div>
 
-    <!-- Leaderboard Section with Dropdown -->
-    <div class="leaderboard-section">
-      <!-- Section Header with Dropdown -->
-      <div class="section-header-with-dropdown">
-        <div class="section-header">
-          <h2 class="section-title">
-            <Target v-if="selectedLeaderboard === 'bounties'" class="text-arc-red" :size="40" />
-            <Skull v-else class="text-arc-red" :size="40" />
-            <span class="section-title-gradient">
-              {{ selectedLeaderboard === 'bounties' ? 'Most Wanted' : 'Top Killers' }}
-            </span>
-          </h2>
-          <p class="section-subtitle">
-            {{ selectedLeaderboard === 'bounties'
-              ? 'The highest-value targets in Arc Raiders'
-              : 'The most dangerous Proud Rats in the wasteland'
-            }}
-          </p>
-        </div>
-
-        <!-- Dropdown Selector -->
-        <div class="dropdown-container">
-          <label class="dropdown-label">Leaderboard</label>
-          <div class="dropdown-wrapper">
-            <select v-model="selectedLeaderboard" class="leaderboard-dropdown">
-              <option value="bounties">Most Wanted</option>
-              <option value="killers">Top Killers</option>
-            </select>
-            <ChevronDown class="dropdown-icon" :size="20" />
-          </div>
-        </div>
+    <!-- Most Wanted Section -->
+    <div class="most-wanted-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <Target class="text-arc-red" :size="40" />
+          <span class="section-title-gradient">Most Wanted</span>
+        </h2>
+        <p class="section-subtitle">The highest-value targets in Arc Raiders</p>
       </div>
 
-      <!-- Most Wanted Content -->
-      <div v-if="selectedLeaderboard === 'bounties'">
-        <!-- Loading State -->
-        <div v-if="loading" class="loading-state">
-          <div class="text-xl">Loading top bounties...</div>
-        </div>
+      <!-- Loading State -->
+      <div v-if="loading" class="loading-state">
+        <div class="text-xl">Loading top bounties...</div>
+      </div>
 
-        <!-- Top 3 Cards -->
-        <div v-else-if="topBounties.length > 0" class="bounty-grid">
+      <!-- Top 3 Cards -->
+      <div v-else-if="topBounties.length > 0" class="bounty-grid">
         <div v-for="(bounty, index) in topBounties" :key="bounty.target_gamertag" class="bounty-card-wrapper">
           <!-- Medal Badge -->
           <div class="medal-badge">
@@ -144,7 +114,7 @@ function getMedalEmoji(index: number) {
           <!-- Card -->
           <div
             class="bounty-card"
-            :style="bounty.avatar_url ? `background-image: linear-gradient(rgba(238, 230, 213, 0.92), rgba(238, 230, 213, 0.95)), url(${bounty.avatar_url}); background-size: cover; background-position: center;` : ''"
+            :style="bounty.avatar_url ? `background-image: linear-gradient(rgba(238, 230, 213, 0.85), rgba(238, 230, 213, 0.90)), url('${bounty.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;` : ''"
           >
             <!-- Rank -->
             <div class="bounty-rank">#{{ index + 1 }}</div>
@@ -188,24 +158,32 @@ function getMedalEmoji(index: number) {
         </div>
       </div>
 
-        <!-- Empty State -->
-        <div v-else class="empty-state">
-          <p class="empty-state-text">No bounties yet!</p>
-          <RouterLink to="/create-bounty" class="empty-state-btn">
-            Be the First to Create One
-          </RouterLink>
-        </div>
+      <!-- Empty State -->
+      <div v-else class="empty-state">
+        <p class="empty-state-text">No bounties yet!</p>
+        <RouterLink to="/create-bounty" class="empty-state-btn">
+          Be the First to Create One
+        </RouterLink>
+      </div>
+    </div>
+
+    <!-- Top Killers Section -->
+    <div class="top-killers-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <Skull class="text-arc-red" :size="40" />
+          <span class="section-title-gradient">Top Killers</span>
+        </h2>
+        <p class="section-subtitle">The most dangerous Proud Rats in the wasteland</p>
       </div>
 
-      <!-- Top Killers Content -->
-      <div v-else>
-        <!-- Loading State -->
-        <div v-if="killersLoading" class="loading-state">
-          <div class="text-xl">Loading top killers...</div>
-        </div>
+      <!-- Loading State -->
+      <div v-if="killersLoading" class="loading-state">
+        <div class="text-xl">Loading top killers...</div>
+      </div>
 
-        <!-- Top 3 Cards -->
-        <div v-else-if="topKillers.length > 0" class="bounty-grid">
+      <!-- Top 3 Cards -->
+      <div v-else-if="topKillers.length > 0" class="bounty-grid">
         <div v-for="(killer, index) in topKillers" :key="killer.killer_id" class="bounty-card-wrapper">
           <!-- Medal Badge -->
           <div class="medal-badge">
@@ -218,7 +196,7 @@ function getMedalEmoji(index: number) {
           <RouterLink
             :to="`/profile/${killer.killer_id}`"
             class="bounty-card killer-card"
-            :style="killer.avatar_url ? `background-image: linear-gradient(rgba(238, 230, 213, 0.92), rgba(238, 230, 213, 0.95)), url(${killer.avatar_url}); background-size: cover; background-position: center;` : ''"
+            :style="killer.avatar_url ? `background-image: linear-gradient(rgba(238, 230, 213, 0.85), rgba(238, 230, 213, 0.90)), url('${killer.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;` : ''"
           >
             <!-- Rank -->
             <div class="bounty-rank">#{{ index + 1 }}</div>
@@ -260,20 +238,19 @@ function getMedalEmoji(index: number) {
         </div>
       </div>
 
-        <!-- Empty State -->
-        <div v-else class="empty-state">
-          <p class="empty-state-text">No kills recorded yet!</p>
-          <RouterLink to="/submit-kill" class="empty-state-btn">
-            Be the First Killer
-          </RouterLink>
-        </div>
+      <!-- Empty State -->
+      <div v-else class="empty-state">
+        <p class="empty-state-text">No kills recorded yet!</p>
+        <RouterLink to="/submit-kill" class="empty-state-btn">
+          Be the First Killer
+        </RouterLink>
+      </div>
 
-        <!-- View All Link -->
-        <div v-if="topKillers.length > 0" class="view-all-link">
-          <RouterLink to="/top-killers" class="view-all-btn">
-            View Full Leaderboard
-          </RouterLink>
-        </div>
+      <!-- View All Link -->
+      <div v-if="topKillers.length > 0" class="view-all-link">
+        <RouterLink to="/top-killers" class="view-all-btn">
+          View Full Leaderboard
+        </RouterLink>
       </div>
     </div>
 
@@ -365,21 +342,18 @@ function getMedalEmoji(index: number) {
   @apply bg-arc-card border-2 border-arc-red hover:bg-arc-red hover:text-black hover:shadow-lg hover:shadow-arc-red/30 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition transform hover:scale-105 min-w-[140px] sm:min-w-0 text-gray-900;
 }
 
-/* Leaderboard Section */
-.leaderboard-section {
+/* Most Wanted & Top Killers Sections */
+.most-wanted-section,
+.top-killers-section {
   @apply container mx-auto px-4 py-8 sm:py-12 md:py-16;
 }
 
-.section-header-with-dropdown {
-  @apply flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-8 sm:mb-12;
-}
-
 .section-header {
-  @apply text-center md:text-left flex-1;
+  @apply text-center mb-8 sm:mb-12;
 }
 
 .section-title {
-  @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 flex items-center justify-center md:justify-start gap-2 sm:gap-3;
+  @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 flex items-center justify-center gap-2 sm:gap-3;
 }
 
 .section-title-gradient {
@@ -387,28 +361,7 @@ function getMedalEmoji(index: number) {
 }
 
 .section-subtitle {
-  @apply text-arc-brown text-base sm:text-lg px-4 md:px-0;
-}
-
-/* Dropdown Styles */
-.dropdown-container {
-  @apply flex flex-col gap-2 min-w-[200px];
-}
-
-.dropdown-label {
-  @apply text-sm font-medium text-arc-brown;
-}
-
-.dropdown-wrapper {
-  @apply relative;
-}
-
-.leaderboard-dropdown {
-  @apply w-full bg-arc-card border-2 border-arc-red rounded-lg px-4 py-3 pr-10 text-gray-900 font-semibold appearance-none cursor-pointer hover:bg-white transition-all focus:outline-none focus:border-arc-yellow;
-}
-
-.dropdown-icon {
-  @apply absolute right-3 top-1/2 -translate-y-1/2 text-arc-red pointer-events-none;
+  @apply text-arc-brown text-base sm:text-lg px-4;
 }
 
 .loading-state {

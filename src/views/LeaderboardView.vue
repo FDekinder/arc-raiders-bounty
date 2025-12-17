@@ -1,18 +1,27 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { supabase } from '@/lib/supabase'
-import { Trophy, Target, Award } from 'lucide-vue-next'
+import { Trophy, Target, Award, Skull, ChevronDown } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import { getTopAchievements } from '@/lib/achievements'
+import { getTopKillers } from '@/lib/db'
 import AchievementBadge from '@/components/AchievementBadge.vue'
 import RoleBadge from '@/components/RoleBadge.vue'
-import type { Achievement } from '@/lib/supabase'
+import type { Achievement, TopKiller } from '@/lib/supabase'
 
 const hunters = ref<any[]>([])
+const killers = ref<TopKiller[]>([])
 const loading = ref(true)
+const killersLoading = ref(true)
 const hunterAchievements = ref<Map<string, Achievement[]>>(new Map())
+const selectedLeaderboard = ref<'hunters' | 'killers'>('hunters')
+
+const isLoading = computed(() => {
+  return selectedLeaderboard.value === 'hunters' ? loading.value : killersLoading.value
+})
 
 onMounted(async () => {
+  // Load Top Hunters
   try {
     // Modified query to get user ID
     const { data, error } = await supabase
@@ -36,6 +45,16 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
+
+  // Load Top Killers
+  try {
+    const killersData = await getTopKillers(10) // Get top 10
+    killers.value = killersData
+  } catch (error) {
+    console.error('Error loading top killers:', error)
+  } finally {
+    killersLoading.value = false
+  }
 })
 
 function getMedalColor(index: number) {
@@ -49,17 +68,40 @@ function getMedalColor(index: number) {
 <template>
   <div class="page-container">
     <div class="content-wrapper">
-      <div class="header">
-        <h1 class="title">
-          <Trophy class="text-arc-yellow" :size="48" />
-          Top Hunters
-        </h1>
-        <p class="subtitle">The most skilled bounty hunters in Arc Raiders</p>
+      <!-- Header with Dropdown -->
+      <div class="header-with-dropdown">
+        <div class="header">
+          <h1 class="title">
+            <Trophy v-if="selectedLeaderboard === 'hunters'" class="text-arc-yellow" :size="48" />
+            <Skull v-else class="text-arc-red" :size="48" />
+            {{ selectedLeaderboard === 'hunters' ? 'Top Hunters' : 'Top Killers' }}
+          </h1>
+          <p class="subtitle">
+            {{ selectedLeaderboard === 'hunters'
+              ? 'The most skilled bounty hunters in Arc Raiders'
+              : 'The most dangerous Proud Rats in the wasteland'
+            }}
+          </p>
+        </div>
+
+        <!-- Dropdown Selector -->
+        <div class="dropdown-container">
+          <label class="dropdown-label">View Leaderboard</label>
+          <div class="dropdown-wrapper">
+            <select v-model="selectedLeaderboard" class="leaderboard-dropdown">
+              <option value="hunters">Top Hunters</option>
+              <option value="killers">Top Killers</option>
+            </select>
+            <ChevronDown class="dropdown-icon" :size="20" />
+          </div>
+        </div>
       </div>
 
-      <div v-if="loading" class="loading-state">Loading leaderboard...</div>
+      <!-- Loading State -->
+      <div v-if="isLoading" class="loading-state">Loading leaderboard...</div>
 
-      <div v-else class="hunters-list">
+      <!-- Top Hunters List -->
+      <div v-else-if="selectedLeaderboard === 'hunters'" class="hunters-list">
         <div
           v-for="(hunter, index) in hunters"
           :key="hunter.id"
@@ -118,6 +160,63 @@ function getMedalColor(index: number) {
           No hunters yet. Be the first to complete a bounty!
         </div>
       </div>
+
+      <!-- Top Killers List -->
+      <div v-else class="hunters-list">
+        <div
+          v-for="(killer, index) in killers"
+          :key="killer.killer_id"
+          class="hunter-card"
+        >
+          <!-- Rank -->
+          <div class="rank" :class="getMedalColor(index)">
+            #{{ index + 1 }}
+          </div>
+
+          <!-- Avatar -->
+          <RouterLink :to="`/profile/${killer.killer_id}`" class="avatar">
+            <img
+              v-if="killer.avatar_url"
+              :src="killer.avatar_url"
+              :alt="`${killer.username}'s avatar`"
+              class="avatar-image"
+            />
+            <Skull v-else :size="32" class="text-arc-red" />
+          </RouterLink>
+
+          <!-- Info -->
+          <div class="hunter-info">
+            <div class="hunter-name-row">
+              <RouterLink
+                :to="`/profile/${killer.killer_id}`"
+                class="hunter-name"
+              >
+                <span v-if="killer.clan_tag" class="clan-tag">[{{ killer.clan_tag }}]</span>
+                {{ killer.username }}
+              </RouterLink>
+              <RoleBadge v-if="killer.game_role" :role="killer.game_role" size="sm" />
+            </div>
+            <div class="hunter-stats">
+              <span>{{ killer.kill_count }} {{ killer.kill_count === 1 ? 'kill' : 'kills' }}</span>
+            </div>
+          </div>
+
+          <!-- Kill Count -->
+          <div class="points-section">
+            <div class="points-display">
+              <Skull class="text-arc-red" :size="24" />
+              <span class="points-value">
+                {{ killer.kill_count }}
+              </span>
+            </div>
+            <div class="points-label">{{ killer.kill_count === 1 ? 'kill' : 'kills' }}</div>
+          </div>
+        </div>
+
+        <div v-if="killers.length === 0" class="empty-state">
+          No kills recorded yet. Be the first Proud Rat to report a kill!
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -131,16 +230,41 @@ function getMedalColor(index: number) {
   @apply container mx-auto px-4 py-6 sm:py-8;
 }
 
+.header-with-dropdown {
+  @apply flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-8 sm:mb-12;
+}
+
 .header {
-  @apply text-center mb-8 sm:mb-12;
+  @apply text-center md:text-left flex-1;
 }
 
 .title {
-  @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 flex items-center justify-center gap-2 sm:gap-3 text-white;
+  @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 flex items-center justify-center md:justify-start gap-2 sm:gap-3 text-white;
 }
 
 .subtitle {
-  @apply text-arc-brown text-sm sm:text-base px-4;
+  @apply text-arc-brown text-sm sm:text-base px-4 md:px-0;
+}
+
+/* Dropdown Styles */
+.dropdown-container {
+  @apply flex flex-col gap-2 min-w-[200px];
+}
+
+.dropdown-label {
+  @apply text-sm font-medium text-arc-brown;
+}
+
+.dropdown-wrapper {
+  @apply relative;
+}
+
+.leaderboard-dropdown {
+  @apply w-full bg-arc-card border-2 border-arc-red rounded-lg px-4 py-3 pr-10 text-gray-900 font-semibold appearance-none cursor-pointer hover:bg-white transition-all focus:outline-none focus:border-arc-yellow;
+}
+
+.dropdown-icon {
+  @apply absolute right-3 top-1/2 -translate-y-1/2 text-arc-red pointer-events-none;
 }
 
 .loading-state {
@@ -160,7 +284,11 @@ function getMedalColor(index: number) {
 }
 
 .avatar {
-  @apply w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-arc-beige flex items-center justify-center flex-shrink-0;
+  @apply w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-arc-beige flex items-center justify-center flex-shrink-0 overflow-hidden;
+}
+
+.avatar-image {
+  @apply w-full h-full object-cover;
 }
 
 .hunter-info {
