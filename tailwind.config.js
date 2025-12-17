@@ -46,7 +46,7 @@ export default {
           lighter: '#4a3f4e',
         },
         'arc-card': {
-          DEFAULT: '#f8f4eb', // Light card background
+          DEFAULT: '#ebddc7', // Light card background
           hover: '#ffffff',
           border: '#d9cdb8',
         },
