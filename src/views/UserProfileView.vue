@@ -4,7 +4,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { supabase } from '@/lib/supabase'
 import type { User, Bounty, BountyClaim } from '@/lib/supabase'
-import { Target, Trophy, Award, TrendingUp, Clock } from 'lucide-vue-next'
+import { Target, Trophy, Award, TrendingUp, Clock, Upload, Camera } from 'lucide-vue-next'
 import { formatDistanceToNow } from 'date-fns'
 import AchievementGrid from '@/components/AchievementGrid.vue'
 import { getTopAchievements } from '@/lib/achievements'
@@ -19,14 +19,17 @@ import StatCard from '@/components/StatCard.vue'
 import Card from '@/components/Card.vue'
 import EmptyState from '@/components/EmptyState.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
+import { useToast } from '@/composables/useToast'
 
 const route = useRoute()
+const { success, error: showError } = useToast()
 const user = ref<User | null>(null)
 const bountiesCreated = ref<Bounty[]>([])
 const claimsSubmitted = ref<any[]>([])
 const loading = ref(true)
 const topAchievements = ref<Achievement[]>([])
 const showAllAchievements = ref(false)
+const uploadingAvatar = ref(false)
 
 const userId = route.params.id as string
 const currentUser = getCurrentUser()
@@ -85,6 +88,73 @@ async function loadUserProfile() {
   }
 }
 
+async function handleAvatarUpload(event: Event) {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+
+  if (!file) return
+
+  try {
+    uploadingAvatar.value = true
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      showError('Please upload an image file')
+      return
+    }
+
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      showError('File size must be less than 2MB')
+      return
+    }
+
+    // Upload to Supabase Storage
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${userId}-${Date.now()}.${fileExt}`
+    const filePath = `avatars/${fileName}`
+
+    const { error: uploadError } = await supabase.storage
+      .from('profile-avatars')
+      .upload(filePath, file, {
+        upsert: true
+      })
+
+    if (uploadError) throw uploadError
+
+    // Get public URL
+    const { data: urlData } = supabase.storage
+      .from('profile-avatars')
+      .getPublicUrl(filePath)
+
+    // Update user profile
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ avatar_url: urlData.publicUrl })
+      .eq('id', userId)
+
+    if (updateError) throw updateError
+
+    // Update local state
+    if (user.value) {
+      user.value.avatar_url = urlData.publicUrl
+    }
+
+    // Update localStorage
+    if (currentUser?.id === userId) {
+      const updatedUser = { ...currentUser, avatar_url: urlData.publicUrl }
+      localStorage.setItem('arc_user', JSON.stringify(updatedUser))
+    }
+
+    success('Profile picture updated successfully!')
+  } catch (err: any) {
+    console.error('Avatar upload error:', err)
+    showError(err.message || 'Failed to upload profile picture')
+  } finally {
+    uploadingAvatar.value = false
+  }
+}
+
 const stats = computed(() => {
   if (!user.value) return null
 
@@ -134,8 +204,32 @@ function handleClanTagUpdate(clanTag: string | null) {
       <div class="profile-header">
         <div class="profile-content">
           <!-- Avatar -->
-          <div class="profile-avatar">
-            <Target :size="48" class="avatar-icon" />
+          <div class="profile-avatar-container">
+            <div class="profile-avatar">
+              <img
+                v-if="user.avatar_url"
+                :src="user.avatar_url"
+                :alt="`${user.username}'s avatar`"
+                class="avatar-image"
+              />
+              <Target v-else :size="48" class="avatar-icon" />
+            </div>
+
+            <!-- Upload Button (only on own profile) -->
+            <div v-if="isOwnProfile" class="avatar-upload-overlay">
+              <input
+                id="avatar-upload"
+                type="file"
+                accept="image/*"
+                @change="handleAvatarUpload"
+                class="hidden"
+              />
+              <label for="avatar-upload" class="upload-button" :class="{ 'uploading': uploadingAvatar }">
+                <Camera v-if="!uploadingAvatar" :size="20" />
+                <div v-else class="spinner-small"></div>
+                <span>{{ uploadingAvatar ? 'Uploading...' : 'Change Photo' }}</span>
+              </label>
+            </div>
           </div>
 
           <!-- Info -->
@@ -406,12 +500,40 @@ function handleClanTagUpdate(clanTag: string | null) {
   @apply flex flex-col md:flex-row gap-6 items-start;
 }
 
+.profile-avatar-container {
+  @apply relative flex flex-col items-center gap-3;
+}
+
 .profile-avatar {
-  @apply w-20 h-20 md:w-24 md:h-24 rounded-full bg-arc-beige border-4 border-arc-red flex items-center justify-center flex-shrink-0;
+  @apply w-24 h-24 md:w-28 md:h-28 rounded-full bg-arc-beige border-4 border-arc-red flex items-center justify-center flex-shrink-0 overflow-hidden;
+}
+
+.avatar-image {
+  @apply w-full h-full object-cover;
 }
 
 .avatar-icon {
   @apply text-arc-red;
+}
+
+.avatar-upload-overlay {
+  @apply w-full;
+}
+
+.upload-button {
+  @apply flex items-center justify-center gap-2 bg-arc-card hover:bg-white border-2 border-arc-red px-4 py-2 rounded-lg cursor-pointer transition-all text-gray-900 font-medium text-sm w-full;
+}
+
+.upload-button.uploading {
+  @apply opacity-70 cursor-not-allowed;
+}
+
+.hidden {
+  @apply sr-only;
+}
+
+.spinner-small {
+  @apply w-5 h-5 border-2 border-arc-brown/20 border-t-arc-red rounded-full animate-spin;
 }
 
 .profile-info {
