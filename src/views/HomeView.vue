@@ -1,15 +1,18 @@
 <!-- src/views/HomeView.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Target, Trophy, Users } from 'lucide-vue-next'
+import { Target, Trophy, Users, Skull } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
-import { getMostWanted, getUserByUsername } from '@/lib/db'
-import type { MostWanted } from '@/lib/supabase'
+import { getMostWanted, getUserByUsername, getTopKillers } from '@/lib/db'
+import type { MostWanted, TopKiller } from '@/lib/supabase'
 
 const topBounties = ref<MostWanted[]>([])
+const topKillers = ref<TopKiller[]>([])
 const loading = ref(true)
+const killersLoading = ref(true)
 
 onMounted(async () => {
+  // Load Most Wanted
   try {
     const data = await getMostWanted()
     const top3 = data.slice(0, 3) // Get top 3
@@ -30,6 +33,16 @@ onMounted(async () => {
     console.error('Error loading top bounties:', error)
   } finally {
     loading.value = false
+  }
+
+  // Load Top Killers
+  try {
+    const killers = await getTopKillers(3) // Get top 3
+    topKillers.value = killers
+  } catch (error) {
+    console.error('Error loading top killers:', error)
+  } finally {
+    killersLoading.value = false
   }
 })
 
@@ -147,6 +160,89 @@ function getMedalEmoji(index: number) {
         <p class="empty-state-text">No bounties yet!</p>
         <RouterLink to="/create-bounty" class="empty-state-btn">
           Be the First to Create One
+        </RouterLink>
+      </div>
+    </div>
+
+    <!-- Top 3 Killers -->
+    <div class="top-killers-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <Skull class="text-arc-red" :size="40" />
+          <span class="section-title-gradient">Top Killers</span>
+        </h2>
+        <p class="section-subtitle">The most dangerous Proud Rats in the wasteland</p>
+      </div>
+
+      <!-- Loading State -->
+      <div v-if="killersLoading" class="loading-state">
+        <div class="text-xl">Loading top killers...</div>
+      </div>
+
+      <!-- Top 3 Cards -->
+      <div v-else-if="topKillers.length > 0" class="bounty-grid">
+        <div v-for="(killer, index) in topKillers" :key="killer.killer_id" class="bounty-card-wrapper">
+          <!-- Medal Badge -->
+          <div class="medal-badge">
+            <div :class="['medal-circle', getMedalClass(index)]">
+              {{ getMedalEmoji(index) }}
+            </div>
+          </div>
+
+          <!-- Card -->
+          <RouterLink :to="`/profile/${killer.killer_id}`" class="bounty-card killer-card">
+            <!-- Rank -->
+            <div class="bounty-rank">#{{ index + 1 }}</div>
+
+            <!-- Profile Picture -->
+            <div class="bounty-avatar-container">
+              <div class="bounty-avatar">
+                <img
+                  v-if="killer.avatar_url"
+                  :src="killer.avatar_url"
+                  :alt="`${killer.username}'s avatar`"
+                  class="bounty-avatar-img"
+                />
+                <div v-else class="bounty-avatar-fallback">
+                  {{ killer.username.charAt(0).toUpperCase() }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Username -->
+            <div class="flex items-center justify-center gap-2 mb-3 sm:mb-4">
+              <span v-if="killer.clan_tag" class="clan-tag">[{{ killer.clan_tag }}]</span>
+              <h3 class="bounty-gamertag">{{ killer.username }}</h3>
+            </div>
+
+            <!-- Stats -->
+            <div class="bounty-stats">
+              <div class="stat-box">
+                <div class="stat-value-large">{{ killer.kill_count }}</div>
+                <div class="stat-label">{{ killer.kill_count === 1 ? 'Kill' : 'Kills' }}</div>
+              </div>
+            </div>
+
+            <!-- View Profile Button -->
+            <div class="bounty-btn killer-btn">
+              View Profile
+            </div>
+          </RouterLink>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else class="empty-state">
+        <p class="empty-state-text">No kills recorded yet!</p>
+        <RouterLink to="/submit-kill" class="empty-state-btn">
+          Be the First Killer
+        </RouterLink>
+      </div>
+
+      <!-- View All Link -->
+      <div v-if="topKillers.length > 0" class="view-all-link">
+        <RouterLink to="/top-killers" class="view-all-btn">
+          View Full Leaderboard
         </RouterLink>
       </div>
     </div>
@@ -427,5 +523,30 @@ function getMedalEmoji(index: number) {
 
 .cta-btn {
   @apply inline-block bg-arc-red hover:bg-arc-red/80 text-black px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition transform hover:scale-105 shadow-lg shadow-arc-red/40;
+}
+
+/* Top Killers Section */
+.top-killers-section {
+  @apply container mx-auto px-4 py-8 sm:py-12 md:py-16;
+}
+
+.killer-card {
+  @apply block no-underline;
+}
+
+.killer-btn {
+  @apply bg-arc-red hover:bg-arc-red/80;
+}
+
+.clan-tag {
+  @apply text-arc-yellow font-mono text-sm;
+}
+
+.view-all-link {
+  @apply text-center mt-8;
+}
+
+.view-all-btn {
+  @apply inline-block bg-arc-brown/20 hover:bg-arc-brown/30 text-gray-900 px-6 py-3 rounded-lg font-semibold transition;
 }
 </style>

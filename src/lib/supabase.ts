@@ -24,6 +24,7 @@ export interface User {
   bounties_created: number
   hunts_joined: number
   achievements_earned: number
+  kill_count: number // Total confirmed kills for Proud Rats
   created_at: string
   clan_tag?: string
   game_role?: UserRole
@@ -83,6 +84,29 @@ export interface UserAchievement {
   earned_at: string
   progress: Record<string, any>
   achievement?: Achievement // For joined queries
+}
+
+export interface Kill {
+  id: string
+  killer_id: string
+  victim_gamertag: string
+  screenshot_url: string
+  verification_status: 'pending' | 'approved' | 'rejected'
+  verified_by?: string
+  points_awarded: number
+  rejection_reason?: string
+  killed_at: string
+  verified_at?: string
+  notes?: string
+}
+
+export interface TopKiller {
+  killer_id: string
+  username: string
+  kill_count: number
+  avatar_url?: string
+  clan_tag?: string
+  game_role?: UserRole
 }
 
 export interface TrophyStats {

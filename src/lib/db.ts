@@ -1,6 +1,6 @@
 // src/lib/db.ts
 import { supabase } from './supabase'
-import type { TrophyStats } from './supabase'
+import type { TrophyStats, TopKiller } from './supabase'
 import { checkAndAwardAchievements, getUserAchievements } from './achievements'
 
 // Create a new user
@@ -305,4 +305,70 @@ export async function getTrophyStats(userId: string): Promise<TrophyStats | null
     console.error('Error fetching trophy stats:', error)
     return null
   }
+}
+
+// Submit a kill claim
+export async function submitKill(killerId: string, victimGamertag: string, screenshotUrl: string) {
+  const { data, error } = await supabase
+    .from('kills')
+    .insert({
+      killer_id: killerId,
+      victim_gamertag: victimGamertag,
+      screenshot_url: screenshotUrl,
+    })
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+// Upload kill screenshot
+export async function uploadKillScreenshot(file: File, userId: string) {
+  const fileExt = file.name.split('.').pop()
+  const fileName = `${userId}-${Date.now()}.${fileExt}`
+  const filePath = `${fileName}`
+
+  const { error: uploadError } = await supabase.storage
+    .from('kill-screenshots')
+    .upload(filePath, file)
+
+  if (uploadError) throw uploadError
+
+  const { data } = supabase.storage.from('kill-screenshots').getPublicUrl(filePath)
+
+  return data.publicUrl
+}
+
+// Get top killers leaderboard
+export async function getTopKillers(limit: number = 3): Promise<TopKiller[]> {
+  const { data, error } = await supabase
+    .from('users')
+    .select('id, username, kill_count, avatar_url, clan_tag, game_role')
+    .eq('game_role', 'PR')
+    .order('kill_count', { ascending: false })
+    .limit(limit)
+
+  if (error) throw error
+
+  return (data || []).map(user => ({
+    killer_id: user.id,
+    username: user.username,
+    kill_count: user.kill_count,
+    avatar_url: user.avatar_url,
+    clan_tag: user.clan_tag,
+    game_role: user.game_role,
+  }))
+}
+
+// Get kills for a specific user
+export async function getUserKills(userId: string) {
+  const { data, error } = await supabase
+    .from('kills')
+    .select('*')
+    .eq('killer_id', userId)
+    .order('killed_at', { ascending: false })
+
+  if (error) throw error
+  return data
 }

@@ -90,6 +90,16 @@ const router = createRouter({
       name: 'reset-password',
       component: () => import('../views/ResetPasswordView.vue'),
     },
+    {
+      path: '/top-killers',
+      name: 'top-killers',
+      component: () => import('../views/TopKillersView.vue'),
+    },
+    {
+      path: '/submit-kill',
+      name: 'submit-kill',
+      component: () => import('../views/SubmitKillView.vue'),
+    },
   ],
 })
 
