@@ -38,6 +38,8 @@ export interface User {
   clan_tag?: string
   game_role?: UserRole
   role?: 'admin' | 'user' // User permission role
+  subscription_tier?: 'free' | 'premium' // Subscription level for ad-free experience
+  subscription_expires_at?: string // When premium subscription expires
 }
 
 export interface Bounty {

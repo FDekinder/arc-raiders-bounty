@@ -3,6 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import { LogOut, Menu, X } from 'lucide-vue-next'
 import ToastContainer from './components/ToastContainer.vue'
 import ExpirationChecker from './components/ExpirationChecker.vue'
+import CookieConsent from './components/CookieConsent.vue'
 import RoleBadge from './components/RoleBadge.vue'
 import { getCurrentUser, logout } from './lib/auth'
 import { computed, ref } from 'vue'
@@ -26,6 +27,9 @@ function closeMobileMenu() {
 
     <!-- Expiration Checker -->
     <ExpirationChecker />
+
+    <!-- Cookie Consent Banner -->
+    <CookieConsent />
 
     <!-- Navigation -->
     <nav

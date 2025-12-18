@@ -7,6 +7,7 @@ import { getTopAchievements } from '@/lib/achievements'
 import { getTopKillers } from '@/lib/db'
 import AchievementBadge from '@/components/AchievementBadge.vue'
 import RoleBadge from '@/components/RoleBadge.vue'
+import AdUnit from '@/components/AdUnit.vue'
 import type { Achievement, TopKiller } from '@/lib/supabase'
 
 const hunters = ref<any[]>([])
@@ -19,6 +20,9 @@ const selectedLeaderboard = ref<'hunters' | 'killers'>('hunters')
 const isLoading = computed(() => {
   return selectedLeaderboard.value === 'hunters' ? loading.value : killersLoading.value
 })
+
+// Ad configuration
+const adSlotLeaderboard = import.meta.env.VITE_AD_SLOT_LEADERBOARD || 'PLACEHOLDER_SLOT_2'
 
 onMounted(async () => {
   // Load Top Hunters
@@ -225,6 +229,15 @@ function getDefaultAvatar(role: string | null | undefined): string {
           No kills recorded yet. Be the first Proud Rat to report a kill!
         </div>
       </div>
+    </div>
+
+    <!-- Ad at bottom of leaderboard -->
+    <div class="mt-12">
+      <AdUnit
+        :slot="adSlotLeaderboard"
+        format="auto"
+        :responsive="true"
+      />
     </div>
   </div>
 </template>

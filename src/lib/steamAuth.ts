@@ -9,7 +9,7 @@ function getCurrentDomain(): string {
     return window.location.origin
   }
   // Fallback for SSR or build time
-  return 'https://arcraidersbounty.vercel.app'
+  return 'https://dont-shoot.com'
 }
 
 export function initiateSteamLogin() {

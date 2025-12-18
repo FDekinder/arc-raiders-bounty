@@ -16,6 +16,7 @@ import EmptyState from '@/components/EmptyState.vue'
 import Card from '@/components/Card.vue'
 import ShareBountyModal from '@/components/ShareBountyModal.vue'
 import KillTypeBadge from '@/components/KillTypeBadge.vue'
+import AdUnit from '@/components/AdUnit.vue'
 import type { BountyShareData } from '@/lib/shareUtils'
 
 const bounties = ref<Bounty[]>([])
@@ -34,6 +35,9 @@ const joiningHunt = ref<string | null>(null)
 
 const { success, error: showError } = useToast()
 const currentUser = getCurrentUser()
+
+// Ad configuration
+const adSlotBountyList = import.meta.env.VITE_AD_SLOT_BOUNTY_LIST || 'PLACEHOLDER_SLOT_1'
 
 onMounted(async () => {
   try {
@@ -251,12 +255,8 @@ function closeShareModal() {
           actionTo="/create-bounty"
         />
 
-        <Card
-          v-for="bounty in filteredBounties"
-          :key="bounty.id"
-          hover
-          class="relative"
-        >
+        <template v-for="(bounty, index) in filteredBounties" :key="bounty.id">
+          <Card hover class="relative">
           <div class="bounty-content">
             <div class="bounty-info">
               <div class="flex items-center gap-2 mb-2">
@@ -354,6 +354,15 @@ function closeShareModal() {
             </div>
           </div>
         </Card>
+
+        <!-- Ad after every 10th bounty -->
+        <AdUnit
+          v-if="(index + 1) % 10 === 0"
+          :slot="adSlotBountyList"
+          format="auto"
+          :responsive="true"
+        />
+      </template>
       </div>
     </div>
 

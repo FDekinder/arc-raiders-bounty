@@ -87,7 +87,7 @@ This guide walks you through setting up Google OAuth authentication for the Arc 
 1. In Supabase, go to **Authentication** → **URL Configuration**
 2. Set **Site URL** to:
    - Development: `http://localhost:5173`
-   - Production: `https://dont-shoot.com` (or your domain)
+   - Production: `https://dont-shoot.com`
 3. Add **Redirect URLs**:
    - `http://localhost:5173/auth/callback`
    - `https://dont-shoot.com/auth/callback`
