@@ -130,7 +130,7 @@ export async function uploadScreenshot(file: File, userId: string) {
 export async function getUserByUsername(username: string) {
   const { data, error } = await supabase
     .from('users')
-    .select('username, avatar_url')
+    .select('username, avatar_url, game_role')
     .eq('username', username)
     .single()
 
