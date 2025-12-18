@@ -22,10 +22,11 @@ async function handleShare(platform: 'twitter' | 'facebook') {
   // For Facebook, copy text to clipboard first since FB doesn't allow pre-filled text
   if (platform === 'facebook') {
     const text = generateShareText(props.bounty, 'facebook')
-    const copySuccess = await copyToClipboard(text)
+    const fullText = `${text}\n\nhttps://dont-shoot.com`
+    const copySuccess = await copyToClipboard(fullText)
 
     if (copySuccess) {
-      success('Caption copied! Paste it in the Facebook post.')
+      success('Caption and link copied! Paste it in Facebook.')
       // Wait a bit before opening Facebook share dialog
       setTimeout(() => {
         shareBounty(props.bounty, platform)
@@ -44,13 +45,12 @@ async function handleShare(platform: 'twitter' | 'facebook') {
 
 async function handleCopyDiscord() {
   const text = generateShareText(props.bounty, 'discord')
-  const url = getShareUrl(props.bounty, 'discord')
-  const fullText = `${text}\n\n${url}`
+  const fullText = `${text}\n\nhttps://dont-shoot.com`
   const copySuccess = await copyToClipboard(fullText)
 
   if (copySuccess) {
     copied.value = true
-    success('Discord message copied to clipboard!')
+    success('Message and link copied! Paste it in Discord.')
     setTimeout(() => {
       copied.value = false
     }, 1500)
@@ -65,7 +65,7 @@ async function handleCopyLink() {
 
   if (copySuccess) {
     copied.value = true
-    success('Link copied to clipboard!')
+    success('Link copied! Share it anywhere.')
     setTimeout(() => {
       copied.value = false
       emit('close')
@@ -81,7 +81,7 @@ async function handleCopyInstagram() {
 
   if (copySuccess) {
     copied.value = true
-    success('Instagram caption copied to clipboard!')
+    success('Caption copied! Paste it in Instagram.')
     setTimeout(() => {
       copied.value = false
     }, 1500)
@@ -171,7 +171,7 @@ if (typeof window !== 'undefined') {
             </div>
             <div class="flex-1 text-left">
               <div class="font-semibold text-gray-900">Share on Facebook</div>
-              <div class="text-xs text-gray-600">Caption auto-copied - just paste!</div>
+              <div class="text-xs text-gray-600">Caption & link auto-copied - just paste!</div>
             </div>
             <Share2 class="text-gray-400 group-hover:text-arc-red transition" :size="20" />
           </button>
@@ -188,7 +188,7 @@ if (typeof window !== 'undefined') {
             </div>
             <div class="flex-1 text-left">
               <div class="font-semibold text-gray-900">Share on Discord</div>
-              <div class="text-xs text-gray-600">Copy message and link</div>
+              <div class="text-xs text-gray-600">Message & link auto-copied - just paste!</div>
             </div>
             <Share2 class="text-gray-400 group-hover:text-arc-red transition" :size="20" />
           </button>
@@ -208,7 +208,7 @@ if (typeof window !== 'undefined') {
                 {{ copied ? 'Copied!' : 'Copy Link' }}
               </div>
               <div class="text-xs text-gray-600">
-                {{ copied ? 'Link copied to clipboard' : 'Copy bounty URL' }}
+                {{ copied ? 'Share it anywhere!' : 'Just the link, no message' }}
               </div>
             </div>
             <Share2 v-if="!copied" class="text-gray-400 group-hover:text-arc-red transition" :size="20" />

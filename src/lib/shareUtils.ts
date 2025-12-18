@@ -16,7 +16,7 @@ export interface BountyShareData {
 function getBaseUrl(): string {
   // In production, use the actual domain
   if (import.meta.env.PROD) {
-    return 'https://arcraidersbounty.vercel.app'
+    return 'https://dont-shoot.com'
   }
   // In development, use localhost
   return window.location.origin
