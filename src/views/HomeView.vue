@@ -120,7 +120,7 @@ function getMedalEmoji(index: number) {
           <!-- Card -->
           <div
             class="bounty-card"
-            :style="`background-image: linear-gradient(rgba(235, 221, 199, 0.85), rgba(235, 221, 199, 0.90)), url('${bounty.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;`"
+            :style="`background-image: linear-gradient(rgba(235, 221, 199, 0.95), rgba(235, 221, 199, 0.98)), url('${bounty.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;`"
           >
             <!-- Rank -->
             <div class="bounty-rank">#{{ index + 1 }}</div>
@@ -202,7 +202,7 @@ function getMedalEmoji(index: number) {
           <RouterLink
             :to="`/profile/${killer.killer_id}`"
             class="bounty-card killer-card"
-            :style="`background-image: linear-gradient(rgba(235, 221, 199, 0.85), rgba(235, 221, 199, 0.90)), url('${killer.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;`"
+            :style="`background-image: linear-gradient(rgba(235, 221, 199, 0.95), rgba(235, 221, 199, 0.98)), url('${killer.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;`"
           >
             <!-- Rank -->
             <div class="bounty-rank">#{{ index + 1 }}</div>
