@@ -1,5 +1,6 @@
 // src/lib/auth.ts
 import type { User, UserRole } from './supabase'
+import { supabase } from './supabase'
 
 export function getCurrentUser(): User | null {
   const userJson = localStorage.getItem('arc_user')
@@ -10,6 +11,44 @@ export function getCurrentUser(): User | null {
   } catch {
     return null
   }
+}
+
+/**
+ * Sign in with Google OAuth
+ */
+export async function signInWithGoogle() {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${window.location.origin}/auth/callback`,
+      queryParams: {
+        access_type: 'offline',
+        prompt: 'consent',
+      },
+    },
+  })
+
+  if (error) throw error
+  return data
+}
+
+/**
+ * Sign out current user
+ */
+export async function signOut() {
+  const { error } = await supabase.auth.signOut()
+  if (error) throw error
+
+  localStorage.removeItem('arc_user')
+  window.location.href = '/login'
+}
+
+/**
+ * Get current Supabase auth session
+ */
+export async function getSession() {
+  const { data: { session }, error } = await supabase.auth.getSession()
+  return { session, error }
 }
 
 export function logout() {

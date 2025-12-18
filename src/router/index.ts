@@ -21,6 +21,11 @@ const router = createRouter({
       component: () => import('../views/SteamCallbackView.vue'),
     },
     {
+      path: '/auth/callback',
+      name: 'auth-callback',
+      component: () => import('../views/AuthCallbackView.vue'),
+    },
+    {
       path: '/bounties',
       name: 'bounties',
       component: () => import('../views/BountiesView.vue'),
@@ -109,7 +114,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/auth/steam/callback', '/register', '/email-login', '/select-role', '/forgot-password', '/reset-password', '/faq']
+  const publicPages = ['/login', '/auth/steam/callback', '/auth/callback', '/register', '/email-login', '/select-role', '/forgot-password', '/reset-password', '/faq']
   const authRequired = !publicPages.includes(to.path)
   const currentUser = getCurrentUser()
 
