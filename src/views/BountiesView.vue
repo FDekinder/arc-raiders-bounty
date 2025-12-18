@@ -3,7 +3,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { getActiveBounties, getMostWanted } from '@/lib/db'
 import type { Bounty, MostWanted } from '@/lib/supabase'
-import { Target, Clock, Search, Users, UserPlus, UserMinus } from 'lucide-vue-next'
+import { Target, Clock, Search, Users, UserPlus, UserMinus, Share2 } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import { getTimeRemaining, getExpirationColor, extendBounty } from '@/lib/bountyExpiration'
 import { getCurrentUser } from '@/lib/auth'
@@ -14,6 +14,8 @@ import IconInput from '@/components/IconInput.vue'
 import LoadingState from '@/components/LoadingState.vue'
 import EmptyState from '@/components/EmptyState.vue'
 import Card from '@/components/Card.vue'
+import ShareBountyModal from '@/components/ShareBountyModal.vue'
+import type { BountyShareData } from '@/lib/shareUtils'
 
 const bounties = ref<Bounty[]>([])
 const mostWanted = ref<MostWanted[]>([])
@@ -143,6 +145,28 @@ const filteredBounties = computed(() => {
 
   return sorted
 })
+
+// Share modal state
+const shareModalOpen = ref(false)
+const bountyToShare = ref<BountyShareData | null>(null)
+
+function openShareModal(bounty: Bounty, event: Event) {
+  event.preventDefault()
+  event.stopPropagation()
+  bountyToShare.value = {
+    id: bounty.id,
+    target_gamertag: bounty.target_gamertag,
+    bounty_amount: bounty.bounty_amount,
+    platform: bounty.platform,
+    status: bounty.status,
+  }
+  shareModalOpen.value = true
+}
+
+function closeShareModal() {
+  shareModalOpen.value = false
+  bountyToShare.value = null
+}
 </script>
 
 <template>
@@ -230,10 +254,21 @@ const filteredBounties = computed(() => {
           v-for="bounty in filteredBounties"
           :key="bounty.id"
           hover
+          class="relative"
         >
           <div class="bounty-content">
             <div class="bounty-info">
-              <h3 class="bounty-target">{{ bounty.target_gamertag }}</h3>
+              <div class="flex items-center gap-2 mb-2">
+                <h3 class="bounty-target flex-1">{{ bounty.target_gamertag }}</h3>
+                <!-- Share Button -->
+                <button
+                  @click="openShareModal(bounty, $event)"
+                  class="p-2 bg-arc-red hover:bg-arc-red/80 text-white rounded-full shadow-md transition transform hover:scale-110"
+                  title="Share this bounty"
+                >
+                  <Share2 :size="16" />
+                </button>
+              </div>
               <div class="bounty-meta">
                 <span class="expiration-info" :class="getExpirationColor(bounty.expires_at)">
                   <Clock :size="16" />
@@ -314,6 +349,14 @@ const filteredBounties = computed(() => {
         </Card>
       </div>
     </div>
+
+    <!-- Share Bounty Modal -->
+    <ShareBountyModal
+      v-if="bountyToShare"
+      :bounty="bountyToShare"
+      :is-open="shareModalOpen"
+      @close="closeShareModal"
+    />
   </div>
 </template>
 
@@ -397,7 +440,7 @@ const filteredBounties = computed(() => {
 }
 
 .bounty-target {
-  @apply text-xl sm:text-2xl font-bold mb-2 break-words text-gray-900;
+  @apply text-xl sm:text-2xl font-bold break-words text-gray-900;
 }
 
 .bounty-meta {

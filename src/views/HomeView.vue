@@ -1,11 +1,13 @@
 <!-- src/views/HomeView.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Target, Trophy, Users, Skull } from 'lucide-vue-next'
+import { Target, Trophy, Users, Skull, Share2 } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import { getMostWanted, getUserByUsername, getTopKillers } from '@/lib/db'
 import type { MostWanted, TopKiller } from '@/lib/supabase'
 import { getDefaultAvatar } from '@/lib/auth'
+import ShareBountyModal from '@/components/ShareBountyModal.vue'
+import type { BountyShareData } from '@/lib/shareUtils'
 
 const topBounties = ref<MostWanted[]>([])
 const topKillers = ref<TopKiller[]>([])
@@ -65,6 +67,26 @@ function getMedalEmoji(index: number) {
   if (index === 2) return '🥉'
   return ''
 }
+
+// Share modal state
+const shareModalOpen = ref(false)
+const bountyToShare = ref<BountyShareData | null>(null)
+
+function openShareModal(bounty: MostWanted, event: Event) {
+  event.preventDefault()
+  event.stopPropagation()
+  bountyToShare.value = {
+    target_gamertag: bounty.target_gamertag,
+    bounty_amount: bounty.total_bounty,
+    platform: 'arc-raiders',
+  }
+  shareModalOpen.value = true
+}
+
+function closeShareModal() {
+  shareModalOpen.value = false
+  bountyToShare.value = null
+}
 </script>
 
 <template>
@@ -118,6 +140,15 @@ function getMedalEmoji(index: number) {
             class="bounty-card"
             :style="`background-image: linear-gradient(rgba(235, 221, 199, 0.95), rgba(235, 221, 199, 0.98)), url('${bounty.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;`"
           >
+            <!-- Share Button -->
+            <button
+              @click="openShareModal(bounty, $event)"
+              class="absolute top-4 right-4 p-2 bg-arc-red hover:bg-arc-red/80 text-white rounded-full shadow-lg transition transform hover:scale-110 z-10"
+              title="Share this bounty"
+            >
+              <Share2 :size="18" />
+            </button>
+
             <!-- Rank -->
             <div class="bounty-rank">#{{ index + 1 }}</div>
 
@@ -299,6 +330,14 @@ function getMedalEmoji(index: number) {
         <RouterLink to="/bounties" class="cta-btn"> View All Bounties </RouterLink>
       </div>
     </div>
+
+    <!-- Share Bounty Modal -->
+    <ShareBountyModal
+      v-if="bountyToShare"
+      :bounty="bountyToShare"
+      :is-open="shareModalOpen"
+      @close="closeShareModal"
+    />
   </div>
 </template>
 
