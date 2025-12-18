@@ -31,7 +31,7 @@ export default {
           dark: '#016f33ff',
         },
         'arc-yellow': {
-          DEFAULT: '#ffea00', // Bright yellow accent
+          DEFAULT: '#dcca04ff', // Bright yellow accent
           light: '#fff04d',
           dark: '#ccbb00',
         },

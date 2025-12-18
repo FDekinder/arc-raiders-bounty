@@ -74,6 +74,13 @@ function closeMobileMenu() {
               Leaderboard
             </RouterLink>
             <RouterLink
+              to="/faq"
+              class="hover:text-arc-red transition"
+              active-class="text-arc-red"
+            >
+              FAQ
+            </RouterLink>
+            <RouterLink
               v-if="currentUser?.role === 'admin'"
               to="/verify"
               class="hover:text-arc-red transition"
@@ -158,6 +165,14 @@ function closeMobileMenu() {
               @click="closeMobileMenu"
             >
               Leaderboard
+            </RouterLink>
+            <RouterLink
+              to="/faq"
+              class="px-4 py-3 hover:bg-white/10 rounded transition"
+              active-class="bg-arc-red text-black"
+              @click="closeMobileMenu"
+            >
+              FAQ
             </RouterLink>
             <RouterLink
               v-if="currentUser?.role === 'admin'"

@@ -25,9 +25,9 @@ onMounted(async () => {
         const avatarUrl = user?.avatar_url || getDefaultAvatar(user?.game_role)
         return {
           ...bounty,
-          avatar_url: avatarUrl
+          avatar_url: avatarUrl,
         }
-      })
+      }),
     )
 
     topBounties.value = bountiesWithAvatars
@@ -41,9 +41,9 @@ onMounted(async () => {
   try {
     const killers = await getTopKillers(3) // Get top 3
     // Ensure all killers have an avatar_url (either custom or default)
-    topKillers.value = killers.map(killer => ({
+    topKillers.value = killers.map((killer) => ({
       ...killer,
-      avatar_url: killer.avatar_url || getDefaultAvatar(killer.game_role)
+      avatar_url: killer.avatar_url || getDefaultAvatar(killer.game_role),
     }))
   } catch (error) {
     console.error('Error loading top killers:', error)
@@ -72,23 +72,15 @@ function getMedalEmoji(index: number) {
     <!-- Hero Section -->
     <div class="hero-container">
       <h1 class="hero-title">
-        <span class="hero-title-gradient">
-          ARC RAIDERS
-        </span>
+        <span class="hero-title-gradient"> ARC RAIDERS </span>
         <br />
         BOUNTY SYSTEM
       </h1>
-      <p class="hero-subtitle">
-        Place bounties. Hunt targets. Claim glory.
-      </p>
+      <p class="hero-subtitle">Place bounties. Hunt targets. Claim glory.</p>
 
       <div class="hero-buttons">
-        <RouterLink to="/bounties" class="btn-primary">
-          View Bounties
-        </RouterLink>
-        <RouterLink to="/create-bounty" class="btn-secondary">
-          Create Bounty
-        </RouterLink>
+        <RouterLink to="/bounties" class="btn-primary"> View Bounties </RouterLink>
+        <RouterLink to="/create-bounty" class="btn-secondary"> Create Bounty </RouterLink>
       </div>
     </div>
 
@@ -109,7 +101,11 @@ function getMedalEmoji(index: number) {
 
       <!-- Top 3 Cards -->
       <div v-else-if="topBounties.length > 0" class="bounty-grid">
-        <div v-for="(bounty, index) in topBounties" :key="bounty.target_gamertag" class="bounty-card-wrapper">
+        <div
+          v-for="(bounty, index) in topBounties"
+          :key="bounty.target_gamertag"
+          class="bounty-card-wrapper"
+        >
           <!-- Medal Badge -->
           <div class="medal-badge">
             <div :class="['medal-circle', getMedalClass(index)]">
@@ -157,9 +153,7 @@ function getMedalEmoji(index: number) {
             </div>
 
             <!-- View Bounties Button -->
-            <RouterLink to="/bounties" class="bounty-btn">
-              Hunt This Target
-            </RouterLink>
+            <RouterLink to="/bounties" class="bounty-btn"> Hunt This Target </RouterLink>
           </div>
         </div>
       </div>
@@ -190,7 +184,11 @@ function getMedalEmoji(index: number) {
 
       <!-- Top 3 Cards -->
       <div v-else-if="topKillers.length > 0" class="bounty-grid">
-        <div v-for="(killer, index) in topKillers" :key="killer.killer_id" class="bounty-card-wrapper">
+        <div
+          v-for="(killer, index) in topKillers"
+          :key="killer.killer_id"
+          class="bounty-card-wrapper"
+        >
           <!-- Medal Badge -->
           <div class="medal-badge">
             <div :class="['medal-circle', getMedalClass(index)]">
@@ -237,9 +235,7 @@ function getMedalEmoji(index: number) {
             </div>
 
             <!-- View Profile Button -->
-            <div class="bounty-btn killer-btn">
-              View Profile
-            </div>
+            <div class="bounty-btn killer-btn">View Profile</div>
           </RouterLink>
         </div>
       </div>
@@ -247,16 +243,12 @@ function getMedalEmoji(index: number) {
       <!-- Empty State -->
       <div v-else class="empty-state">
         <p class="empty-state-text">No kills recorded yet!</p>
-        <RouterLink to="/submit-kill" class="empty-state-btn">
-          Be the First Killer
-        </RouterLink>
+        <RouterLink to="/submit-kill" class="empty-state-btn"> Be the First Killer </RouterLink>
       </div>
 
       <!-- View All Link -->
       <div v-if="topKillers.length > 0" class="view-all-link">
-        <RouterLink to="/top-killers" class="view-all-btn">
-          View Full Leaderboard
-        </RouterLink>
+        <RouterLink to="/top-killers" class="view-all-btn"> View Full Leaderboard </RouterLink>
       </div>
     </div>
 
@@ -303,12 +295,8 @@ function getMedalEmoji(index: number) {
     <div class="cta-section">
       <div class="cta-box">
         <h2 class="cta-title">Ready to Start Hunting?</h2>
-        <p class="cta-subtitle">
-          Join the Arc Raiders bounty hunting community today
-        </p>
-        <RouterLink to="/bounties" class="cta-btn">
-          View All Bounties
-        </RouterLink>
+        <p class="cta-subtitle">Join the Arc Raiders bounty hunting community today</p>
+        <RouterLink to="/bounties" class="cta-btn"> View All Bounties </RouterLink>
       </div>
     </div>
   </div>
@@ -409,7 +397,7 @@ function getMedalEmoji(index: number) {
 }
 
 .bounty-rank {
-  @apply text-4xl sm:text-6xl font-bold text-arc-red/20 mb-2;
+  @apply text-4xl sm:text-6xl font-bold text-arc-red/80 mb-2;
 }
 
 .bounty-avatar-container {
@@ -557,6 +545,6 @@ function getMedalEmoji(index: number) {
 }
 
 .view-all-btn {
-  @apply inline-block bg-arc-brown/20 hover:bg-arc-brown/30 text-gray-900 px-6 py-3 rounded-lg font-semibold transition;
+  @apply inline-block bg-arc-red/50 hover:bg-arc-red/80 text-gray-900 px-6 py-3 rounded-lg font-semibold transition;
 }
 </style>

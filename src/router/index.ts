@@ -100,11 +100,16 @@ const router = createRouter({
       name: 'submit-kill',
       component: () => import('../views/SubmitKillView.vue'),
     },
+    {
+      path: '/faq',
+      name: 'faq',
+      component: () => import('../views/FAQView.vue'),
+    },
   ],
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/auth/steam/callback', '/register', '/email-login', '/select-role', '/forgot-password', '/reset-password']
+  const publicPages = ['/login', '/auth/steam/callback', '/register', '/email-login', '/select-role', '/forgot-password', '/reset-password', '/faq']
   const authRequired = !publicPages.includes(to.path)
   const currentUser = getCurrentUser()
 
