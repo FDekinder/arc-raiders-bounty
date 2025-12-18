@@ -26,7 +26,7 @@ onMounted(async () => {
     // Modified query to get user ID
     const { data, error } = await supabase
       .from('users')
-      .select('id, username, total_points, bounties_completed, avatar_url, clan_tag, role')
+      .select('id, username, total_points, bounties_completed, avatar_url, clan_tag, game_role')
       .order('total_points', { ascending: false })
       .limit(10)
 
@@ -62,6 +62,12 @@ function getMedalColor(index: number) {
   if (index === 1) return 'text-arc-brown'
   if (index === 2) return 'text-arc-yellow'
   return 'text-gray-600'
+}
+
+function getDefaultAvatar(role: string | null | undefined): string {
+  if (role === 'PR') return '/rat.png'
+  if (role === 'BH') return '/bounty_hunter_cropped.png'
+  return '/default.png'
 }
 </script>
 
@@ -112,10 +118,14 @@ function getMedalColor(index: number) {
             #{{ index + 1 }}
           </div>
 
-          <!-- Avatar placeholder -->
-          <div class="avatar">
-            <Target :size="32" class="text-gray-600" />
-          </div>
+          <!-- Avatar -->
+          <RouterLink :to="`/profile/${hunter.id}`" class="avatar">
+            <img
+              :src="hunter.avatar_url || getDefaultAvatar(hunter.game_role)"
+              :alt="`${hunter.username}'s avatar`"
+              class="avatar-image"
+            />
+          </RouterLink>
 
           <!-- Info -->
           <div class="hunter-info">
@@ -176,12 +186,10 @@ function getMedalColor(index: number) {
           <!-- Avatar -->
           <RouterLink :to="`/profile/${killer.killer_id}`" class="avatar">
             <img
-              v-if="killer.avatar_url"
-              :src="killer.avatar_url"
+              :src="killer.avatar_url || getDefaultAvatar(killer.game_role)"
               :alt="`${killer.username}'s avatar`"
               class="avatar-image"
             />
-            <Skull v-else :size="32" class="text-arc-red" />
           </RouterLink>
 
           <!-- Info -->
