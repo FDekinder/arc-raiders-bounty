@@ -1,6 +1,6 @@
 // src/lib/shareUtils.ts
 
-export type SharePlatform = 'twitter' | 'facebook' | 'instagram' | 'clipboard'
+export type SharePlatform = 'twitter' | 'facebook' | 'discord' | 'instagram' | 'clipboard'
 
 export interface BountyShareData {
   id?: string
@@ -65,6 +65,16 @@ I just placed a ${bounty.bounty_amount.toLocaleString()} point bounty on ${bount
 
 Can you eliminate this target? Join the hunt now!`
 
+    case 'discord':
+      return `🎯 **BOUNTY ALERT!** 🎯
+
+**Target:** ${bounty.target_gamertag}
+**Reward:** ${bounty.bounty_amount.toLocaleString()} points
+**Platform:** ${platformEmoji}
+**Status:** WANTED
+
+Think you can take them down? 👀`
+
     case 'instagram':
       return `🎯 BOUNTY HUNTER ALERT 🎯
 
@@ -103,6 +113,7 @@ export function getShareUrl(bounty: BountyShareData, platform: SharePlatform): s
     case 'facebook':
       return `https://www.facebook.com/sharer/sharer.php?u=${encodedTrackedUrl}`
 
+    case 'discord':
     case 'instagram':
     case 'clipboard':
       return trackedUrl
