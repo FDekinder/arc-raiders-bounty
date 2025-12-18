@@ -7,6 +7,7 @@ import { Target, Search, CheckCircle, XCircle, Loader } from 'lucide-vue-next'
 import { useToast } from '@/composables/useToast'
 import { getCurrentUser } from '@/lib/auth'
 import { verifyPlayer, type Platform, type PlayerVerification } from '@/lib/platformVerification'
+import type { KillType } from '@/components/KillTypeBadge.vue'
 
 const router = useRouter()
 const { success, error: showError } = useToast()
@@ -16,6 +17,8 @@ const amount = ref('')
 const loading = ref(false)
 const error = ref('')
 const selectedPlatform = ref<Platform>('steam')
+const selectedKillType = ref<KillType | ''>('')
+const otherDescription = ref('')
 
 // Verification
 const verifying = ref(false)
@@ -29,6 +32,57 @@ const platforms = [
   { value: 'steam', label: 'Steam', icon: '🎮' },
   { value: 'xbox', label: 'Xbox', icon: '🎯' },
   { value: 'playstation', label: 'PlayStation', icon: '🎮' },
+]
+
+const killTypes = [
+  {
+    value: 'friendly_fire' as const,
+    emoji: '🤝',
+    label: 'Friendly Fire Betrayal',
+    description: 'Killed after saying friendly/truce',
+  },
+  {
+    value: 'back_stabber' as const,
+    emoji: '🔫',
+    label: 'Back Stabber',
+    description: 'Shot player in the back',
+  },
+  {
+    value: 'loot_ambush' as const,
+    emoji: '📦',
+    label: 'Loot Ambush',
+    description: 'Killed while looting/inventory open',
+  },
+  {
+    value: 'extract_camper' as const,
+    emoji: '🚪',
+    label: 'Extract Camper',
+    description: 'Waiting at extract to ambush',
+  },
+  {
+    value: 'spawn_killer' as const,
+    emoji: '🎯',
+    label: 'Spawn Killer',
+    description: 'Killed immediately after spawn',
+  },
+  {
+    value: 'bait_switch' as const,
+    emoji: '🎣',
+    label: 'Bait & Switch',
+    description: 'Pretended to help then killed',
+  },
+  {
+    value: 'third_party' as const,
+    emoji: '⚡',
+    label: 'Third Party Vulture',
+    description: 'Killed while fighting someone else',
+  },
+  {
+    value: 'other' as const,
+    emoji: '🗺️',
+    label: 'Other',
+    description: 'Other griefing behavior',
+  },
 ]
 
 async function verifyGamertag() {
@@ -76,6 +130,13 @@ async function handleSubmit() {
     return
   }
 
+  // Require kill type selection
+  if (!selectedKillType.value) {
+    error.value = 'Please select a kill type/betrayal category'
+    showError('Please select a kill type/betrayal category')
+    return
+  }
+
   loading.value = true
 
   try {
@@ -84,13 +145,15 @@ async function handleSubmit() {
       throw new Error('Bounty amount must be at least 10 points')
     }
 
-    // Create bounty with platform info
+    // Create bounty with platform info and kill type
     await createBounty(
       verifiedPlayer.value!.displayName,
       bountyAmount,
       userId,
       verifiedPlayer.value!.playerId,
       verifiedPlayer.value!.platform,
+      selectedKillType.value as KillType,
+      selectedKillType.value === 'other' ? otherDescription.value : undefined,
     )
 
     success(`Bounty created on ${verifiedPlayer.value!.displayName} for ${bountyAmount} points!`)
@@ -142,6 +205,43 @@ function handlePlatformChange() {
                   <span class="platform-icon">{{ platform.icon }}</span>
                   <span>{{ platform.label }}</span>
                 </button>
+              </div>
+            </div>
+
+            <!-- Kill Type / Betrayal Category -->
+            <div class="form-section">
+              <label class="form-label">Kill Type / Betrayal Category</label>
+              <p class="help-text mb-3">Select why this bounty is being placed</p>
+              <div class="kill-type-grid">
+                <button
+                  v-for="killType in killTypes"
+                  :key="killType.value"
+                  type="button"
+                  @click="selectedKillType = killType.value"
+                  :class="[
+                    'kill-type-card',
+                    selectedKillType === killType.value ? 'kill-type-card-active' : 'kill-type-card-inactive'
+                  ]"
+                >
+                  <div class="kill-type-icon">{{ killType.emoji }}</div>
+                  <div class="kill-type-content">
+                    <div class="kill-type-label">{{ killType.label }}</div>
+                    <div class="kill-type-description">{{ killType.description }}</div>
+                  </div>
+                </button>
+              </div>
+
+              <!-- Other Description (shown when "Other" is selected) -->
+              <div v-if="selectedKillType === 'other'" class="mt-3">
+                <label class="form-label text-sm">Describe the griefing behavior (optional)</label>
+                <textarea
+                  v-model="otherDescription"
+                  placeholder="Briefly describe what happened..."
+                  class="input-field"
+                  rows="3"
+                  maxlength="200"
+                ></textarea>
+                <p class="help-text mt-1">{{ otherDescription.length }}/200 characters</p>
               </div>
             </div>
 
@@ -390,5 +490,37 @@ function handlePlatformChange() {
 
 .submit-btn {
   @apply w-full bg-arc-red hover:bg-arc-red/80 disabled:bg-arc-brown/40 disabled:cursor-not-allowed px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm sm:text-base text-black disabled:text-gray-600;
+}
+
+.kill-type-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-3;
+}
+
+.kill-type-card {
+  @apply p-3 sm:p-4 rounded-lg border-2 transition flex items-start gap-3 text-left;
+}
+
+.kill-type-card-active {
+  @apply border-arc-red bg-arc-red/10;
+}
+
+.kill-type-card-inactive {
+  @apply border-arc-brown/30 hover:border-arc-brown/50 hover:bg-arc-beige;
+}
+
+.kill-type-icon {
+  @apply text-2xl sm:text-3xl flex-shrink-0;
+}
+
+.kill-type-content {
+  @apply flex-1 min-w-0;
+}
+
+.kill-type-label {
+  @apply font-semibold text-gray-900 text-sm sm:text-base mb-1;
+}
+
+.kill-type-description {
+  @apply text-xs sm:text-sm text-arc-brown;
 }
 </style>

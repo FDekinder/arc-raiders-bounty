@@ -15,6 +15,7 @@ import LoadingState from '@/components/LoadingState.vue'
 import EmptyState from '@/components/EmptyState.vue'
 import Card from '@/components/Card.vue'
 import ShareBountyModal from '@/components/ShareBountyModal.vue'
+import KillTypeBadge from '@/components/KillTypeBadge.vue'
 import type { BountyShareData } from '@/lib/shareUtils'
 
 const bounties = ref<Bounty[]>([])
@@ -269,6 +270,12 @@ function closeShareModal() {
                   <Share2 :size="16" />
                 </button>
               </div>
+
+              <!-- Kill Type Badge -->
+              <div v-if="bounty.kill_type" class="mb-2">
+                <KillTypeBadge :kill-type="bounty.kill_type" size="sm" />
+              </div>
+
               <div class="bounty-meta">
                 <span class="expiration-info" :class="getExpirationColor(bounty.expires_at)">
                   <Clock :size="16" />

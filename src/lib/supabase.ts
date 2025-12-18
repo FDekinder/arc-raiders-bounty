@@ -10,6 +10,15 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 // Types
 export type UserRole = 'BH' | 'PR' // BH = Bounty Hunter, PR = Proud Rat
 export type Platform = 'steam' | 'xbox' | 'playstation'
+export type KillType =
+  | 'friendly_fire'
+  | 'back_stabber'
+  | 'loot_ambush'
+  | 'extract_camper'
+  | 'spawn_killer'
+  | 'bait_switch'
+  | 'third_party'
+  | 'other'
 
 export interface User {
   id: string
@@ -41,6 +50,8 @@ export interface Bounty {
   status: 'active' | 'completed' | 'expired'
   created_at: string
   expires_at: string
+  kill_type?: KillType
+  kill_type_description?: string
 }
 
 export interface BountyClaim {

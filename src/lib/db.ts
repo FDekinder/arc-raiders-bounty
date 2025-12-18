@@ -1,6 +1,6 @@
 // src/lib/db.ts
 import { supabase } from './supabase'
-import type { TrophyStats, TopKiller } from './supabase'
+import type { TrophyStats, TopKiller, KillType } from './supabase'
 import { checkAndAwardAchievements, getUserAchievements } from './achievements'
 
 // Create a new user
@@ -22,6 +22,8 @@ export async function createBounty(
   createdBy: string,
   platformPlayerId?: string,
   platform?: 'steam' | 'xbox' | 'playstation',
+  killType?: KillType,
+  killTypeDescription?: string,
 ) {
   const { data, error } = await supabase
     .from('bounties')
@@ -31,6 +33,8 @@ export async function createBounty(
       created_by: createdBy,
       steam_id: platformPlayerId, // Keep for backward compatibility
       platform: platform,
+      kill_type: killType,
+      kill_type_description: killTypeDescription,
     })
     .select()
     .single()
