@@ -26,9 +26,9 @@ export default {
           dark: '#00d4ff',
         },
         'arc-green': {
-          DEFAULT: '#05ff74', // Bright green accent
-          light: '#3aff8f',
-          dark: '#00cc5d',
+          DEFAULT: '#046b04ff', // Bright green accent
+          light: '#22bc65ff',
+          dark: '#016f33ff',
         },
         'arc-yellow': {
           DEFAULT: '#ffea00', // Bright yellow accent

@@ -12,7 +12,7 @@ import AchievementBadge from '@/components/AchievementBadge.vue'
 import ClanTagEditor from '@/components/ClanTagEditor.vue'
 import RoleBadge from '@/components/RoleBadge.vue'
 import type { Achievement } from '@/lib/supabase'
-import { getCurrentUser } from '@/lib/auth'
+import { getCurrentUser, getUserAvatarUrl, GENERIC_AVATARS, getDefaultAvatar } from '@/lib/auth'
 import LoadingState from '@/components/LoadingState.vue'
 import AlertMessage from '@/components/AlertMessage.vue'
 import StatCard from '@/components/StatCard.vue'
@@ -30,10 +30,14 @@ const loading = ref(true)
 const topAchievements = ref<Achievement[]>([])
 const showAllAchievements = ref(false)
 const uploadingAvatar = ref(false)
+const showAvatarSelector = ref(false)
 
 const userId = route.params.id as string
 const currentUser = getCurrentUser()
 const isOwnProfile = computed(() => currentUser?.id === userId)
+
+// Get avatar URL with fallback to default
+const avatarUrl = computed(() => getUserAvatarUrl(user.value))
 
 onMounted(async () => {
   await loadUserProfile()
@@ -152,9 +156,78 @@ async function handleAvatarUpload(event: Event) {
     }
 
     success('Profile picture updated successfully!')
+    showAvatarSelector.value = false
   } catch (err: any) {
     console.error('Avatar upload error:', err)
     showError(err.message || 'Failed to upload profile picture')
+  } finally {
+    uploadingAvatar.value = false
+  }
+}
+
+// Select a preset avatar
+async function selectPresetAvatar(avatarPath: string) {
+  try {
+    uploadingAvatar.value = true
+
+    // Update user profile with preset avatar
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ avatar_url: avatarPath })
+      .eq('id', userId)
+
+    if (updateError) throw updateError
+
+    // Update local state
+    if (user.value) {
+      user.value.avatar_url = avatarPath
+    }
+
+    // Update localStorage
+    if (currentUser?.id === userId) {
+      const updatedUser = { ...currentUser, avatar_url: avatarPath }
+      localStorage.setItem('arc_user', JSON.stringify(updatedUser))
+    }
+
+    success('Profile picture updated successfully!')
+    showAvatarSelector.value = false
+  } catch (err: any) {
+    console.error('Avatar selection error:', err)
+    showError(err.message || 'Failed to update profile picture')
+  } finally {
+    uploadingAvatar.value = false
+  }
+}
+
+// Reset to default avatar based on role
+async function resetToDefaultAvatar() {
+  try {
+    uploadingAvatar.value = true
+
+    // Set to null to use default based on role
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ avatar_url: null })
+      .eq('id', userId)
+
+    if (updateError) throw updateError
+
+    // Update local state
+    if (user.value) {
+      user.value.avatar_url = undefined
+    }
+
+    // Update localStorage
+    if (currentUser?.id === userId) {
+      const updatedUser = { ...currentUser, avatar_url: undefined }
+      localStorage.setItem('arc_user', JSON.stringify(updatedUser))
+    }
+
+    success('Reset to default avatar!')
+    showAvatarSelector.value = false
+  } catch (err: any) {
+    console.error('Avatar reset error:', err)
+    showError(err.message || 'Failed to reset avatar')
   } finally {
     uploadingAvatar.value = false
   }
@@ -212,28 +285,82 @@ function handleClanTagUpdate(clanTag: string | null) {
           <div class="profile-avatar-container">
             <div class="profile-avatar">
               <img
-                v-if="user.avatar_url"
-                :src="user.avatar_url"
+                :src="avatarUrl"
                 :alt="`${user.username}'s avatar`"
                 class="avatar-image"
               />
-              <Target v-else :size="48" class="avatar-icon" />
             </div>
 
-            <!-- Upload Button (only on own profile) -->
-            <div v-if="isOwnProfile" class="avatar-upload-overlay">
-              <input
-                id="avatar-upload"
-                type="file"
-                accept="image/*"
-                @change="handleAvatarUpload"
-                class="hidden"
-              />
-              <label for="avatar-upload" class="upload-button" :class="{ 'uploading': uploadingAvatar }">
+            <!-- Avatar Selection (only on own profile) -->
+            <div v-if="isOwnProfile" class="avatar-controls">
+              <button
+                @click="showAvatarSelector = !showAvatarSelector"
+                class="upload-button"
+                :class="{ 'uploading': uploadingAvatar }"
+                :disabled="uploadingAvatar"
+              >
                 <Camera v-if="!uploadingAvatar" :size="20" />
                 <div v-else class="spinner-small"></div>
-                <span>{{ uploadingAvatar ? 'Uploading...' : 'Change Photo' }}</span>
-              </label>
+                <span>{{ uploadingAvatar ? 'Updating...' : 'Change Photo' }}</span>
+              </button>
+
+              <!-- Avatar Selector Modal -->
+              <div v-if="showAvatarSelector" class="avatar-selector-modal">
+                <div class="avatar-selector-header">
+                  <h3 class="text-lg font-bold text-arc-dark">Choose Avatar</h3>
+                  <button @click="showAvatarSelector = false" class="text-arc-red hover:text-arc-red/80">
+                    ✕
+                  </button>
+                </div>
+
+                <!-- Default Avatars -->
+                <div class="avatar-section">
+                  <h4 class="text-sm font-semibold text-arc-dark/70 mb-2">Default (Based on Role)</h4>
+                  <div class="avatar-grid">
+                    <button
+                      @click="resetToDefaultAvatar"
+                      class="avatar-option"
+                      :class="{ 'selected': !user.avatar_url }"
+                    >
+                      <img :src="getDefaultAvatar(user.game_role)" alt="Default avatar" class="avatar-option-img" />
+                      <span class="text-xs">{{ user.game_role === 'PR' ? 'Rat' : 'Hunter' }}</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Generic Avatars -->
+                <div class="avatar-section">
+                  <h4 class="text-sm font-semibold text-arc-dark/70 mb-2">Generic Options</h4>
+                  <div class="avatar-grid">
+                    <button
+                      v-for="(avatar, index) in GENERIC_AVATARS"
+                      :key="avatar"
+                      @click="selectPresetAvatar(avatar)"
+                      class="avatar-option"
+                      :class="{ 'selected': user.avatar_url === avatar }"
+                    >
+                      <img :src="avatar" :alt="`Generic ${index + 1}`" class="avatar-option-img" />
+                      <span class="text-xs">Option {{ index + 1 }}</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Upload Custom -->
+                <div class="avatar-section">
+                  <h4 class="text-sm font-semibold text-arc-dark/70 mb-2">Upload Custom</h4>
+                  <input
+                    id="avatar-upload"
+                    type="file"
+                    accept="image/*"
+                    @change="handleAvatarUpload"
+                    class="hidden"
+                  />
+                  <label for="avatar-upload" class="upload-custom-button">
+                    <Camera :size="20" />
+                    <span>Upload from device</span>
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -635,5 +762,46 @@ function handleClanTagUpdate(clanTag: string | null) {
 /* Stats Grid */
 .stats-grid {
   @apply grid grid-cols-1 md:grid-cols-3 gap-6;
+}
+
+/* Avatar Controls */
+.avatar-controls {
+  @apply relative w-full;
+}
+
+.avatar-selector-modal {
+  @apply absolute top-full left-0 mt-2 bg-white rounded-lg shadow-2xl border-2 border-arc-red p-4 z-50 min-w-[280px] max-w-[320px];
+}
+
+.avatar-selector-header {
+  @apply flex items-center justify-between mb-4 pb-2 border-b border-arc-brown/20;
+}
+
+.avatar-section {
+  @apply mb-4 last:mb-0;
+}
+
+.avatar-grid {
+  @apply grid grid-cols-3 gap-2;
+}
+
+.avatar-option {
+  @apply flex flex-col items-center gap-1 p-2 rounded-lg border-2 border-arc-brown/20 hover:border-arc-red transition-all cursor-pointer bg-arc-beige/30;
+}
+
+.avatar-option.selected {
+  @apply border-arc-red bg-arc-red/10;
+}
+
+.avatar-option-img {
+  @apply w-16 h-16 rounded-full object-cover border-2 border-transparent;
+}
+
+.avatar-option.selected .avatar-option-img {
+  @apply border-arc-red;
+}
+
+.upload-custom-button {
+  @apply flex items-center justify-center gap-2 bg-arc-red text-white px-4 py-3 rounded-lg cursor-pointer hover:bg-arc-red/80 transition-all font-medium w-full;
 }
 </style>

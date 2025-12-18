@@ -5,6 +5,7 @@ import { Target, Trophy, Users, Skull } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import { getMostWanted, getUserByUsername, getTopKillers } from '@/lib/db'
 import type { MostWanted, TopKiller } from '@/lib/supabase'
+import { getDefaultAvatar } from '@/lib/auth'
 
 const topBounties = ref<MostWanted[]>([])
 const topKillers = ref<TopKiller[]>([])
@@ -17,13 +18,14 @@ onMounted(async () => {
     const data = await getMostWanted()
     const top3 = data.slice(0, 3) // Get top 3
 
-    // Fetch user profiles to get avatar URLs
+    // Fetch user profiles to get avatar URLs with fallback to default
     const bountiesWithAvatars = await Promise.all(
       top3.map(async (bounty: MostWanted) => {
         const user = await getUserByUsername(bounty.target_gamertag)
+        const avatarUrl = user?.avatar_url || getDefaultAvatar(user?.game_role)
         return {
           ...bounty,
-          avatar_url: user?.avatar_url
+          avatar_url: avatarUrl
         }
       })
     )
@@ -35,10 +37,14 @@ onMounted(async () => {
     loading.value = false
   }
 
-  // Load Top Killers
+  // Load Top Killers with default avatars
   try {
     const killers = await getTopKillers(3) // Get top 3
-    topKillers.value = killers
+    // Ensure all killers have an avatar_url (either custom or default)
+    topKillers.value = killers.map(killer => ({
+      ...killer,
+      avatar_url: killer.avatar_url || getDefaultAvatar(killer.game_role)
+    }))
   } catch (error) {
     console.error('Error loading top killers:', error)
   } finally {
@@ -114,7 +120,7 @@ function getMedalEmoji(index: number) {
           <!-- Card -->
           <div
             class="bounty-card"
-            :style="bounty.avatar_url ? `background-image: linear-gradient(rgba(238, 230, 213, 0.85), rgba(238, 230, 213, 0.90)), url('${bounty.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;` : ''"
+            :style="`background-image: linear-gradient(rgba(235, 221, 199, 0.85), rgba(235, 221, 199, 0.90)), url('${bounty.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;`"
           >
             <!-- Rank -->
             <div class="bounty-rank">#{{ index + 1 }}</div>
@@ -196,7 +202,7 @@ function getMedalEmoji(index: number) {
           <RouterLink
             :to="`/profile/${killer.killer_id}`"
             class="bounty-card killer-card"
-            :style="killer.avatar_url ? `background-image: linear-gradient(rgba(238, 230, 213, 0.85), rgba(238, 230, 213, 0.90)), url('${killer.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;` : ''"
+            :style="`background-image: linear-gradient(rgba(235, 221, 199, 0.85), rgba(235, 221, 199, 0.90)), url('${killer.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;`"
           >
             <!-- Rank -->
             <div class="bounty-rank">#{{ index + 1 }}</div>
