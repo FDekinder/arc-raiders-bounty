@@ -120,11 +120,16 @@ const router = createRouter({
       name: 'design-demo',
       component: () => import('../views/DesignDemoView.vue'),
     },
+    {
+      path: '/community-guidelines',
+      name: 'community-guidelines',
+      component: () => import('../views/CommunityGuidelinesView.vue'),
+    },
   ],
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/auth/steam/callback', '/auth/callback', '/register', '/email-login', '/select-role', '/forgot-password', '/reset-password', '/faq', '/privacy', '/design-demo']
+  const publicPages = ['/login', '/auth/steam/callback', '/auth/callback', '/register', '/email-login', '/select-role', '/forgot-password', '/reset-password', '/faq', '/privacy', '/design-demo', '/community-guidelines']
   const authRequired = !publicPages.includes(to.path)
   const currentUser = getCurrentUser()
 
