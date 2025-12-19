@@ -3,6 +3,14 @@ export default {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      // Custom clip-path shapes for unique design
+      clipPath: {
+        'angle-tl': 'polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px)',
+        'angle-tr': 'polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%)',
+        'angle-br': 'polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%)',
+        'angle-bl': 'polygon(0 0, 100% 0, 100% 100%, 12px 100%, 0 calc(100% - 12px))',
+        'angle-all': 'polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px)',
+      },
       colors: {
         // Arc Raiders light color palette inspired by official website
         'arc-cream': {

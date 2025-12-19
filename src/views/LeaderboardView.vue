@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '@/lib/supabase'
-import { Trophy, Target, Award, Skull, ChevronDown } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import { getTopAchievements } from '@/lib/achievements'
 import { getTopKillers } from '@/lib/db'
 import AchievementBadge from '@/components/AchievementBadge.vue'
 import RoleBadge from '@/components/RoleBadge.vue'
+import RankBadge from '@/components/RankBadge.vue'
+import IconTrophy from '@/components/icons/IconTrophy.vue'
+import IconHunter from '@/components/icons/IconHunter.vue'
+import TacticalButton from '@/components/TacticalButton.vue'
 import AdUnit from '@/components/AdUnit.vue'
 import type { Achievement, TopKiller } from '@/lib/supabase'
 
@@ -61,13 +64,6 @@ onMounted(async () => {
   }
 })
 
-function getMedalColor(index: number) {
-  if (index === 0) return 'text-arc-yellow'
-  if (index === 1) return 'text-arc-brown'
-  if (index === 2) return 'text-arc-yellow'
-  return 'text-gray-600'
-}
-
 function getDefaultAvatar(role: string | null | undefined): string {
   if (role === 'PR') return '/rat.png'
   if (role === 'BH') return '/bounty_hunter_cropped.png'
@@ -82,8 +78,8 @@ function getDefaultAvatar(role: string | null | undefined): string {
       <div class="header-with-dropdown">
         <div class="header">
           <h1 class="title">
-            <Trophy v-if="selectedLeaderboard === 'hunters'" class="text-arc-yellow" :size="48" />
-            <Skull v-else class="text-arc-red" :size="48" />
+            <IconTrophy v-if="selectedLeaderboard === 'hunters'" className="text-arc-yellow" :size="48" />
+            <IconHunter v-else className="text-arc-red" :size="48" />
             {{ selectedLeaderboard === 'hunters' ? 'Top Hunters' : 'Top Killers' }}
           </h1>
           <p class="subtitle">
@@ -94,16 +90,28 @@ function getDefaultAvatar(role: string | null | undefined): string {
           </p>
         </div>
 
-        <!-- Dropdown Selector -->
-        <div class="dropdown-container">
-          <label class="dropdown-label">View Leaderboard</label>
-          <div class="dropdown-wrapper">
-            <select v-model="selectedLeaderboard" class="leaderboard-dropdown">
-              <option value="hunters">Top Hunters</option>
-              <option value="killers">Top Killers</option>
-            </select>
-            <ChevronDown class="dropdown-icon" :size="20" />
-          </div>
+        <!-- Tab Selector -->
+        <div class="tabs-container">
+          <TacticalButton
+            :variant="selectedLeaderboard === 'hunters' ? 'primary' : 'ghost'"
+            size="md"
+            @click="selectedLeaderboard = 'hunters'"
+          >
+            <template #icon>
+              <IconTrophy :size="18" />
+            </template>
+            Top Hunters
+          </TacticalButton>
+          <TacticalButton
+            :variant="selectedLeaderboard === 'killers' ? 'primary' : 'ghost'"
+            size="md"
+            @click="selectedLeaderboard = 'killers'"
+          >
+            <template #icon>
+              <IconHunter :size="18" />
+            </template>
+            Top Killers
+          </TacticalButton>
         </div>
       </div>
 
@@ -118,8 +126,9 @@ function getDefaultAvatar(role: string | null | undefined): string {
           class="hunter-card"
         >
           <!-- Rank -->
-          <div class="rank" :class="getMedalColor(index)">
-            #{{ index + 1 }}
+          <div class="rank">
+            <RankBadge v-if="index < 3" :rank="(index + 1) as 1 | 2 | 3" />
+            <span v-else class="rank-number">#{{ index + 1 }}</span>
           </div>
 
           <!-- Avatar -->
@@ -183,8 +192,9 @@ function getDefaultAvatar(role: string | null | undefined): string {
           class="hunter-card"
         >
           <!-- Rank -->
-          <div class="rank" :class="getMedalColor(index)">
-            #{{ index + 1 }}
+          <div class="rank">
+            <RankBadge v-if="index < 3" :rank="(index + 1) as 1 | 2 | 3" />
+            <span v-else class="rank-number">#{{ index + 1 }}</span>
           </div>
 
           <!-- Avatar -->
@@ -267,25 +277,13 @@ function getDefaultAvatar(role: string | null | undefined): string {
   @apply text-arc-brown text-sm sm:text-base px-4 md:px-0;
 }
 
-/* Dropdown Styles */
-.dropdown-container {
-  @apply flex flex-col gap-2 min-w-[200px];
+/* Tabs Container */
+.tabs-container {
+  @apply flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto min-w-[200px];
 }
 
-.dropdown-label {
-  @apply text-sm font-medium text-arc-brown;
-}
-
-.dropdown-wrapper {
-  @apply relative;
-}
-
-.leaderboard-dropdown {
-  @apply w-full bg-arc-card border-2 border-arc-red rounded-lg px-4 py-3 pr-10 text-gray-900 font-semibold appearance-none cursor-pointer hover:bg-white transition-all focus:outline-none focus:border-arc-yellow;
-}
-
-.dropdown-icon {
-  @apply absolute right-3 top-1/2 -translate-y-1/2 text-arc-red pointer-events-none;
+.tabs-container :deep(button) {
+  @apply w-full sm:w-auto;
 }
 
 .loading-state {
@@ -301,7 +299,11 @@ function getDefaultAvatar(role: string | null | undefined): string {
 }
 
 .rank {
-  @apply text-3xl sm:text-4xl font-bold w-12 sm:w-16 text-center flex-shrink-0;
+  @apply text-2xl sm:text-3xl md:text-4xl font-bold w-10 sm:w-12 md:w-16 text-center flex-shrink-0 flex items-center justify-center;
+}
+
+.rank-number {
+  @apply text-arc-brown;
 }
 
 .avatar {
@@ -345,7 +347,7 @@ function getDefaultAvatar(role: string | null | undefined): string {
 }
 
 .points-value {
-  @apply text-2xl sm:text-3xl font-bold text-arc-yellow;
+  @apply text-xl sm:text-2xl md:text-3xl font-bold text-arc-yellow;
 }
 
 .points-label {

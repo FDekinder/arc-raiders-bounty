@@ -1,11 +1,17 @@
 <!-- src/views/HomeView.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Target, Trophy, Users, Skull, Share2 } from 'lucide-vue-next'
+import { Share2 } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import { getMostWanted, getUserByUsername, getTopKillers } from '@/lib/db'
 import type { MostWanted, TopKiller } from '@/lib/supabase'
 import { getDefaultAvatar } from '@/lib/auth'
+import Card from '@/components/Card.vue'
+import TacticalButton from '@/components/TacticalButton.vue'
+import RankBadge from '@/components/RankBadge.vue'
+import IconTarget from '@/components/icons/IconTarget.vue'
+import IconHunter from '@/components/icons/IconHunter.vue'
+import IconBounty from '@/components/icons/IconBounty.vue'
 import ShareBountyModal from '@/components/ShareBountyModal.vue'
 import type { BountyShareData } from '@/lib/shareUtils'
 
@@ -54,19 +60,6 @@ onMounted(async () => {
   }
 })
 
-function getMedalClass(index: number) {
-  if (index === 0) return 'medal-gold'
-  if (index === 1) return 'medal-silver'
-  if (index === 2) return 'medal-bronze'
-  return ''
-}
-
-function getMedalEmoji(index: number) {
-  if (index === 0) return '🥇'
-  if (index === 1) return '🥈'
-  if (index === 2) return '🥉'
-  return ''
-}
 
 // Share modal state
 const shareModalOpen = ref(false)
@@ -101,8 +94,22 @@ function closeShareModal() {
       <p class="hero-subtitle">Place bounties. Hunt targets. Claim glory.</p>
 
       <div class="hero-buttons">
-        <RouterLink to="/bounties" class="btn-primary"> View Bounties </RouterLink>
-        <RouterLink to="/create-bounty" class="btn-secondary"> Create Bounty </RouterLink>
+        <RouterLink to="/bounties">
+          <TacticalButton variant="primary" size="lg">
+            <template #icon>
+              <IconTarget :size="20" />
+            </template>
+            View Bounties
+          </TacticalButton>
+        </RouterLink>
+        <RouterLink to="/create-bounty">
+          <TacticalButton variant="secondary" size="lg">
+            <template #icon>
+              <IconBounty :size="20" />
+            </template>
+            Create Bounty
+          </TacticalButton>
+        </RouterLink>
       </div>
     </div>
 
@@ -110,7 +117,7 @@ function closeShareModal() {
     <div class="most-wanted-section">
       <div class="section-header">
         <h2 class="section-title">
-          <Target class="text-arc-red" :size="40" />
+          <IconTarget :size="40" className="text-arc-red" />
           <span class="section-title-gradient">Most Wanted</span>
         </h2>
         <p class="section-subtitle">The highest-value targets in Arc Raiders</p>
@@ -128,11 +135,9 @@ function closeShareModal() {
           :key="bounty.target_gamertag"
           class="bounty-card-wrapper"
         >
-          <!-- Medal Badge -->
+          <!-- Rank Badge -->
           <div class="medal-badge">
-            <div :class="['medal-circle', getMedalClass(index)]">
-              {{ getMedalEmoji(index) }}
-            </div>
+            <RankBadge :rank="(index + 1) as 1 | 2 | 3" />
           </div>
 
           <!-- Card -->
@@ -184,7 +189,14 @@ function closeShareModal() {
             </div>
 
             <!-- View Bounties Button -->
-            <RouterLink to="/bounties" class="bounty-btn"> Hunt This Target </RouterLink>
+            <RouterLink to="/bounties">
+              <TacticalButton variant="danger" :fullWidth="true">
+                <template #icon>
+                  <IconTarget :size="18" />
+                </template>
+                Hunt This Target
+              </TacticalButton>
+            </RouterLink>
           </div>
         </div>
       </div>
@@ -192,8 +204,13 @@ function closeShareModal() {
       <!-- Empty State -->
       <div v-else class="empty-state">
         <p class="empty-state-text">No bounties yet!</p>
-        <RouterLink to="/create-bounty" class="empty-state-btn">
-          Be the First to Create One
+        <RouterLink to="/create-bounty">
+          <TacticalButton variant="primary" size="lg">
+            <template #icon>
+              <IconBounty :size="20" />
+            </template>
+            Be the First to Create One
+          </TacticalButton>
         </RouterLink>
       </div>
     </div>
@@ -202,7 +219,7 @@ function closeShareModal() {
     <div class="top-killers-section">
       <div class="section-header">
         <h2 class="section-title">
-          <Skull class="text-arc-red" :size="40" />
+          <IconHunter :size="40" className="text-arc-red" />
           <span class="section-title-gradient">Top Killers</span>
         </h2>
         <p class="section-subtitle">The most dangerous Proud Rats in the wasteland</p>
@@ -220,11 +237,9 @@ function closeShareModal() {
           :key="killer.killer_id"
           class="bounty-card-wrapper"
         >
-          <!-- Medal Badge -->
+          <!-- Rank Badge -->
           <div class="medal-badge">
-            <div :class="['medal-circle', getMedalClass(index)]">
-              {{ getMedalEmoji(index) }}
-            </div>
+            <RankBadge :rank="(index + 1) as 1 | 2 | 3" />
           </div>
 
           <!-- Card -->
@@ -364,7 +379,15 @@ function closeShareModal() {
 }
 
 .hero-buttons {
-  @apply flex gap-3 sm:gap-4 justify-center flex-wrap px-4;
+  @apply flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center px-4 max-w-md mx-auto sm:max-w-none;
+}
+
+.hero-buttons a {
+  @apply w-full sm:w-auto;
+}
+
+.hero-buttons a :deep(button) {
+  @apply w-full;
 }
 
 .btn-primary {
@@ -411,7 +434,7 @@ function closeShareModal() {
 
 /* Medal Badge */
 .medal-badge {
-  @apply absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 z-10;
+  @apply absolute -top-2 sm:-top-3 md:-top-4 left-1/2 transform -translate-x-1/2 z-10;
 }
 
 .medal-circle {
@@ -432,7 +455,7 @@ function closeShareModal() {
 
 /* Bounty Card */
 .bounty-card {
-  @apply bg-arc-card rounded-xl p-6 sm:p-8 pt-14 sm:pt-16 text-center hover:bg-white transition transform hover:scale-105 border-2 border-arc-brown/20 hover:border-arc-red hover:shadow-lg hover:shadow-arc-brown/30;
+  @apply bg-arc-card rounded-xl p-4 sm:p-6 md:p-8 pt-12 sm:pt-14 md:pt-16 text-center hover:bg-white transition transform hover:scale-105 border-2 border-arc-brown/20 hover:border-arc-red hover:shadow-lg hover:shadow-arc-brown/30;
 }
 
 .bounty-rank {
