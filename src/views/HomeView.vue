@@ -72,12 +72,12 @@ onMounted(async () => {
       <p class="hero-subtitle">Place bounties. Hunt targets. Claim glory.</p>
 
       <div class="hero-buttons">
-        <RouterLink to="/bounties">
+        <RouterLink to="/create-bounty">
           <TacticalButton variant="primary" size="lg">
             <template #icon>
               <IconBounty :size="20" />
             </template>
-            View Bounties
+            Create Bounty
           </TacticalButton>
         </RouterLink>
         <RouterLink to="/submit-kill">
@@ -127,7 +127,7 @@ onMounted(async () => {
                 </div>
                 <div class="medal-glow"></div>
               </div>
-              <Card>
+              <Card variant="red">
                 <div
                   class="bounty-card"
                   :style="
@@ -240,7 +240,7 @@ onMounted(async () => {
                 </div>
                 <div class="medal-glow"></div>
               </div>
-              <Card>
+              <Card variant="red">
                 <div
                   class="bounty-card"
                   :style="
@@ -538,8 +538,8 @@ onMounted(async () => {
 
 /* Bounty Card */
 .bounty-card {
-  @apply bg-arc-card rounded-xl p-4 sm:p-6 md:p-8 text-center hover:bg-white transition transform hover:scale-105 border-2 border-arc-brown/20 hover:border-arc-red hover:shadow-lg hover:shadow-arc-brown/30;
-  min-height: 500px;
+  @apply bg-arc-card rounded-xl p-4 sm:p-6 md:p-8 text-center hover:bg-white transition transform hover:scale-105 border-2 border-arc-red hover:shadow-lg hover:shadow-arc-brown/30;
+  min-height: 700px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

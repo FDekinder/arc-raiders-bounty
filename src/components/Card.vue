@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface Props {
-  variant?: 'default' | 'bordered' | 'glass' | 'flat' | 'angled'
+  variant?: 'default' | 'bordered' | 'glass' | 'flat' | 'angled' | 'red'
   padding?: 'none' | 'sm' | 'md' | 'lg'
   hover?: boolean
   corners?: boolean // Show corner brackets
@@ -85,6 +85,11 @@ withDefaults(defineProps<Props>(), {
 .card-flat {
   @apply bg-arc-beige/50;
   clip-path: polygon(0 6px, 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px));
+}
+
+.card-red {
+  @apply bg-arc-red/20 border-2 border-arc-red;
+  clip-path: polygon(0 8px, 8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px));
 }
 
 /* Padding */

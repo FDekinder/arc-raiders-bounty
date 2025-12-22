@@ -65,24 +65,53 @@ export async function createBounty(
   return data
 }
 
-// Get active bounties
+// Get active bounties with dynamically calculated amounts
 export async function getActiveBounties() {
   const { data, error } = await supabase
     .from('bounties')
     .select('*')
     .eq('status', 'active')
-    .order('bounty_amount', { ascending: false })
 
   if (error) throw error
-  return data
+
+  // Calculate dynamic bounty amounts for each bounty
+  const bountiesWithDynamicAmounts = await Promise.all(
+    (data || []).map(async (bounty) => {
+      const dynamicAmount = await calculateBountyAmount(bounty.target_gamertag)
+      return {
+        ...bounty,
+        bounty_amount: dynamicAmount,
+      }
+    })
+  )
+
+  // Sort by dynamic amount
+  bountiesWithDynamicAmounts.sort((a, b) => b.bounty_amount - a.bounty_amount)
+
+  return bountiesWithDynamicAmounts
 }
 
-// Get most wanted
+// Get most wanted with dynamically calculated bounty amounts
 export async function getMostWanted() {
   const { data, error } = await supabase.rpc('get_most_wanted')
 
   if (error) throw error
-  return data
+
+  // Calculate dynamic bounty amounts for each target
+  const dataWithDynamicBounties = await Promise.all(
+    (data || []).map(async (bounty: any) => {
+      const dynamicAmount = await calculateBountyAmount(bounty.target_gamertag)
+      return {
+        ...bounty,
+        total_bounty: dynamicAmount,
+      }
+    })
+  )
+
+  // Sort by bounty_count (number of active bounties) - most popular targets first
+  dataWithDynamicBounties.sort((a, b) => b.bounty_count - a.bounty_count)
+
+  return dataWithDynamicBounties
 }
 
 // Get top hunters leaderboard
@@ -364,6 +393,49 @@ export async function getTopKillers(limit: number = 3): Promise<TopKiller[]> {
     game_role: user.game_role,
     platform: user.platform,
   }))
+}
+
+// Calculate dynamic bounty amount based on hunters
+export async function calculateBountyAmount(targetGamertag: string): Promise<number> {
+  // Get all killers who have killed this specific target (hunters)
+  const { data: hunterKills, error } = await supabase
+    .from('kills')
+    .select('killer_id')
+    .eq('victim_gamertag', targetGamertag)
+    .eq('verification_status', 'approved')
+
+  if (error) throw error
+
+  // Get unique hunter IDs
+  const uniqueHunterIds = [...new Set((hunterKills || []).map(kill => kill.killer_id))]
+
+  if (uniqueHunterIds.length === 0) {
+    return 0 // No hunters yet
+  }
+
+  // Get all top killers (top 10) to determine hunter rankings
+  const topKillers = await getTopKillers(10)
+  const topKillerIds = topKillers.map(k => k.killer_id)
+
+  let totalBounty = 0
+
+  // Calculate bounty based on each hunter's rank
+  for (const hunterId of uniqueHunterIds) {
+    const hunterRank = topKillerIds.indexOf(hunterId)
+
+    if (hunterRank === -1) {
+      // Regular hunter (not in top 10)
+      totalBounty += 150
+    } else if (hunterRank >= 0 && hunterRank <= 2) {
+      // Top 1-3 killer
+      totalBounty += 1000
+    } else if (hunterRank >= 3 && hunterRank <= 9) {
+      // Top 4-10 killer
+      totalBounty += 500
+    }
+  }
+
+  return totalBounty
 }
 
 // Get kills for a specific user

@@ -13,7 +13,6 @@ const router = useRouter()
 const { success, error: showError } = useToast()
 
 const gamertag = ref('')
-const amount = ref('')
 const loading = ref(false)
 const error = ref('')
 const selectedPlatform = ref<Platform>('steam')
@@ -140,15 +139,11 @@ async function handleSubmit() {
   loading.value = true
 
   try {
-    const bountyAmount = parseInt(amount.value)
-    if (isNaN(bountyAmount) || bountyAmount < 10) {
-      throw new Error('Bounty amount must be at least 10 points')
-    }
-
     // Create bounty with platform info and kill type
+    // Bounty amount will be calculated dynamically based on hunters
     await createBounty(
       verifiedPlayer.value!.displayName,
-      bountyAmount,
+      0, // Amount will be calculated dynamically
       userId,
       verifiedPlayer.value!.playerId,
       verifiedPlayer.value!.platform,
@@ -156,7 +151,7 @@ async function handleSubmit() {
       selectedKillType.value === 'other' ? otherDescription.value : undefined,
     )
 
-    success(`Bounty created on ${verifiedPlayer.value!.displayName} for ${bountyAmount} points!`)
+    success(`Bounty created on ${verifiedPlayer.value!.displayName}! Reward will be calculated based on hunters.`)
 
     router.push('/bounties')
   } catch (err: any) {
@@ -316,18 +311,22 @@ function handlePlatformChange() {
               </p>
             </div>
 
-            <!-- Bounty Amount -->
+            <!-- Dynamic Bounty Explanation -->
             <div class="form-section">
-              <label class="form-label">Bounty Amount (Points)</label>
-              <input
-                v-model="amount"
-                type="number"
-                min="10"
-                placeholder="Minimum 10 points"
-                class="input-field"
-                required
-              />
-              <p class="help-text">Higher bounties attract more hunters!</p>
+              <div class="info-box">
+                <h3 class="info-title">🎯 Dynamic Bounty System</h3>
+                <p class="info-text">
+                  The bounty reward is calculated automatically based on who is hunting this target:
+                </p>
+                <ul class="info-list">
+                  <li><strong>Top 1-3 Killers:</strong> +1000 points each</li>
+                  <li><strong>Top 4-10 Killers:</strong> +500 points each</li>
+                  <li><strong>Regular Hunters:</strong> +150 points each</li>
+                </ul>
+                <p class="info-text-small">
+                  The more hunters, the higher the reward! Rankings update in real-time.
+                </p>
+              </div>
             </div>
 
             <!-- Error Message -->
@@ -522,5 +521,29 @@ function handlePlatformChange() {
 
 .kill-type-description {
   @apply text-xs sm:text-sm text-arc-brown;
+}
+
+.info-box {
+  @apply bg-arc-beige rounded-lg p-4 sm:p-5 border border-arc-brown/20;
+}
+
+.info-title {
+  @apply text-lg font-bold text-gray-900 mb-3;
+}
+
+.info-text {
+  @apply text-sm sm:text-base text-gray-900 mb-3;
+}
+
+.info-list {
+  @apply list-disc list-inside space-y-2 mb-3 text-sm sm:text-base text-gray-900;
+}
+
+.info-list li {
+  @apply ml-2;
+}
+
+.info-text-small {
+  @apply text-xs sm:text-sm text-arc-brown italic;
 }
 </style>

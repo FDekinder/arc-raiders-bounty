@@ -6,6 +6,7 @@ import ExpirationChecker from './components/ExpirationChecker.vue'
 import CookieConsent from './components/CookieConsent.vue'
 import WelcomeModal from './components/WelcomeModal.vue'
 import RoleBadge from './components/RoleBadge.vue'
+import SeasonCountdown from './components/SeasonCountdown.vue'
 import { getCurrentUser, logout } from './lib/auth'
 import { computed, ref } from 'vue'
 
@@ -233,7 +234,32 @@ function closeMobileMenu() {
       </div>
     </nav>
 
+    <!-- Season Countdown Banner -->
+    <div class="countdown-banner">
+      <div class="container mx-auto px-4">
+        <SeasonCountdown />
+      </div>
+    </div>
+
     <!-- Main content -->
     <RouterView />
   </div>
 </template>
+
+<style scoped>
+.countdown-banner {
+  position: sticky;
+  top: 64px;
+  z-index: 40;
+  padding: 0.5rem 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 1024px) {
+  .countdown-banner {
+    position: relative;
+    top: 0;
+  }
+}
+</style>
