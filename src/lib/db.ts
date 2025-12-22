@@ -348,7 +348,7 @@ export async function uploadKillScreenshot(file: File, userId: string) {
 export async function getTopKillers(limit: number = 3): Promise<TopKiller[]> {
   const { data, error } = await supabase
     .from('users')
-    .select('id, username, kill_count, avatar_url, clan_tag, game_role')
+    .select('id, username, kill_count, avatar_url, clan_tag, game_role, platform')
     .eq('game_role', 'PR')
     .order('kill_count', { ascending: false })
     .limit(limit)
@@ -362,6 +362,7 @@ export async function getTopKillers(limit: number = 3): Promise<TopKiller[]> {
     avatar_url: user.avatar_url,
     clan_tag: user.clan_tag,
     game_role: user.game_role,
+    platform: user.platform,
   }))
 }
 
@@ -375,4 +376,28 @@ export async function getUserKills(userId: string) {
 
   if (error) throw error
   return data
+}
+
+// Get victim breakdown for a killer (grouped by victim with kill counts)
+export async function getKillerVictimBreakdown(killerId: string): Promise<{ victim_gamertag: string; count: number }[]> {
+  const { data, error } = await supabase
+    .from('kills')
+    .select('victim_gamertag')
+    .eq('killer_id', killerId)
+    .eq('verification_status', 'approved')
+
+  if (error) throw error
+  if (!data) return []
+
+  // Group by victim and count
+  const victimCounts: Record<string, number> = {}
+  data.forEach((kill) => {
+    const victim = kill.victim_gamertag
+    victimCounts[victim] = (victimCounts[victim] || 0) + 1
+  })
+
+  // Convert to array and sort by count descending
+  return Object.entries(victimCounts)
+    .map(([victim_gamertag, count]) => ({ victim_gamertag, count }))
+    .sort((a, b) => b.count - a.count)
 }

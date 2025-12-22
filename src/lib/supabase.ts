@@ -120,6 +120,8 @@ export interface TopKiller {
   avatar_url?: string
   clan_tag?: string
   game_role?: UserRole
+  platform?: Platform
+  victims?: { victim_gamertag: string; count: number }[]
 }
 
 export interface TrophyStats {

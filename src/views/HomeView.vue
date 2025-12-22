@@ -1,19 +1,15 @@
 <!-- src/views/HomeView.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Share2 } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import { getMostWanted, getUserByUsername, getTopKillers } from '@/lib/db'
 import type { MostWanted, TopKiller } from '@/lib/supabase'
 import { getDefaultAvatar } from '@/lib/auth'
 import Card from '@/components/Card.vue'
 import TacticalButton from '@/components/TacticalButton.vue'
-import RankBadge from '@/components/RankBadge.vue'
 import IconTarget from '@/components/icons/IconTarget.vue'
 import IconHunter from '@/components/icons/IconHunter.vue'
 import IconBounty from '@/components/icons/IconBounty.vue'
-import ShareBountyModal from '@/components/ShareBountyModal.vue'
-import type { BountyShareData } from '@/lib/shareUtils'
 
 const topBounties = ref<MostWanted[]>([])
 const topKillers = ref<TopKiller[]>([])
@@ -24,11 +20,11 @@ onMounted(async () => {
   // Load Most Wanted
   try {
     const data = await getMostWanted()
-    const top3 = data.slice(0, 3) // Get top 3
+    const top10 = data.slice(0, 10) // Get top 10
 
     // Fetch user profiles to get avatar URLs with fallback to default
     const bountiesWithAvatars = await Promise.all(
-      top3.map(async (bounty: MostWanted) => {
+      top10.map(async (bounty: MostWanted) => {
         const user = await getUserByUsername(bounty.target_gamertag)
         const avatarUrl = user?.avatar_url || getDefaultAvatar(user?.game_role)
         return {
@@ -45,41 +41,23 @@ onMounted(async () => {
     loading.value = false
   }
 
-  // Load Top Killers with default avatars
+  // Load Top Killers
   try {
-    const killers = await getTopKillers(3) // Get top 3
-    // Ensure all killers have an avatar_url (either custom or default)
-    topKillers.value = killers.map((killer) => ({
+    const killers = await getTopKillers(10) // Get top 10
+
+    // Add avatar URLs with fallback to default
+    const killersWithAvatars = killers.map((killer) => ({
       ...killer,
       avatar_url: killer.avatar_url || getDefaultAvatar(killer.game_role),
     }))
+
+    topKillers.value = killersWithAvatars
   } catch (error) {
     console.error('Error loading top killers:', error)
   } finally {
     killersLoading.value = false
   }
 })
-
-
-// Share modal state
-const shareModalOpen = ref(false)
-const bountyToShare = ref<BountyShareData | null>(null)
-
-function openShareModal(bounty: MostWanted, event: Event) {
-  event.preventDefault()
-  event.stopPropagation()
-  bountyToShare.value = {
-    target_gamertag: bounty.target_gamertag,
-    bounty_amount: bounty.total_bounty,
-    platform: 'arc-raiders',
-  }
-  shareModalOpen.value = true
-}
-
-function closeShareModal() {
-  shareModalOpen.value = false
-  bountyToShare.value = null
-}
 </script>
 
 <template>
@@ -97,17 +75,17 @@ function closeShareModal() {
         <RouterLink to="/bounties">
           <TacticalButton variant="primary" size="lg">
             <template #icon>
-              <IconTarget :size="20" />
+              <IconBounty :size="20" />
             </template>
             View Bounties
           </TacticalButton>
         </RouterLink>
-        <RouterLink to="/create-bounty">
-          <TacticalButton variant="secondary" size="lg">
+        <RouterLink to="/submit-kill">
+          <TacticalButton variant="primary" size="lg">
             <template #icon>
-              <IconBounty :size="20" />
+              <IconHunter :size="20" />
             </template>
-            Create Bounty
+            Report Kill
           </TacticalButton>
         </RouterLink>
       </div>
@@ -128,76 +106,87 @@ function closeShareModal() {
         <div class="text-xl">Loading top bounties...</div>
       </div>
 
-      <!-- Top 3 Cards -->
-      <div v-else-if="topBounties.length > 0" class="bounty-grid">
-        <div
-          v-for="(bounty, index) in topBounties"
-          :key="bounty.target_gamertag"
-          class="bounty-card-wrapper"
-        >
-          <!-- Rank Badge -->
-          <div class="medal-badge">
-            <RankBadge :rank="(index + 1) as 1 | 2 | 3" />
-          </div>
-
-          <!-- Card -->
-          <div
-            class="bounty-card"
-            :style="`background-image: linear-gradient(rgba(235, 221, 199, 0.95), rgba(235, 221, 199, 0.98)), url('${bounty.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;`"
+      <!-- Top 3 Bounties Cards -->
+      <div v-else-if="topBounties.length > 0">
+        <div class="bounties-grid">
+          <RouterLink
+            v-for="(bounty, index) in topBounties.slice(0, 3)"
+            :key="bounty.target_gamertag"
+            to="/bounties"
+            class="bounty-link"
           >
-            <!-- Share Button -->
-            <button
-              @click="openShareModal(bounty, $event)"
-              class="absolute top-4 right-4 p-2 bg-arc-red hover:bg-arc-red/80 text-white rounded-full shadow-lg transition transform hover:scale-110 z-10"
-              title="Share this bounty"
-            >
-              <Share2 :size="18" />
-            </button>
-
-            <!-- Rank -->
-            <div class="bounty-rank">#{{ index + 1 }}</div>
-
-            <!-- Profile Picture -->
-            <div class="bounty-avatar-container">
-              <div class="bounty-avatar">
-                <img
-                  v-if="bounty.avatar_url"
-                  :src="bounty.avatar_url"
-                  :alt="`${bounty.target_gamertag}'s avatar`"
-                  class="bounty-avatar-img"
-                />
-                <div v-else class="bounty-avatar-fallback">
-                  {{ bounty.target_gamertag.charAt(0).toUpperCase() }}
+            <div class="card-with-medal">
+              <div
+                class="futuristic-medal"
+                :class="
+                  index === 0 ? 'medal-rank-1' : index === 1 ? 'medal-rank-2' : 'medal-rank-3'
+                "
+              >
+                <div class="medal-inner">
+                  <div class="medal-rank">{{ index + 1 }}</div>
                 </div>
+                <div class="medal-glow"></div>
+              </div>
+              <Card>
+                <div
+                  class="bounty-card"
+                  :style="
+                    bounty.avatar_url
+                      ? {
+                          backgroundImage: `linear-gradient(rgba(236, 226, 208, 0.25), rgba(236, 226, 208, 0.20)), url(${bounty.avatar_url})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                        }
+                      : {}
+                  "
+                >
+                  <h3 class="bounty-gamertag">{{ bounty.target_gamertag }}</h3>
+                  <div class="bounty-stats">
+                    <div class="stat-box">
+                      <div class="stat-value-large">{{ bounty.total_bounty }}</div>
+                      <div class="stat-label">Total Bounty</div>
+                    </div>
+                    <div class="stat-box">
+                      <div class="stat-value-medium">{{ bounty.bounty_count }}</div>
+                      <div class="stat-label">Active Bounties</div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </RouterLink>
+        </div>
+
+        <!-- Positions 4-10 List -->
+        <div v-if="topBounties.length > 3" class="leaderboard-list">
+          <RouterLink
+            v-for="(bounty, index) in topBounties.slice(3, 10)"
+            :key="bounty.target_gamertag"
+            to="/bounties"
+            class="leaderboard-item"
+          >
+            <div class="leaderboard-rank">{{ index + 4 }}</div>
+            <div class="leaderboard-avatar">
+              <img
+                v-if="bounty.avatar_url"
+                :src="bounty.avatar_url"
+                :alt="bounty.target_gamertag"
+              />
+              <div v-else class="leaderboard-avatar-fallback">
+                {{ bounty.target_gamertag.charAt(0).toUpperCase() }}
               </div>
             </div>
-
-            <!-- Gamertag -->
-            <h3 class="bounty-gamertag">{{ bounty.target_gamertag }}</h3>
-
-            <!-- Stats -->
-            <div class="bounty-stats">
-              <div class="stat-box">
-                <div class="stat-value-large">{{ bounty.total_bounty }}</div>
-                <div class="stat-label">Total Bounty</div>
-              </div>
-
-              <div class="stat-box">
-                <div class="stat-value-medium">{{ bounty.bounty_count }}</div>
-                <div class="stat-label">Active Bounties</div>
-              </div>
+            <div class="leaderboard-info">
+              <div class="leaderboard-name">{{ bounty.target_gamertag }}</div>
+              <div class="leaderboard-subtext">{{ bounty.bounty_count }} active bounties</div>
             </div>
+            <div class="leaderboard-value">{{ bounty.total_bounty }}</div>
+          </RouterLink>
+        </div>
 
-            <!-- View Bounties Button -->
-            <RouterLink to="/bounties">
-              <TacticalButton variant="danger" :fullWidth="true">
-                <template #icon>
-                  <IconTarget :size="18" />
-                </template>
-                Hunt This Target
-              </TacticalButton>
-            </RouterLink>
-          </div>
+        <!-- View Full Leaderboard Button -->
+        <div class="view-all-link">
+          <RouterLink to="/leaderboard" class="view-all-btn"> View Full Leaderboard </RouterLink>
         </div>
       </div>
 
@@ -230,58 +219,79 @@ function closeShareModal() {
         <div class="text-xl">Loading top killers...</div>
       </div>
 
-      <!-- Top 3 Cards -->
-      <div v-else-if="topKillers.length > 0" class="bounty-grid">
-        <div
-          v-for="(killer, index) in topKillers"
-          :key="killer.killer_id"
-          class="bounty-card-wrapper"
-        >
-          <!-- Rank Badge -->
-          <div class="medal-badge">
-            <RankBadge :rank="(index + 1) as 1 | 2 | 3" />
-          </div>
-
-          <!-- Card -->
+      <!-- Top 3 Killers Cards -->
+      <div v-else-if="topKillers.length > 0">
+        <div class="killers-grid">
           <RouterLink
+            v-for="(killer, index) in topKillers.slice(0, 3)"
+            :key="killer.killer_id"
             :to="`/profile/${killer.killer_id}`"
-            class="bounty-card killer-card"
-            :style="`background-image: linear-gradient(rgba(235, 221, 199, 0.95), rgba(235, 221, 199, 0.98)), url('${killer.avatar_url}'); background-size: cover; background-position: center; background-blend-mode: overlay;`"
+            class="killer-link"
           >
-            <!-- Rank -->
-            <div class="bounty-rank">#{{ index + 1 }}</div>
-
-            <!-- Profile Picture -->
-            <div class="bounty-avatar-container">
-              <div class="bounty-avatar">
-                <img
-                  v-if="killer.avatar_url"
-                  :src="killer.avatar_url"
-                  :alt="`${killer.username}'s avatar`"
-                  class="bounty-avatar-img"
-                />
-                <div v-else class="bounty-avatar-fallback">
-                  {{ killer.username.charAt(0).toUpperCase() }}
+            <div class="card-with-medal">
+              <div
+                class="futuristic-medal"
+                :class="
+                  index === 0 ? 'medal-rank-1' : index === 1 ? 'medal-rank-2' : 'medal-rank-3'
+                "
+              >
+                <div class="medal-inner">
+                  <div class="medal-rank">{{ index + 1 }}</div>
                 </div>
+                <div class="medal-glow"></div>
+              </div>
+              <Card>
+                <div
+                  class="bounty-card"
+                  :style="
+                    killer.avatar_url
+                      ? {
+                          backgroundImage: `linear-gradient(rgba(236, 226, 208, 0.25), rgba(236, 226, 208, 0.20)), url(${killer.avatar_url})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                        }
+                      : {}
+                  "
+                >
+                  <h3 class="bounty-gamertag">
+                    <span v-if="killer.clan_tag" class="clan-tag">[{{ killer.clan_tag }}]</span>
+                    {{ killer.username }}
+                  </h3>
+                  <div class="bounty-stats">
+                    <div class="stat-box">
+                      <div class="stat-value-large">{{ killer.kill_count }}</div>
+                      <div class="stat-label">Total Kills</div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </RouterLink>
+        </div>
+
+        <!-- Positions 4-10 List -->
+        <div v-if="topKillers.length > 3" class="leaderboard-list">
+          <RouterLink
+            v-for="(killer, index) in topKillers.slice(3, 10)"
+            :key="killer.killer_id"
+            :to="`/profile/${killer.killer_id}`"
+            class="leaderboard-item"
+          >
+            <div class="leaderboard-rank">{{ index + 4 }}</div>
+            <div class="leaderboard-avatar">
+              <img v-if="killer.avatar_url" :src="killer.avatar_url" :alt="killer.username" />
+              <div v-else class="leaderboard-avatar-fallback">
+                {{ killer.username.charAt(0).toUpperCase() }}
               </div>
             </div>
-
-            <!-- Username -->
-            <div class="flex items-center justify-center gap-2 mb-3 sm:mb-4">
-              <span v-if="killer.clan_tag" class="clan-tag">[{{ killer.clan_tag }}]</span>
-              <h3 class="bounty-gamertag">{{ killer.username }}</h3>
-            </div>
-
-            <!-- Stats -->
-            <div class="bounty-stats">
-              <div class="stat-box">
-                <div class="stat-value-large">{{ killer.kill_count }}</div>
-                <div class="stat-label">{{ killer.kill_count === 1 ? 'Kill' : 'Kills' }}</div>
+            <div class="leaderboard-info">
+              <div class="leaderboard-name">
+                <span v-if="killer.clan_tag" class="clan-tag">[{{ killer.clan_tag }}]</span>
+                {{ killer.username }}
               </div>
+              <div class="leaderboard-subtext">{{ killer.kill_count }} total kills</div>
             </div>
-
-            <!-- View Profile Button -->
-            <div class="bounty-btn killer-btn">View Profile</div>
+            <div class="leaderboard-value">{{ killer.kill_count }}</div>
           </RouterLink>
         </div>
       </div>
@@ -345,14 +355,6 @@ function closeShareModal() {
         <RouterLink to="/bounties" class="cta-btn"> View All Bounties </RouterLink>
       </div>
     </div>
-
-    <!-- Share Bounty Modal -->
-    <ShareBountyModal
-      v-if="bountyToShare"
-      :bounty="bountyToShare"
-      :is-open="shareModalOpen"
-      @close="closeShareModal"
-    />
   </div>
 </template>
 
@@ -424,62 +426,135 @@ function closeShareModal() {
   @apply text-center py-8 sm:py-12 text-white;
 }
 
-.bounty-grid {
+.bounties-grid {
   @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto;
 }
 
-.bounty-card-wrapper {
-  @apply relative;
+.bounty-link {
+  @apply block no-underline;
 }
 
-/* Medal Badge */
-.medal-badge {
-  @apply absolute -top-2 sm:-top-3 md:-top-4 left-1/2 transform -translate-x-1/2 z-10;
+.killers-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto;
 }
 
-.medal-circle {
-  @apply text-4xl sm:text-5xl w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center shadow-2xl bg-gradient-to-br;
+.killer-link {
+  @apply block no-underline;
 }
 
-.medal-gold {
-  @apply from-arc-yellow to-arc-yellow;
+/* Card with Medal Container */
+.card-with-medal {
+  position: relative;
+  padding-top: 50px;
 }
 
-.medal-silver {
-  @apply from-arc-red to-arc-red;
+/* Futuristic Medal System */
+.futuristic-medal {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 80px;
+  z-index: 10;
 }
 
-.medal-bronze {
-  @apply from-arc-red to-arc-red;
+.medal-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 3px solid;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  z-index: 2;
+}
+
+.medal-rank {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0 0 10px currentColor;
+}
+
+.medal-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  opacity: 0.5;
+  filter: blur(15px);
+  animation: pulse 2s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.medal-rank-1 .medal-inner {
+  border-color: #ffd700;
+  color: #ffd700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.medal-rank-1 .medal-glow {
+  background: #ffd700;
+}
+
+.medal-rank-2 .medal-inner {
+  border-color: #c0c0c0;
+  color: #c0c0c0;
+  box-shadow: 0 0 20px rgba(192, 192, 192, 0.5);
+}
+
+.medal-rank-2 .medal-glow {
+  background: #c0c0c0;
+}
+
+.medal-rank-3 .medal-inner {
+  border-color: #cd7f32;
+  color: #cd7f32;
+  box-shadow: 0 0 20px rgba(205, 127, 50, 0.5);
+}
+
+.medal-rank-3 .medal-glow {
+  background: #cd7f32;
 }
 
 /* Bounty Card */
 .bounty-card {
-  @apply bg-arc-card rounded-xl p-4 sm:p-6 md:p-8 pt-12 sm:pt-14 md:pt-16 text-center hover:bg-white transition transform hover:scale-105 border-2 border-arc-brown/20 hover:border-arc-red hover:shadow-lg hover:shadow-arc-brown/30;
-}
-
-.bounty-rank {
-  @apply text-4xl sm:text-6xl font-bold text-arc-red/80 mb-2;
-}
-
-.bounty-avatar-container {
-  @apply flex justify-center mb-3 sm:mb-4;
-}
-
-.bounty-avatar {
-  @apply w-20 h-20 sm:w-24 sm:h-24 rounded-full border-[3px] sm:border-4 border-arc-red overflow-hidden bg-arc-beige;
-}
-
-.bounty-avatar-img {
-  @apply w-full h-full object-cover;
-}
-
-.bounty-avatar-fallback {
-  @apply w-full h-full flex items-center justify-center text-3xl sm:text-4xl font-bold text-arc-red;
+  @apply bg-arc-card rounded-xl p-4 sm:p-6 md:p-8 text-center hover:bg-white transition transform hover:scale-105 border-2 border-arc-brown/20 hover:border-arc-red hover:shadow-lg hover:shadow-arc-brown/30;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .bounty-gamertag {
-  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4 break-words text-gray-900;
+  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4 break-words;
+  background: rgba(236, 226, 208, 0.95);
+  color: #1a1a1a;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .bounty-stats {
@@ -590,16 +665,50 @@ function closeShareModal() {
 }
 
 /* Killer Card Styles */
-.killer-card {
-  @apply block no-underline;
-}
-
-.killer-btn {
-  @apply bg-arc-red hover:bg-arc-red/80;
-}
-
 .clan-tag {
   @apply text-arc-yellow font-mono text-sm;
+}
+
+/* Leaderboard List (Positions 4-10) */
+.leaderboard-list {
+  @apply max-w-4xl mx-auto mt-8 space-y-2;
+}
+
+.leaderboard-item {
+  @apply flex items-center gap-4 bg-arc-card rounded-lg p-4 border border-arc-brown/20 hover:border-arc-red hover:bg-white transition no-underline;
+}
+
+.leaderboard-rank {
+  @apply w-10 h-10 flex items-center justify-center rounded-full bg-arc-brown/20 font-bold text-lg text-gray-900;
+  min-width: 2.5rem;
+}
+
+.leaderboard-avatar {
+  @apply w-12 h-12 rounded-full overflow-hidden border-2 border-arc-brown/30 bg-arc-beige flex-shrink-0;
+}
+
+.leaderboard-avatar img {
+  @apply w-full h-full object-cover;
+}
+
+.leaderboard-avatar-fallback {
+  @apply w-full h-full flex items-center justify-center text-xl font-bold text-arc-red;
+}
+
+.leaderboard-info {
+  @apply flex-1 min-w-0;
+}
+
+.leaderboard-name {
+  @apply font-bold text-gray-900 truncate text-base;
+}
+
+.leaderboard-subtext {
+  @apply text-sm text-gray-600;
+}
+
+.leaderboard-value {
+  @apply font-bold text-xl text-arc-red;
 }
 
 .view-all-link {

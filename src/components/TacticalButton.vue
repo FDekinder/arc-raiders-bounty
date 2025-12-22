@@ -84,16 +84,16 @@ withDefaults(defineProps<Props>(), {
 
 /* Variants */
 .tactical-btn-primary {
-  @apply bg-arc-brown text-white border-arc-brown;
+  @apply bg-arc-red text-white border-white;
 }
 
 .tactical-btn-primary:hover:not(:disabled) {
-  @apply bg-arc-brown/90 shadow-lg;
-  box-shadow: 0 4px 14px rgba(139, 115, 85, 0.4);
+  @apply bg-arc-red/90 shadow-lg;
+  box-shadow: 0 4px 14px rgba(255, 0, 0, 0.4);
 }
 
 .tactical-btn-primary:active:not(:disabled) {
-  @apply bg-arc-brown/80;
+  @apply bg-arc-red/80;
   transform: translateY(1px);
 }
 

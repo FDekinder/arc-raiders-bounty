@@ -157,3 +157,33 @@ export async function getMyActiveHunts(hunterId: string): Promise<number> {
     return 0
   }
 }
+
+export async function getHunterCountByGamertag(targetGamertag: string): Promise<number> {
+  try {
+    // Get all active bounties for this target
+    const { data: bounties, error: bountyError } = await supabase
+      .from('bounties')
+      .select('id')
+      .eq('target_gamertag', targetGamertag)
+      .eq('status', 'active')
+
+    if (bountyError) throw bountyError
+    if (!bounties || bounties.length === 0) return 0
+
+    // Get unique hunters across all bounties for this target
+    const bountyIds = bounties.map(b => b.id)
+    const { data: hunters, error: huntersError } = await supabase
+      .from('bounty_hunters')
+      .select('hunter_id')
+      .in('bounty_id', bountyIds)
+
+    if (huntersError) throw huntersError
+
+    // Count unique hunters
+    const uniqueHunters = new Set(hunters?.map(h => h.hunter_id) || [])
+    return uniqueHunters.size
+  } catch (error) {
+    console.error('Error getting hunter count by gamertag:', error)
+    return 0
+  }
+}
