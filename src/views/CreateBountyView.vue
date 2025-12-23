@@ -122,7 +122,7 @@ async function handleSubmit() {
       targetGamertag,
       0, // Amount will be calculated dynamically
       userId,
-      null, // No player ID verification
+      undefined, // No player ID verification
       selectedPlatform.value,
       selectedKillType.value as KillType,
       selectedKillType.value === 'other' ? otherDescription.value : undefined,

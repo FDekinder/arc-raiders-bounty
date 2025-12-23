@@ -69,7 +69,8 @@ export function isAdmin(): boolean {
 export function getDefaultAvatar(gameRole?: UserRole): string {
   // Randomly select from generic avatars instead of fixed defaults
   const randomIndex = Math.floor(Math.random() * GENERIC_AVATARS.length)
-  return GENERIC_AVATARS[randomIndex]
+  const avatar = GENERIC_AVATARS[randomIndex]
+  return avatar ?? '/generic1.png'
 }
 
 // Get user avatar URL or default based on role
