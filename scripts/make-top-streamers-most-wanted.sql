@@ -13,10 +13,10 @@ BEGIN
     RAISE EXCEPTION 'No PR (Proud Rat) user found. Please create a user first.';
   END IF;
 
-  -- Add 10 bounties for theburntpeanut (highest priority)
+  -- Add 20 bounties for theburntpeanut (#1 MOST WANTED)
   INSERT INTO bounties (target_gamertag, bounty_amount, created_by, platform, status, kill_type)
   SELECT 'theburntpeanut', 1, creator_id, 'steam', 'active', 'other'
-  FROM generate_series(1, 10);
+  FROM generate_series(1, 20);
 
   -- Add 9 bounties for shroud
   INSERT INTO bounties (target_gamertag, bounty_amount, created_by, platform, status, kill_type)
@@ -39,7 +39,7 @@ BEGIN
   FROM generate_series(1, 6);
 
   RAISE NOTICE 'Successfully added multiple bounties for top 5 streamers!';
-  RAISE NOTICE 'theburntpeanut: 10 additional bounties';
+  RAISE NOTICE 'theburntpeanut: 20 additional bounties (#1 MOST WANTED)';
   RAISE NOTICE 'shroud: 9 additional bounties';
   RAISE NOTICE 'summit1g: 8 additional bounties';
   RAISE NOTICE 'recrent: 7 additional bounties';

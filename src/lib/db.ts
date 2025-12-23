@@ -65,6 +65,19 @@ export async function createBounty(
   return data
 }
 
+// Check if a bounty already exists for a target
+export async function checkExistingBounty(targetGamertag: string) {
+  const { data, error } = await supabase
+    .from('bounties')
+    .select('*, created_by_user:users!bounties_created_by_fkey(username, avatar_url)')
+    .eq('target_gamertag', targetGamertag)
+    .eq('status', 'active')
+    .maybeSingle()
+
+  if (error) throw error
+  return data
+}
+
 // Get active bounties with dynamically calculated amounts
 export async function getActiveBounties() {
   const { data, error } = await supabase
@@ -108,8 +121,8 @@ export async function getMostWanted() {
     })
   )
 
-  // Sort by bounty_count (number of active bounties) - most popular targets first
-  dataWithDynamicBounties.sort((a, b) => b.bounty_count - a.bounty_count)
+  // Sort by total_bounty (highest bounty value = #1 Most Wanted)
+  dataWithDynamicBounties.sort((a, b) => b.total_bounty - a.total_bounty)
 
   return dataWithDynamicBounties
 }
@@ -395,47 +408,62 @@ export async function getTopKillers(limit: number = 3): Promise<TopKiller[]> {
   }))
 }
 
-// Calculate dynamic bounty amount based on hunters
+// Calculate dynamic bounty amount based on hunters who joined the hunt
 export async function calculateBountyAmount(targetGamertag: string): Promise<number> {
-  // Get all killers who have killed this specific target (hunters)
-  const { data: hunterKills, error } = await supabase
-    .from('kills')
-    .select('killer_id')
-    .eq('victim_gamertag', targetGamertag)
-    .eq('verification_status', 'approved')
+  try {
+    // Get all active bounties for this target
+    const { data: bounties, error: bountyError } = await supabase
+      .from('bounties')
+      .select('id')
+      .eq('target_gamertag', targetGamertag)
+      .eq('status', 'active')
 
-  if (error) throw error
+    if (bountyError) throw bountyError
+    if (!bounties || bounties.length === 0) return 0
 
-  // Get unique hunter IDs
-  const uniqueHunterIds = [...new Set((hunterKills || []).map(kill => kill.killer_id))]
+    // Get all hunters who joined these bounties
+    const bountyIds = bounties.map(b => b.id)
+    const { data: hunters, error: huntersError } = await supabase
+      .from('bounty_hunters')
+      .select('hunter_id')
+      .in('bounty_id', bountyIds)
 
-  if (uniqueHunterIds.length === 0) {
-    return 0 // No hunters yet
-  }
+    if (huntersError) throw huntersError
 
-  // Get all top killers (top 10) to determine hunter rankings
-  const topKillers = await getTopKillers(10)
-  const topKillerIds = topKillers.map(k => k.killer_id)
+    // Get unique hunter IDs
+    const uniqueHunterIds = [...new Set(hunters?.map(h => h.hunter_id) || [])]
 
-  let totalBounty = 0
-
-  // Calculate bounty based on each hunter's rank
-  for (const hunterId of uniqueHunterIds) {
-    const hunterRank = topKillerIds.indexOf(hunterId)
-
-    if (hunterRank === -1) {
-      // Regular hunter (not in top 10)
-      totalBounty += 150
-    } else if (hunterRank >= 0 && hunterRank <= 2) {
-      // Top 1-3 killer
-      totalBounty += 1000
-    } else if (hunterRank >= 3 && hunterRank <= 9) {
-      // Top 4-10 killer
-      totalBounty += 500
+    if (uniqueHunterIds.length === 0) {
+      return 0 // No hunters yet
     }
-  }
 
-  return totalBounty
+    // Get all top killers (top 10) to determine hunter rankings
+    const topKillers = await getTopKillers(10)
+    const topKillerIds = topKillers.map(k => k.killer_id)
+
+    let totalBounty = 0
+
+    // Calculate bounty based on each hunter's rank
+    for (const hunterId of uniqueHunterIds) {
+      const hunterRank = topKillerIds.indexOf(hunterId)
+
+      if (hunterRank === -1) {
+        // Regular hunter (not in top 10)
+        totalBounty += 150
+      } else if (hunterRank >= 0 && hunterRank <= 2) {
+        // Top 1-3 killer
+        totalBounty += 1000
+      } else if (hunterRank >= 3 && hunterRank <= 9) {
+        // Top 4-10 killer
+        totalBounty += 500
+      }
+    }
+
+    return totalBounty
+  } catch (error) {
+    console.error('Error calculating bounty amount:', error)
+    return 0
+  }
 }
 
 // Get kills for a specific user
@@ -472,4 +500,66 @@ export async function getKillerVictimBreakdown(killerId: string): Promise<{ vict
   return Object.entries(victimCounts)
     .map(([victim_gamertag, count]) => ({ victim_gamertag, count }))
     .sort((a, b) => b.count - a.count)
+}
+
+// Get hunter count for a specific target (number of unique hunters who joined the hunt)
+export async function getHunterCount(targetGamertag: string): Promise<number> {
+  try {
+    // Get all active bounties for this target
+    const { data: bounties, error: bountyError } = await supabase
+      .from('bounties')
+      .select('id')
+      .eq('target_gamertag', targetGamertag)
+      .eq('status', 'active')
+
+    if (bountyError) throw bountyError
+    if (!bounties || bounties.length === 0) return 0
+
+    // Get unique hunters across all bounties for this target
+    const bountyIds = bounties.map(b => b.id)
+    const { data: hunters, error: huntersError } = await supabase
+      .from('bounty_hunters')
+      .select('hunter_id')
+      .in('bounty_id', bountyIds)
+
+    if (huntersError) throw huntersError
+
+    // Count unique hunters
+    const uniqueHunters = new Set(hunters?.map(h => h.hunter_id) || [])
+    return uniqueHunters.size
+  } catch (error) {
+    console.error('Error getting hunter count:', error)
+    return 0
+  }
+}
+
+// Check if a user is already hunting a specific target
+export async function isUserHunting(targetGamertag: string, userId: string): Promise<boolean> {
+  try {
+    // Get all active bounties for this target
+    const { data: bounties, error: bountyError } = await supabase
+      .from('bounties')
+      .select('id')
+      .eq('target_gamertag', targetGamertag)
+      .eq('status', 'active')
+
+    if (bountyError) throw bountyError
+    if (!bounties || bounties.length === 0) return false
+
+    // Check if user is hunting any of these bounties
+    const bountyIds = bounties.map(b => b.id)
+    const { data, error } = await supabase
+      .from('bounty_hunters')
+      .select('id')
+      .in('bounty_id', bountyIds)
+      .eq('hunter_id', userId)
+      .limit(1)
+
+    if (error) throw error
+
+    return (data && data.length > 0)
+  } catch (error) {
+    console.error('Error checking if user is hunting:', error)
+    return false
+  }
 }

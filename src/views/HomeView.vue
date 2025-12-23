@@ -1,22 +1,34 @@
 <!-- src/views/HomeView.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
-import { getMostWanted, getUserByUsername, getTopKillers } from '@/lib/db'
+import { RouterLink, useRouter } from 'vue-router'
+import { getMostWanted, getUserByUsername, getTopKillers, getHunterCount, isUserHunting, checkExistingBounty } from '@/lib/db'
+import { joinHunt, leaveHunt, getMyActiveHunts } from '@/lib/hunters'
 import type { MostWanted, TopKiller } from '@/lib/supabase'
-import { getDefaultAvatar } from '@/lib/auth'
+import { getDefaultAvatar, getCurrentUser } from '@/lib/auth'
+import { useToast } from '@/composables/useToast'
 import Card from '@/components/Card.vue'
 import TacticalButton from '@/components/TacticalButton.vue'
 import IconTarget from '@/components/icons/IconTarget.vue'
 import IconHunter from '@/components/icons/IconHunter.vue'
 import IconBounty from '@/components/icons/IconBounty.vue'
 
+const router = useRouter()
+const { success, error: showError } = useToast()
+
 const topBounties = ref<MostWanted[]>([])
 const topKillers = ref<TopKiller[]>([])
 const loading = ref(true)
 const killersLoading = ref(true)
+const hunterCounts = ref<Record<string, number>>({})
+const userHuntingStatus = ref<Record<string, boolean>>({})
+const bountyIds = ref<Record<string, string>>({}) // Map target_gamertag to bounty_id
+const showHuntLimitModal = ref(false)
+const huntLimitMessage = ref('')
 
 onMounted(async () => {
+  const currentUser = getCurrentUser()
+
   // Load Most Wanted
   try {
     const data = await getMostWanted()
@@ -35,6 +47,31 @@ onMounted(async () => {
     )
 
     topBounties.value = bountiesWithAvatars
+
+    // Fetch bounty IDs, hunter counts, and hunting status for each target
+    await Promise.all(
+      bountiesWithAvatars.map(async (bounty) => {
+        // Get bounty ID for this target
+        const existingBounty = await checkExistingBounty(bounty.target_gamertag)
+        if (existingBounty) {
+          bountyIds.value[bounty.target_gamertag] = existingBounty.id
+        }
+
+        // Get hunter count
+        const count = await getHunterCount(bounty.target_gamertag)
+        hunterCounts.value[bounty.target_gamertag] = count
+      })
+    )
+
+    // Fetch user hunting status for each target (if user is logged in)
+    if (currentUser) {
+      await Promise.all(
+        bountiesWithAvatars.map(async (bounty) => {
+          const hunting = await isUserHunting(bounty.target_gamertag, currentUser.id)
+          userHuntingStatus.value[bounty.target_gamertag] = hunting
+        })
+      )
+    }
   } catch (error) {
     console.error('Error loading top bounties:', error)
   } finally {
@@ -58,6 +95,79 @@ onMounted(async () => {
     killersLoading.value = false
   }
 })
+
+// Function to handle joining/leaving the hunt
+async function handleToggleHunt(targetGamertag: string) {
+  const currentUser = getCurrentUser()
+  if (!currentUser) {
+    router.push('/login')
+    return
+  }
+
+  const bountyId = bountyIds.value[targetGamertag]
+  if (!bountyId) {
+    showError('Bounty not found')
+    return
+  }
+
+  const isHunting = userHuntingStatus.value[targetGamertag]
+
+  if (isHunting) {
+    // Leave the hunt
+    const result = await leaveHunt(bountyId, currentUser.id)
+    if (result.success) {
+      success(`You've left the hunt for ${targetGamertag}`)
+      userHuntingStatus.value[targetGamertag] = false
+
+      // Refresh hunter count
+      const count = await getHunterCount(targetGamertag)
+      hunterCounts.value[targetGamertag] = count
+
+      // Refresh bounty values
+      await refreshBountyValues()
+    } else {
+      showError(result.error || 'Failed to leave hunt')
+    }
+  } else {
+    // Join the hunt
+    const result = await joinHunt(bountyId, currentUser.id)
+    if (result.success) {
+      success(`You've joined the hunt for ${targetGamertag}!`)
+      userHuntingStatus.value[targetGamertag] = true
+
+      // Refresh hunter count
+      const count = await getHunterCount(targetGamertag)
+      hunterCounts.value[targetGamertag] = count
+
+      // Refresh bounty values
+      await refreshBountyValues()
+    } else {
+      // Show error modal if hunt limit reached
+      if (result.error?.includes('3 targets')) {
+        huntLimitMessage.value = result.error
+        showHuntLimitModal.value = true
+      } else {
+        showError(result.error || 'Failed to join hunt')
+      }
+    }
+  }
+}
+
+// Function to refresh bounty values after joining/leaving
+async function refreshBountyValues() {
+  try {
+    const data = await getMostWanted()
+    const top10 = data.slice(0, 10)
+
+    // Update only the total_bounty values for existing bounties
+    topBounties.value = topBounties.value.map(existing => {
+      const updated = top10.find(b => b.target_gamertag === existing.target_gamertag)
+      return updated ? { ...existing, total_bounty: updated.total_bounty } : existing
+    })
+  } catch (error) {
+    console.error('Error refreshing bounty values:', error)
+  }
+}
 </script>
 
 <template>
@@ -147,10 +257,16 @@ onMounted(async () => {
                       <div class="stat-label">Total Bounty</div>
                     </div>
                     <div class="stat-box">
-                      <div class="stat-value-medium">{{ bounty.bounty_count }}</div>
-                      <div class="stat-label">Active Bounties</div>
+                      <div class="stat-value-medium">{{ hunterCounts[bounty.target_gamertag] || 0 }}</div>
+                      <div class="stat-label">Hunters</div>
                     </div>
                   </div>
+                  <button
+                    @click.prevent="handleToggleHunt(bounty.target_gamertag)"
+                    :class="userHuntingStatus[bounty.target_gamertag] ? 'leave-hunt-btn' : 'join-hunt-btn'"
+                  >
+                    {{ userHuntingStatus[bounty.target_gamertag] ? 'Leave Hunt' : 'Join the Hunt' }}
+                  </button>
                 </div>
               </Card>
             </div>
@@ -178,7 +294,7 @@ onMounted(async () => {
             </div>
             <div class="leaderboard-info">
               <div class="leaderboard-name">{{ bounty.target_gamertag }}</div>
-              <div class="leaderboard-subtext">{{ bounty.bounty_count }} active bounties</div>
+              <div class="leaderboard-subtext">{{ hunterCounts[bounty.target_gamertag] || 0 }} hunters</div>
             </div>
             <div class="leaderboard-value">{{ bounty.total_bounty }}</div>
           </RouterLink>
@@ -353,6 +469,34 @@ onMounted(async () => {
         <h2 class="cta-title">Ready to Start Hunting?</h2>
         <p class="cta-subtitle">Join the Arc Raiders bounty hunting community today</p>
         <RouterLink to="/bounties" class="cta-btn"> View All Bounties </RouterLink>
+      </div>
+    </div>
+
+    <!-- Hunt Limit Modal -->
+    <div v-if="showHuntLimitModal" class="modal-overlay" @click="showHuntLimitModal = false">
+      <div class="modal-content" @click.stop>
+        <div class="modal-header">
+          <h2 class="modal-title">🎯 Hunt Limit Reached</h2>
+        </div>
+
+        <div class="modal-body">
+          <p class="modal-message">
+            {{ huntLimitMessage }}
+          </p>
+
+          <p class="modal-submessage">
+            You can only hunt 3 targets at a time. Leave one of your current hunts to join a new one.
+          </p>
+        </div>
+
+        <div class="modal-actions">
+          <button @click="showHuntLimitModal = false" class="btn-ok">
+            Got it
+          </button>
+          <RouterLink to="/bounties" class="btn-view-hunts">
+            View My Hunts
+          </RouterLink>
+        </div>
       </div>
     </div>
   </div>
@@ -717,5 +861,59 @@ onMounted(async () => {
 
 .view-all-btn {
   @apply inline-block bg-arc-red/50 hover:bg-arc-red/80 text-gray-900 px-6 py-3 rounded-lg font-semibold transition;
+}
+
+/* Join the Hunt Button */
+.join-hunt-btn {
+  @apply w-full bg-arc-red hover:bg-arc-red/80 text-black py-3 rounded-lg font-semibold text-base transition transform hover:scale-105 shadow-md shadow-arc-red/30;
+  margin-top: auto;
+}
+
+/* Leave Hunt Button */
+.leave-hunt-btn {
+  @apply w-full bg-arc-brown/30 hover:bg-arc-brown/50 text-gray-900 border border-arc-brown py-3 rounded-lg font-semibold text-base transition;
+  margin-top: auto;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  @apply fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+}
+
+.modal-content {
+  @apply bg-arc-card rounded-xl shadow-2xl max-w-lg w-full border-2 border-arc-brown/30;
+  clip-path: polygon(0 12px, 12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px));
+}
+
+.modal-header {
+  @apply p-6 pb-4 border-b border-arc-brown/20;
+}
+
+.modal-title {
+  @apply text-2xl font-bold text-gray-900;
+}
+
+.modal-body {
+  @apply p-6;
+}
+
+.modal-message {
+  @apply text-base text-gray-900 mb-3 font-semibold;
+}
+
+.modal-submessage {
+  @apply text-sm text-arc-brown;
+}
+
+.modal-actions {
+  @apply p-6 pt-4 flex gap-3;
+}
+
+.btn-ok {
+  @apply flex-1 bg-arc-red hover:bg-arc-red/80 text-white font-semibold py-3 rounded-lg transition;
+}
+
+.btn-view-hunts {
+  @apply flex-1 bg-arc-brown/20 hover:bg-arc-brown/30 text-gray-900 font-semibold py-3 rounded-lg transition text-center;
 }
 </style>

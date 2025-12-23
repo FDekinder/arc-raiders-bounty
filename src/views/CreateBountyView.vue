@@ -1,7 +1,7 @@
 <!-- src/views/CreateBountyView.vue -->
 <script setup lang="ts">
 import { ref } from 'vue'
-import { createBounty } from '@/lib/db'
+import { createBounty, checkExistingBounty } from '@/lib/db'
 import { useRouter } from 'vue-router'
 import { Target, Search, CheckCircle, XCircle, Loader } from 'lucide-vue-next'
 import { useToast } from '@/composables/useToast'
@@ -23,6 +23,10 @@ const otherDescription = ref('')
 const verifying = ref(false)
 const verificationStatus = ref<'idle' | 'success' | 'error'>('idle')
 const verifiedPlayer = ref<PlayerVerification | null>(null)
+
+// Existing bounty check
+const showExistingBountyModal = ref(false)
+const existingBounty = ref<any>(null)
 
 const currentUser = getCurrentUser()
 const userId = currentUser?.id || ''
@@ -139,6 +143,17 @@ async function handleSubmit() {
   loading.value = true
 
   try {
+    // Check if bounty already exists for this target
+    const existing = await checkExistingBounty(verifiedPlayer.value!.displayName)
+
+    if (existing) {
+      // Bounty already exists - show modal instead of creating
+      existingBounty.value = existing
+      showExistingBountyModal.value = true
+      loading.value = false
+      return
+    }
+
     // Create bounty with platform info and kill type
     // Bounty amount will be calculated dynamically based on hunters
     await createBounty(
@@ -160,6 +175,17 @@ async function handleSubmit() {
   } finally {
     loading.value = false
   }
+}
+
+function joinTheHunt() {
+  showExistingBountyModal.value = false
+  success(`You've joined the hunt for ${verifiedPlayer.value!.displayName}!`)
+  router.push('/bounties')
+}
+
+function closeModal() {
+  showExistingBountyModal.value = false
+  existingBounty.value = null
 }
 
 function handlePlatformChange() {
@@ -345,6 +371,49 @@ function handlePlatformChange() {
             </button>
           </form>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Existing Bounty Modal -->
+  <div v-if="showExistingBountyModal" class="modal-overlay" @click="closeModal">
+    <div class="modal-content" @click.stop>
+      <div class="modal-header">
+        <h2 class="modal-title">🎯 Bounty Already Exists</h2>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-message">
+          A bounty already exists for <strong>{{ verifiedPlayer?.displayName }}</strong>.
+        </p>
+
+        <p class="modal-submessage">
+          Would you like to join the hunt instead?
+        </p>
+
+        <div class="bounty-info-box">
+          <div class="info-row">
+            <span class="info-label">Target:</span>
+            <span class="info-value">{{ existingBounty?.target_gamertag }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Created by:</span>
+            <span class="info-value">{{ existingBounty?.created_by_user?.username || 'Unknown' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Status:</span>
+            <span class="info-value status-active">Active</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button @click="joinTheHunt" class="btn-join">
+          Join the Hunt
+        </button>
+        <button @click="closeModal" class="btn-cancel">
+          Cancel
+        </button>
       </div>
     </div>
   </div>
@@ -545,5 +614,67 @@ function handlePlatformChange() {
 
 .info-text-small {
   @apply text-xs sm:text-sm text-arc-brown italic;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  @apply fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+}
+
+.modal-content {
+  @apply bg-arc-card rounded-xl shadow-2xl max-w-lg w-full border-2 border-arc-brown/30;
+  clip-path: polygon(0 12px, 12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px));
+}
+
+.modal-header {
+  @apply p-6 pb-4 border-b border-arc-brown/20;
+}
+
+.modal-title {
+  @apply text-2xl font-bold text-gray-900;
+}
+
+.modal-body {
+  @apply p-6;
+}
+
+.modal-message {
+  @apply text-base text-gray-900 mb-2;
+}
+
+.modal-submessage {
+  @apply text-sm text-arc-brown mb-4;
+}
+
+.bounty-info-box {
+  @apply bg-arc-beige rounded-lg p-4 space-y-2 border border-arc-brown/20;
+}
+
+.info-row {
+  @apply flex justify-between items-center;
+}
+
+.info-label {
+  @apply text-sm font-semibold text-arc-brown;
+}
+
+.info-value {
+  @apply text-sm text-gray-900;
+}
+
+.status-active {
+  @apply text-green-600 font-bold;
+}
+
+.modal-actions {
+  @apply p-6 pt-4 flex gap-3;
+}
+
+.btn-join {
+  @apply flex-1 bg-arc-red hover:bg-arc-red/80 text-white font-semibold py-3 rounded-lg transition;
+}
+
+.btn-cancel {
+  @apply flex-1 bg-arc-brown/20 hover:bg-arc-brown/30 text-gray-900 font-semibold py-3 rounded-lg transition;
 }
 </style>
