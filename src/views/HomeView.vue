@@ -380,8 +380,13 @@ async function refreshBountyValues() {
                     <span v-if="killer.clan_tag" class="clan-tag">[{{ killer.clan_tag }}]</span>
                     {{ killer.username }}
                   </h3>
-                  <div class="bounty-stats">
-                    <div class="stat-box">
+
+                  <!-- Spacer to push content to bottom -->
+                  <div class="bounty-spacer"></div>
+
+                  <!-- Bottom section with stats -->
+                  <div class="bounty-bottom">
+                    <div class="stat-box-compact killer-stat-centered">
                       <div class="stat-value-large">{{ killer.kill_count }}</div>
                       <div class="stat-label">Total Kills</div>
                     </div>
@@ -729,6 +734,10 @@ async function refreshBountyValues() {
 
 .stat-box-compact {
   @apply bg-arc-beige rounded-lg p-2 sm:p-3 border border-arc-brown/30;
+}
+
+.killer-stat-centered {
+  @apply w-full;
 }
 
 .stat-value-large {

@@ -3,10 +3,10 @@
 import { ref } from 'vue'
 import { createBounty, checkExistingBounty } from '@/lib/db'
 import { useRouter } from 'vue-router'
-import { Target, Search, CheckCircle, XCircle, Loader } from 'lucide-vue-next'
+import { Target } from 'lucide-vue-next'
 import { useToast } from '@/composables/useToast'
 import { getCurrentUser } from '@/lib/auth'
-import { verifyPlayer, type Platform, type PlayerVerification } from '@/lib/platformVerification'
+import type { Platform } from '@/lib/platformVerification'
 import type { KillType } from '@/components/KillTypeBadge.vue'
 
 const router = useRouter()
@@ -18,11 +18,6 @@ const error = ref('')
 const selectedPlatform = ref<Platform>('steam')
 const selectedKillType = ref<KillType | ''>('')
 const otherDescription = ref('')
-
-// Verification
-const verifying = ref(false)
-const verificationStatus = ref<'idle' | 'success' | 'error'>('idle')
-const verifiedPlayer = ref<PlayerVerification | null>(null)
 
 // Existing bounty check
 const showExistingBountyModal = ref(false)
@@ -88,48 +83,13 @@ const killTypes = [
   },
 ]
 
-async function verifyGamertag() {
-  if (!gamertag.value.trim()) {
-    showError('Please enter a username/gamertag')
-    return
-  }
-
-  verifying.value = true
-  verificationStatus.value = 'idle'
-  verifiedPlayer.value = null
-
-  try {
-    const result = await verifyPlayer(gamertag.value.trim(), selectedPlatform.value)
-
-    if (result.error || !result.playerId) {
-      verificationStatus.value = 'error'
-      error.value = result.error || 'Player not found'
-      showError(result.error || 'Player not found')
-    } else {
-      verificationStatus.value = 'success'
-      verifiedPlayer.value = result
-      // Update the gamertag field with the verified name
-      gamertag.value = result.displayName
-      success(
-        `${platforms.find((p) => p.value === selectedPlatform.value)?.label} player verified!`,
-      )
-    }
-  } catch (err: any) {
-    verificationStatus.value = 'error'
-    error.value = err.message || 'Failed to verify player'
-    showError('Failed to verify player')
-  } finally {
-    verifying.value = false
-  }
-}
-
 async function handleSubmit() {
   error.value = ''
 
-  // Require verification
-  if (verificationStatus.value !== 'success') {
-    error.value = 'Please verify the player first'
-    showError('Please verify the player first')
+  // Validate gamertag
+  if (!gamertag.value.trim()) {
+    error.value = 'Please enter a username/gamertag'
+    showError('Please enter a username/gamertag')
     return
   }
 
@@ -143,8 +103,10 @@ async function handleSubmit() {
   loading.value = true
 
   try {
+    const targetGamertag = gamertag.value.trim()
+
     // Check if bounty already exists for this target
-    const existing = await checkExistingBounty(verifiedPlayer.value!.displayName)
+    const existing = await checkExistingBounty(targetGamertag)
 
     if (existing) {
       // Bounty already exists - show modal instead of creating
@@ -157,16 +119,16 @@ async function handleSubmit() {
     // Create bounty with platform info and kill type
     // Bounty amount will be calculated dynamically based on hunters
     await createBounty(
-      verifiedPlayer.value!.displayName,
+      targetGamertag,
       0, // Amount will be calculated dynamically
       userId,
-      verifiedPlayer.value!.playerId,
-      verifiedPlayer.value!.platform,
+      null, // No player ID verification
+      selectedPlatform.value,
       selectedKillType.value as KillType,
       selectedKillType.value === 'other' ? otherDescription.value : undefined,
     )
 
-    success(`Bounty created on ${verifiedPlayer.value!.displayName}! Reward will be calculated based on hunters.`)
+    success(`Bounty created on ${targetGamertag}! Reward will be calculated based on hunters.`)
 
     router.push('/bounties')
   } catch (err: any) {
@@ -179,19 +141,13 @@ async function handleSubmit() {
 
 function joinTheHunt() {
   showExistingBountyModal.value = false
-  success(`You've joined the hunt for ${verifiedPlayer.value!.displayName}!`)
+  success(`You've joined the hunt for ${gamertag.value.trim()}!`)
   router.push('/bounties')
 }
 
 function closeModal() {
   showExistingBountyModal.value = false
   existingBounty.value = null
-}
-
-function handlePlatformChange() {
-  // Reset verification when platform changes
-  verificationStatus.value = 'idle'
-  verifiedPlayer.value = null
 }
 </script>
 
@@ -214,10 +170,7 @@ function handlePlatformChange() {
                   v-for="platform in platforms"
                   :key="platform.value"
                   type="button"
-                  @click="
-                    selectedPlatform = platform.value as Platform;
-                    handlePlatformChange()
-                  "
+                  @click="selectedPlatform = platform.value as Platform"
                   :class="[
                     'platform-btn',
                     selectedPlatform === platform.value ? 'platform-btn-active' : 'platform-btn-inactive'
@@ -266,7 +219,7 @@ function handlePlatformChange() {
               </div>
             </div>
 
-            <!-- Target Player with Verification -->
+            <!-- Target Player -->
             <div class="form-section">
               <label class="form-label">
                 Target Player
@@ -274,66 +227,15 @@ function handlePlatformChange() {
                   ({{ platforms.find((p) => p.value === selectedPlatform)?.label }} username/ID)
                 </span>
               </label>
-              <div class="input-group">
-                <div class="input-wrapper">
-                  <input
-                    v-model="gamertag"
-                    type="text"
-                    placeholder="Enter username or ID..."
-                    class="input-field"
-                    required
-                    @input="verificationStatus = 'idle'"
-                  />
-                  <div v-if="verificationStatus === 'success'" class="input-icon">
-                    <CheckCircle class="icon-success" :size="20" />
-                  </div>
-                  <div v-if="verificationStatus === 'error'" class="input-icon">
-                    <XCircle class="icon-error" :size="20" />
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  @click="verifyGamertag"
-                  :disabled="verifying || !gamertag.trim()"
-                  class="verify-btn"
-                >
-                  <Loader v-if="verifying" class="spinner" :size="18" />
-                  <Search v-else :size="18" />
-                  Verify
-                </button>
-              </div>
-
-              <!-- Verified Player Card -->
-              <div v-if="verifiedPlayer" class="player-card">
-                <img
-                  v-if="verifiedPlayer.avatarUrl"
-                  :src="verifiedPlayer.avatarUrl"
-                  :alt="verifiedPlayer.displayName"
-                  class="player-avatar"
-                />
-                <div v-else class="player-avatar-placeholder">
-                  {{ platforms.find((p) => p.value === selectedPlatform)?.icon }}
-                </div>
-                <div class="player-info">
-                  <div class="player-name">{{ verifiedPlayer.displayName }}</div>
-                  <div class="player-platform">
-                    {{ platforms.find((p) => p.value === selectedPlatform)?.label }}
-                  </div>
-                  <a
-                    v-if="verifiedPlayer.profileUrl && selectedPlatform !== 'xbox'"
-                    :href="verifiedPlayer.profileUrl"
-                    target="_blank"
-                    class="player-link"
-                  >
-                    View Profile →
-                  </a>
-                </div>
-                <CheckCircle class="verified-icon" :size="32" />
-              </div>
-
+              <input
+                v-model="gamertag"
+                type="text"
+                placeholder="Enter username or gamertag..."
+                class="input-field"
+                required
+              />
               <p class="help-text">
-                We'll verify this player exists on
-                {{ platforms.find((p) => p.value === selectedPlatform)?.label }}
+                Enter the player's {{ platforms.find((p) => p.value === selectedPlatform)?.label }} username or gamertag
               </p>
             </div>
 
@@ -363,7 +265,7 @@ function handlePlatformChange() {
             <!-- Submit Button -->
             <button
               type="submit"
-              :disabled="loading || verificationStatus !== 'success'"
+              :disabled="loading"
               class="submit-btn"
             >
               <Target :size="20" />
@@ -384,7 +286,7 @@ function handlePlatformChange() {
 
       <div class="modal-body">
         <p class="modal-message">
-          A bounty already exists for <strong>{{ verifiedPlayer?.displayName }}</strong>.
+          A bounty already exists for <strong>{{ gamertag }}</strong>.
         </p>
 
         <p class="modal-submessage">
