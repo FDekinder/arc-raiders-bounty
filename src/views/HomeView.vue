@@ -251,22 +251,29 @@ async function refreshBountyValues() {
                   "
                 >
                   <h3 class="bounty-gamertag">{{ bounty.target_gamertag }}</h3>
-                  <div class="bounty-stats">
-                    <div class="stat-box">
-                      <div class="stat-value-large">{{ bounty.total_bounty }}</div>
-                      <div class="stat-label">Total Bounty</div>
+
+                  <!-- Spacer to push content to bottom -->
+                  <div class="bounty-spacer"></div>
+
+                  <!-- Bottom section with stats and button -->
+                  <div class="bounty-bottom">
+                    <div class="bounty-stats-horizontal">
+                      <div class="stat-box-compact">
+                        <div class="stat-value-large">{{ bounty.total_bounty }}</div>
+                        <div class="stat-label">Total Bounty</div>
+                      </div>
+                      <div class="stat-box-compact">
+                        <div class="stat-value-medium">{{ hunterCounts[bounty.target_gamertag] || 0 }}</div>
+                        <div class="stat-label">Hunters</div>
+                      </div>
                     </div>
-                    <div class="stat-box">
-                      <div class="stat-value-medium">{{ hunterCounts[bounty.target_gamertag] || 0 }}</div>
-                      <div class="stat-label">Hunters</div>
-                    </div>
+                    <button
+                      @click.prevent="handleToggleHunt(bounty.target_gamertag)"
+                      :class="userHuntingStatus[bounty.target_gamertag] ? 'leave-hunt-btn' : 'join-hunt-btn'"
+                    >
+                      {{ userHuntingStatus[bounty.target_gamertag] ? 'Leave Hunt' : 'Join the Hunt' }}
+                    </button>
                   </div>
-                  <button
-                    @click.prevent="handleToggleHunt(bounty.target_gamertag)"
-                    :class="userHuntingStatus[bounty.target_gamertag] ? 'leave-hunt-btn' : 'join-hunt-btn'"
-                  >
-                    {{ userHuntingStatus[bounty.target_gamertag] ? 'Leave Hunt' : 'Join the Hunt' }}
-                  </button>
                 </div>
               </Card>
             </div>
@@ -686,7 +693,6 @@ async function refreshBountyValues() {
   min-height: 700px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .bounty-gamertag {
@@ -701,11 +707,27 @@ async function refreshBountyValues() {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
+.bounty-spacer {
+  flex: 1;
+}
+
+.bounty-bottom {
+  @apply space-y-3;
+}
+
+.bounty-stats-horizontal {
+  @apply grid grid-cols-2 gap-2;
+}
+
 .bounty-stats {
   @apply space-y-2 sm:space-y-3 mb-4 sm:mb-6;
 }
 
 .stat-box {
+  @apply bg-arc-beige rounded-lg p-2 sm:p-3 border border-arc-brown/30;
+}
+
+.stat-box-compact {
   @apply bg-arc-beige rounded-lg p-2 sm:p-3 border border-arc-brown/30;
 }
 

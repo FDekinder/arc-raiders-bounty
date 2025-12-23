@@ -67,15 +67,14 @@ export function isAdmin(): boolean {
 
 // Get default avatar based on user role
 export function getDefaultAvatar(gameRole?: UserRole): string {
-  if (gameRole === 'PR') {
-    return '/rat.png' // Proud Rat default
-  }
-  return '/default.png' // Hunter default
+  // Randomly select from generic avatars instead of fixed defaults
+  const randomIndex = Math.floor(Math.random() * GENERIC_AVATARS.length)
+  return GENERIC_AVATARS[randomIndex]
 }
 
 // Get user avatar URL or default based on role
 export function getUserAvatarUrl(user: User | null): string {
-  if (!user) return '/default.png'
+  if (!user) return getDefaultAvatar()
   return user.avatar_url || getDefaultAvatar(user.game_role)
 }
 
