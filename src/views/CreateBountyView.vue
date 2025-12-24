@@ -24,6 +24,12 @@ const showExistingBountyModal = ref(false)
 const existingBounty = ref<any>(null)
 
 const currentUser = getCurrentUser()
+
+// Redirect to login if not authenticated
+if (!currentUser) {
+  router.push('/login')
+}
+
 const userId = currentUser?.id || ''
 
 const platforms = [
@@ -86,6 +92,13 @@ const killTypes = [
 async function handleSubmit() {
   error.value = ''
 
+  // Check if user is logged in
+  if (!userId) {
+    showError('You must be logged in to create a bounty')
+    router.push('/login')
+    return
+  }
+
   // Validate gamertag
   if (!gamertag.value.trim()) {
     error.value = 'Please enter a username/gamertag'
@@ -118,9 +131,10 @@ async function handleSubmit() {
 
     // Create bounty with platform info and kill type
     // Bounty amount will be calculated dynamically based on hunters
+    // Using 1 as placeholder since DB requires bounty_amount > 0
     await createBounty(
       targetGamertag,
-      0, // Amount will be calculated dynamically
+      1, // Placeholder - actual amount calculated dynamically
       userId,
       undefined, // No player ID verification
       selectedPlatform.value,
