@@ -13,6 +13,7 @@ const router = useRouter()
 const { success, error: showError } = useToast()
 
 const gamertag = ref('')
+const embarkId = ref('')
 const loading = ref(false)
 const error = ref('')
 const selectedPlatform = ref<Platform>('steam')
@@ -250,6 +251,24 @@ function closeModal() {
               />
               <p class="help-text">
                 Enter the player's {{ platforms.find((p) => p.value === selectedPlatform)?.label }} username or gamertag
+              </p>
+            </div>
+
+            <!-- Embark ID -->
+            <div class="form-section">
+              <label class="form-label">
+                Embark ID
+                <span class="text-arc-brown text-xs ml-2">(Optional)</span>
+              </label>
+              <input
+                v-model="embarkId"
+                type="text"
+                placeholder="Paste Embark ID here..."
+                class="input-field font-mono"
+                maxlength="100"
+              />
+              <p class="help-text">
+                Copy and paste the player's Embark ID if you have it. This helps with accurate player identification.
               </p>
             </div>
 
