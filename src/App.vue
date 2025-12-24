@@ -90,6 +90,13 @@ function closeMobileMenu() {
               FAQ
             </RouterLink>
             <RouterLink
+              to="/report-bug"
+              class="text-arc-red hover:text-arc-red/80 transition font-semibold"
+              active-class="!text-[#000080]"
+            >
+              Report Bug
+            </RouterLink>
+            <RouterLink
               v-if="currentUser?.game_role === 'PR'"
               to="/submit-kill"
               class="text-arc-red hover:text-arc-red/80 transition font-semibold"
@@ -190,6 +197,14 @@ function closeMobileMenu() {
               @click="closeMobileMenu"
             >
               FAQ
+            </RouterLink>
+            <RouterLink
+              to="/report-bug"
+              class="px-4 py-3 text-arc-red hover:bg-arc-brown/10 rounded transition font-semibold"
+              active-class="!bg-[#000080] !text-white"
+              @click="closeMobileMenu"
+            >
+              Report Bug
             </RouterLink>
             <RouterLink
               v-if="currentUser?.game_role === 'PR'"
