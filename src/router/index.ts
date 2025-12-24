@@ -130,6 +130,11 @@ const router = createRouter({
       name: 'report-bug',
       component: () => import('../views/ReportBugView.vue'),
     },
+    {
+      path: '/admin/bug-reports',
+      name: 'admin-bug-reports',
+      component: () => import('../views/AdminBugReportsView.vue'),
+    },
   ],
 })
 
@@ -147,7 +152,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // Check admin-only routes (always enforce, even in dev)
-  const adminOnlyRoutes = ['/verify']
+  const adminOnlyRoutes = ['/verify', '/admin/bug-reports']
   if (adminOnlyRoutes.includes(to.path)) {
     if (!currentUser || currentUser.role !== 'admin') {
       // Redirect non-admins to home

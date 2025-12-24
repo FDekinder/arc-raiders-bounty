@@ -283,15 +283,15 @@ async function handleSubmit() {
 }
 
 .report-type-btn {
-  @apply flex items-center gap-3 p-4 rounded-lg border-2 transition cursor-pointer;
+  @apply flex items-center gap-3 p-4 rounded-lg border-2 transition cursor-pointer text-gray-900;
 }
 
 .report-type-active {
-  @apply bg-arc-red/10 border-arc-red;
+  @apply bg-arc-red/10 border-arc-red text-gray-900;
 }
 
 .report-type-inactive {
-  @apply bg-white border-arc-brown/20 hover:border-arc-red/50;
+  @apply bg-white border-arc-brown/20 hover:border-arc-red/50 text-gray-900;
 }
 
 .info-alert {
@@ -303,10 +303,10 @@ async function handleSubmit() {
 }
 
 .submit-btn {
-  @apply flex items-center justify-center gap-2 bg-arc-red hover:bg-arc-red/80 text-black px-6 py-3 rounded-lg font-semibold transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply flex items-center justify-center gap-2 bg-arc-red hover:bg-arc-red/80 text-white px-6 py-3 rounded-lg font-semibold transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
 .cancel-btn {
-  @apply px-6 py-3 bg-arc-brown/20 hover:bg-arc-brown/30 text-gray-900 rounded-lg font-semibold transition;
+  @apply px-6 py-3 bg-arc-red hover:bg-arc-red/80 text-white rounded-lg font-semibold transition;
 }
 </style>
