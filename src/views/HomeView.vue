@@ -1,6 +1,6 @@
 <!-- src/views/HomeView.vue -->
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { getMostWanted, getUserByUsername, getTopKillers, getHunterCount, isUserHunting, checkExistingBounty } from '@/lib/db'
 import { joinHunt, leaveHunt, getMyActiveHunts } from '@/lib/hunters'
@@ -25,6 +25,75 @@ const userHuntingStatus = ref<Record<string, boolean>>({})
 const bountyIds = ref<Record<string, string>>({}) // Map target_gamertag to bounty_id
 const showHuntLimitModal = ref(false)
 const huntLimitMessage = ref('')
+
+// Streamer bounty data
+const streamerHunterCounts = ref<Record<string, number>>({})
+const streamerHuntingStatus = ref<Record<string, boolean>>({})
+const streamerBountyIds = ref<Record<string, string>>({})
+
+// Streamer list - permanent bounty targets (base list)
+const streamerListBase = [
+  'theburntpeanut',
+  'shroud',
+  'summit1g',
+  'recrent',
+  'cohhcarnage',
+  'timthetatman',
+  'nickmercs',
+  'ninja',
+  'sxb',
+  'wtcn',
+  'zackrawrr',
+  'LIRIK',
+  'DrDisRespecT',
+  'sequisha',
+  'grimmmz',
+  'lost',
+  'sacriel',
+  'anthony_kongphan',
+  'thespudhunter',
+  'solidfps',
+  'HutchMF',
+  'cloakzy',
+  'Myth_',
+  'RNGingy',
+  'xQc',
+  'Nadeshot',
+  'Symfuhny',
+  'Tfue',
+  'Swagg',
+  'Aceu',
+  'iiTzTimmy',
+  'FaZeJSmooth',
+  'HusKerrs',
+  'Klean',
+  'Gigz',
+  'Astatoro',
+  'Phillygamer98',
+  'BasicallyZen',
+  'Phixate',
+  'RamenStyle',
+  'Bearki',
+  'Jesse',
+  'Qloud',
+  'ON1C',
+  'BoschPlays',
+  'MrC0d3r',
+  'Skulldar_',
+  'Paitambemjoga',
+  'RAIDER21',
+  'RiotGamesFPS',
+  'RogueNine',
+]
+
+// Computed sorted streamer list based on hunter counts
+const streamerList = computed(() => {
+  return [...streamerListBase].sort((a, b) => {
+    const countA = streamerHunterCounts.value[a] || 0
+    const countB = streamerHunterCounts.value[b] || 0
+    return countB - countA // Sort descending (most hunters first)
+  })
+})
 
 onMounted(async () => {
   const currentUser = getCurrentUser()
@@ -94,7 +163,79 @@ onMounted(async () => {
   } finally {
     killersLoading.value = false
   }
+
+  // Load streamer bounty data
+  await Promise.all(
+    streamerListBase.map(async (streamer) => {
+      // Get bounty ID for this streamer
+      const existingBounty = await checkExistingBounty(streamer)
+      if (existingBounty) {
+        streamerBountyIds.value[streamer] = existingBounty.id
+
+        // Get hunter count
+        const count = await getHunterCount(streamer)
+        streamerHunterCounts.value[streamer] = count
+
+        // Get hunting status (only if user is logged in)
+        if (currentUser) {
+          const hunting = await isUserHunting(streamer, currentUser.id)
+          streamerHuntingStatus.value[streamer] = hunting
+        }
+      }
+    })
+  )
 })
+
+// Function to handle joining/leaving the hunt for streamers
+async function handleStreamerToggleHunt(streamerGamertag: string) {
+  const currentUser = getCurrentUser()
+  if (!currentUser) {
+    router.push('/login')
+    return
+  }
+
+  const bountyId = streamerBountyIds.value[streamerGamertag]
+  if (!bountyId) {
+    showError('Bounty not found for this streamer')
+    return
+  }
+
+  const isHunting = streamerHuntingStatus.value[streamerGamertag]
+
+  if (isHunting) {
+    // Leave the hunt
+    const result = await leaveHunt(bountyId, currentUser.id)
+    if (result.success) {
+      success(`You've left the hunt for ${streamerGamertag}`)
+      streamerHuntingStatus.value[streamerGamertag] = false
+
+      // Refresh hunter count
+      const count = await getHunterCount(streamerGamertag)
+      streamerHunterCounts.value[streamerGamertag] = count
+    } else {
+      showError(result.error || 'Failed to leave hunt')
+    }
+  } else {
+    // Join the hunt
+    const result = await joinHunt(bountyId, currentUser.id)
+    if (result.success) {
+      success(`You've joined the hunt for ${streamerGamertag}!`)
+      streamerHuntingStatus.value[streamerGamertag] = true
+
+      // Refresh hunter count
+      const count = await getHunterCount(streamerGamertag)
+      streamerHunterCounts.value[streamerGamertag] = count
+    } else {
+      // Show error modal if hunt limit reached
+      if (result.error?.includes('3 targets')) {
+        huntLimitMessage.value = result.error
+        showHuntLimitModal.value = true
+      } else {
+        showError(result.error || 'Failed to join hunt')
+      }
+    }
+  }
+}
 
 // Function to handle joining/leaving the hunt
 async function handleToggleHunt(targetGamertag: string) {
@@ -324,6 +465,66 @@ async function refreshBountyValues() {
             Be the First to Create One
           </TacticalButton>
         </RouterLink>
+      </div>
+    </div>
+
+    <!-- Streamer Bounty List Section -->
+    <div class="streamer-bounty-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <IconTarget :size="40" className="text-arc-red" />
+          <span class="section-title-gradient streamer-gradient">Streamer Bounties</span>
+        </h2>
+        <p class="section-subtitle">Popular streamers with active bounties</p>
+      </div>
+
+      <!-- Streamer List -->
+      <!-- Top 5 Streamers (Full Width) -->
+      <div class="streamer-list-top5">
+        <div
+          v-for="(streamer, index) in streamerList.slice(0, 5)"
+          :key="streamer"
+          class="streamer-item streamer-item-large"
+        >
+          <div class="streamer-rank">{{ index + 1 }}</div>
+          <div class="streamer-icon">🎮</div>
+          <div class="streamer-info">
+            <div class="streamer-name">{{ streamer }}</div>
+            <div class="streamer-subtext">
+              {{ streamerHunterCounts[streamer] || 0 }} hunter{{ streamerHunterCounts[streamer] === 1 ? '' : 's' }}
+            </div>
+          </div>
+          <button
+            @click="handleStreamerToggleHunt(streamer)"
+            :class="streamerHuntingStatus[streamer] ? 'streamer-leave-btn' : 'streamer-join-btn'"
+          >
+            {{ streamerHuntingStatus[streamer] ? 'Leave Hunt' : 'Join the Hunt' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Remaining Streamers (2 Columns) -->
+      <div class="streamer-list-rest">
+        <div
+          v-for="(streamer, index) in streamerList.slice(5)"
+          :key="streamer"
+          class="streamer-item"
+        >
+          <div class="streamer-rank">{{ index + 6 }}</div>
+          <div class="streamer-icon">🎮</div>
+          <div class="streamer-info">
+            <div class="streamer-name">{{ streamer }}</div>
+            <div class="streamer-subtext">
+              {{ streamerHunterCounts[streamer] || 0 }} hunter{{ streamerHunterCounts[streamer] === 1 ? '' : 's' }}
+            </div>
+          </div>
+          <button
+            @click="handleStreamerToggleHunt(streamer)"
+            :class="streamerHuntingStatus[streamer] ? 'streamer-leave-btn' : 'streamer-join-btn'"
+          >
+            {{ streamerHuntingStatus[streamer] ? 'Leave Hunt' : 'Join the Hunt' }}
+          </button>
+        </div>
       </div>
     </div>
 
@@ -946,5 +1147,74 @@ async function refreshBountyValues() {
 
 .btn-view-hunts {
   @apply flex-1 bg-arc-brown/20 hover:bg-arc-brown/30 text-gray-900 font-semibold py-3 rounded-lg transition text-center;
+}
+
+/* Streamer Bounty Section */
+.streamer-bounty-section {
+  @apply container mx-auto px-4 py-8 sm:py-12 md:py-16;
+}
+
+.streamer-gradient {
+  @apply bg-gradient-to-r from-arc-red via-arc-yellow to-arc-red bg-clip-text text-transparent;
+}
+
+/* Top 5 Streamers - Full Width */
+.streamer-list-top5 {
+  @apply max-w-5xl mx-auto flex flex-col gap-3 mb-3;
+}
+
+/* Remaining Streamers - 2 Column Grid */
+.streamer-list-rest {
+  @apply max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-3;
+}
+
+.streamer-item {
+  @apply flex items-center gap-3 bg-arc-card rounded-lg p-3 border border-arc-red/20 hover:border-arc-red hover:bg-white transition;
+}
+
+.streamer-item-large {
+  @apply p-4 border-2 border-arc-red;
+  animation: glow-red 2s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+@keyframes glow-red {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), 0 0 20px rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5), 0 0 30px rgba(239, 68, 68, 0.3), 0 0 40px rgba(239, 68, 68, 0.2);
+    border-color: #f87171;
+  }
+}
+
+.streamer-rank {
+  @apply w-8 h-8 flex items-center justify-center rounded-full bg-arc-red/20 font-bold text-sm text-gray-900;
+  min-width: 2rem;
+}
+
+.streamer-icon {
+  @apply text-2xl;
+}
+
+.streamer-info {
+  @apply flex-1 min-w-0;
+}
+
+.streamer-name {
+  @apply font-bold text-gray-900 truncate text-sm;
+}
+
+.streamer-subtext {
+  @apply text-xs text-gray-600;
+}
+
+.streamer-join-btn {
+  @apply bg-arc-red hover:bg-arc-red/80 text-black px-3 py-1.5 rounded-md font-semibold text-xs transition shadow-sm;
+}
+
+.streamer-leave-btn {
+  @apply bg-arc-brown/30 hover:bg-arc-brown/50 text-gray-900 border border-arc-brown px-3 py-1.5 rounded-md font-semibold text-xs transition;
 }
 </style>
