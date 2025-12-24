@@ -8,7 +8,7 @@ import { RouterLink } from 'vue-router'
 import { getTimeRemaining, getExpirationColor, extendBounty } from '@/lib/bountyExpiration'
 import { getCurrentUser } from '@/lib/auth'
 import { useToast } from '@/composables/useToast'
-import { joinHunt, leaveHunt, getHunterCount, isHunting, getMyActiveHunts } from '@/lib/hunters'
+import { joinHunt, leaveHunt, getMyActiveHunts, getBatchHunterCounts, getBatchHuntingStatus } from '@/lib/hunters'
 import PageHeader from '@/components/PageHeader.vue'
 import IconInput from '@/components/IconInput.vue'
 import LoadingState from '@/components/LoadingState.vue'
@@ -56,14 +56,18 @@ onMounted(async () => {
 async function loadHunterData() {
   if (!currentUser) return
 
-  // Get my active hunt count
-  myActiveHunts.value = await getMyActiveHunts(currentUser.id)
+  const bountyIds = bounties.value.map(b => b.id)
 
-  // Load hunter counts and status for each bounty
-  for (const bounty of bounties.value) {
-    hunterCounts.value[bounty.id] = await getHunterCount(bounty.id)
-    huntingStatus.value[bounty.id] = await isHunting(bounty.id, currentUser.id)
-  }
+  // Load all data in parallel with batch functions
+  const [activeHunts, counts, status] = await Promise.all([
+    getMyActiveHunts(currentUser.id),
+    getBatchHunterCounts(bountyIds),
+    getBatchHuntingStatus(bountyIds, currentUser.id)
+  ])
+
+  myActiveHunts.value = activeHunts
+  hunterCounts.value = counts
+  huntingStatus.value = status
 }
 
 async function handleJoinHunt(bountyId: string) {

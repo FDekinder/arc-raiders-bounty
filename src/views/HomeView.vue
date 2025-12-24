@@ -12,6 +12,7 @@ import TacticalButton from '@/components/TacticalButton.vue'
 import IconTarget from '@/components/icons/IconTarget.vue'
 import IconHunter from '@/components/icons/IconHunter.vue'
 import IconBounty from '@/components/icons/IconBounty.vue'
+import RolePoll from '@/components/RolePoll.vue'
 
 const router = useRouter()
 const { success, error: showError } = useToast()
@@ -340,6 +341,11 @@ async function refreshBountyValues() {
           </TacticalButton>
         </RouterLink>
       </div>
+    </div>
+
+    <!-- Role Poll Section -->
+    <div class="container mx-auto px-4 py-8">
+      <RolePoll />
     </div>
 
     <!-- Most Wanted Section -->

@@ -130,9 +130,9 @@ export async function isHunting(bountyId: string, hunterId: string): Promise<boo
       .select('id')
       .eq('bounty_id', bountyId)
       .eq('hunter_id', hunterId)
-      .single()
+      .maybeSingle()
 
-    if (error && error.code !== 'PGRST116') throw error
+    if (error) throw error
     return !!data
   } catch (error) {
     console.error('Error checking hunt status:', error)
@@ -185,5 +185,60 @@ export async function getHunterCountByGamertag(targetGamertag: string): Promise<
   } catch (error) {
     console.error('Error getting hunter count by gamertag:', error)
     return 0
+  }
+}
+
+// Batch function to get hunter counts for multiple bounties at once
+export async function getBatchHunterCounts(bountyIds: string[]): Promise<Record<string, number>> {
+  if (bountyIds.length === 0) return {}
+
+  try {
+    const { data, error } = await supabase
+      .from('bounty_hunters')
+      .select('bounty_id')
+      .in('bounty_id', bountyIds)
+
+    if (error) throw error
+
+    // Count hunters per bounty
+    const counts: Record<string, number> = {}
+    bountyIds.forEach(id => counts[id] = 0)
+
+    data?.forEach(hunter => {
+      counts[hunter.bounty_id] = (counts[hunter.bounty_id] || 0) + 1
+    })
+
+    return counts
+  } catch (error) {
+    console.error('Error getting batch hunter counts:', error)
+    return {}
+  }
+}
+
+// Batch function to check hunting status for multiple bounties at once
+export async function getBatchHuntingStatus(bountyIds: string[], hunterId: string): Promise<Record<string, boolean>> {
+  if (bountyIds.length === 0) return {}
+
+  try {
+    const { data, error } = await supabase
+      .from('bounty_hunters')
+      .select('bounty_id')
+      .in('bounty_id', bountyIds)
+      .eq('hunter_id', hunterId)
+
+    if (error) throw error
+
+    // Create status map
+    const status: Record<string, boolean> = {}
+    bountyIds.forEach(id => status[id] = false)
+
+    data?.forEach(hunt => {
+      status[hunt.bounty_id] = true
+    })
+
+    return status
+  } catch (error) {
+    console.error('Error getting batch hunting status:', error)
+    return {}
   }
 }
