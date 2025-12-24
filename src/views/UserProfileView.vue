@@ -12,7 +12,7 @@ import AchievementBadge from '@/components/AchievementBadge.vue'
 import ClanTagEditor from '@/components/ClanTagEditor.vue'
 import RoleBadge from '@/components/RoleBadge.vue'
 import type { Achievement } from '@/lib/supabase'
-import { getCurrentUser, getUserAvatarUrl, GENERIC_AVATARS, getDefaultAvatar } from '@/lib/auth'
+import { getUserAvatarUrl, GENERIC_AVATARS, getDefaultAvatar } from '@/lib/auth'
 import LoadingState from '@/components/LoadingState.vue'
 import AlertMessage from '@/components/AlertMessage.vue'
 import StatCard from '@/components/StatCard.vue'
@@ -20,9 +20,11 @@ import Card from '@/components/Card.vue'
 import EmptyState from '@/components/EmptyState.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { useToast } from '@/composables/useToast'
+import { useAuth } from '@/composables/useAuth'
 
 const route = useRoute()
 const { success, error: showError } = useToast()
+const { currentUser, setUser: setAuthUser } = useAuth()
 const user = ref<User | null>(null)
 const bountiesCreated = ref<Bounty[]>([])
 const claimsSubmitted = ref<any[]>([])
@@ -33,8 +35,7 @@ const uploadingAvatar = ref(false)
 const showAvatarSelector = ref(false)
 
 const userId = route.params.id as string
-const currentUser = getCurrentUser()
-const isOwnProfile = computed(() => currentUser?.id === userId)
+const isOwnProfile = computed(() => currentUser.value?.id === userId)
 
 // Get avatar URL with fallback to default
 const avatarUrl = computed(() => getUserAvatarUrl(user.value))
@@ -149,10 +150,10 @@ async function handleAvatarUpload(event: Event) {
       user.value.avatar_url = urlData.publicUrl
     }
 
-    // Update localStorage
-    if (currentUser?.id === userId) {
-      const updatedUser = { ...currentUser, avatar_url: urlData.publicUrl }
-      localStorage.setItem('arc_user', JSON.stringify(updatedUser))
+    // Update reactive user state
+    if (currentUser.value?.id === userId) {
+      const updatedUser = { ...currentUser.value, avatar_url: urlData.publicUrl }
+      setAuthUser(updatedUser)
     }
 
     success('Profile picture updated successfully!')
@@ -183,10 +184,10 @@ async function selectPresetAvatar(avatarPath: string) {
       user.value.avatar_url = avatarPath
     }
 
-    // Update localStorage
-    if (currentUser?.id === userId) {
-      const updatedUser = { ...currentUser, avatar_url: avatarPath }
-      localStorage.setItem('arc_user', JSON.stringify(updatedUser))
+    // Update reactive user state
+    if (currentUser.value?.id === userId) {
+      const updatedUser = { ...currentUser.value, avatar_url: avatarPath }
+      setAuthUser(updatedUser)
     }
 
     success('Profile picture updated successfully!')
@@ -217,10 +218,10 @@ async function resetToDefaultAvatar() {
       user.value.avatar_url = undefined
     }
 
-    // Update localStorage
-    if (currentUser?.id === userId) {
-      const updatedUser = { ...currentUser, avatar_url: undefined }
-      localStorage.setItem('arc_user', JSON.stringify(updatedUser))
+    // Update reactive user state
+    if (currentUser.value?.id === userId) {
+      const updatedUser = { ...currentUser.value, avatar_url: undefined }
+      setAuthUser(updatedUser)
     }
 
     success('Reset to default avatar!')

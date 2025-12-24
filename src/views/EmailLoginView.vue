@@ -4,10 +4,12 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '@/lib/supabase'
 import { useToast } from '@/composables/useToast'
+import { useAuth } from '@/composables/useAuth'
 import { Mail, Lock, AlertCircle } from 'lucide-vue-next'
 
 const router = useRouter()
 const { success, error: showError } = useToast()
+const { setUser } = useAuth()
 
 const email = ref('')
 const password = ref('')
@@ -46,8 +48,8 @@ async function handleLogin() {
 
     if (userError) throw userError
 
-    // Store user in localStorage
-    localStorage.setItem('arc_user', JSON.stringify(userData))
+    // Update reactive user state
+    setUser(userData)
 
     success('Logged in successfully!')
 

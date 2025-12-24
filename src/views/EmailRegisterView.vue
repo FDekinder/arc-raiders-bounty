@@ -6,10 +6,12 @@ import { supabase } from '@/lib/supabase'
 import type { Platform } from '@/lib/supabase'
 import PlatformSelector from '@/components/PlatformSelector.vue'
 import { useToast } from '@/composables/useToast'
+import { useAuth } from '@/composables/useAuth'
 import { Mail, Lock, User, AlertCircle } from 'lucide-vue-next'
 
 const router = useRouter()
 const { success, error: showError } = useToast()
+const { setUser } = useAuth()
 
 const step = ref<'credentials' | 'platform'>('credentials')
 const email = ref('')
@@ -86,8 +88,8 @@ async function completeRegistration() {
 
     if (userError) throw userError
 
-    // Store user in localStorage
-    localStorage.setItem('arc_user', JSON.stringify(userData))
+    // Update reactive user state
+    setUser(userData)
 
     success('Account created successfully!')
 

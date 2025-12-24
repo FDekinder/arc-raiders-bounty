@@ -4,9 +4,11 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { createOrUpdateUser } from '@/lib/steamAuth'
 import { useToast } from '@/composables/useToast'
+import { useAuth } from '@/composables/useAuth'
 
 const router = useRouter()
 const { success, error: showError } = useToast()
+const { setUser } = useAuth()
 const status = ref('Verifying Steam login...')
 
 onMounted(async () => {
@@ -42,8 +44,8 @@ onMounted(async () => {
 
     if (dbError) throw dbError
 
-    // Store user in localStorage
-    localStorage.setItem('arc_user', JSON.stringify(user))
+    // Update reactive user state
+    setUser(user)
 
     success('Successfully logged in!')
 

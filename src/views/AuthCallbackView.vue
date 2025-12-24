@@ -5,10 +5,12 @@ import { useRouter } from 'vue-router'
 import { supabase } from '@/lib/supabase'
 import { ensureUserProfile } from '@/lib/authHelpers'
 import { useToast } from '@/composables/useToast'
+import { useAuth } from '@/composables/useAuth'
 import { Loader } from 'lucide-vue-next'
 
 const router = useRouter()
 const { success, error: showError } = useToast()
+const { setUser } = useAuth()
 const status = ref<'loading' | 'success' | 'error'>('loading')
 const errorMessage = ref('')
 
@@ -32,8 +34,8 @@ onMounted(async () => {
       throw new Error('Failed to create user profile')
     }
 
-    // Store user in localStorage for getCurrentUser() compatibility
-    localStorage.setItem('arc_user', JSON.stringify(userProfile))
+    // Update reactive user state (this also updates localStorage)
+    setUser(userProfile)
 
     status.value = 'success'
     success('Successfully signed in!')

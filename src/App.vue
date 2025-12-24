@@ -7,10 +7,10 @@ import CookieConsent from './components/CookieConsent.vue'
 import WelcomeModal from './components/WelcomeModal.vue'
 import RoleBadge from './components/RoleBadge.vue'
 import SeasonCountdown from './components/SeasonCountdown.vue'
-import { getCurrentUser, logout } from './lib/auth'
-import { computed, ref } from 'vue'
+import { useAuth } from './composables/useAuth'
+import { ref } from 'vue'
 
-const currentUser = computed(() => getCurrentUser())
+const { currentUser, logout } = useAuth()
 const mobileMenuOpen = ref(false)
 
 function toggleMobileMenu() {

@@ -5,9 +5,10 @@ import { useRouter } from 'vue-router'
 import RoleSelector from '@/components/RoleSelector.vue'
 import type { UserRole } from '@/lib/supabase'
 import { supabase } from '@/lib/supabase'
-import { getCurrentUser } from '@/lib/auth'
+import { useAuth } from '@/composables/useAuth'
 
 const router = useRouter()
+const { currentUser, setUser } = useAuth()
 const selectedRole = ref<UserRole | undefined>(undefined)
 const saving = ref(false)
 const error = ref<string | null>(null)
@@ -22,8 +23,7 @@ async function confirmRole() {
     return
   }
 
-  const currentUser = getCurrentUser()
-  if (!currentUser) {
+  if (!currentUser.value) {
     error.value = 'User not found. Please log in again.'
     return
   }
@@ -36,13 +36,13 @@ async function confirmRole() {
     const { error: updateError } = await supabase
       .from('users')
       .update({ game_role: selectedRole.value })
-      .eq('id', currentUser.id)
+      .eq('id', currentUser.value.id)
 
     if (updateError) throw updateError
 
-    // Update localStorage
-    const updatedUser = { ...currentUser, game_role: selectedRole.value }
-    localStorage.setItem('arc_user', JSON.stringify(updatedUser))
+    // Update reactive user state
+    const updatedUser = { ...currentUser.value, game_role: selectedRole.value }
+    setUser(updatedUser)
 
     // Redirect to home
     router.push('/')

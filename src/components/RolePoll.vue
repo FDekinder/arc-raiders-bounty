@@ -13,6 +13,8 @@ const voting = ref(false)
 const userVote = ref<'good_guy' | 'proud_rat' | null>(null)
 const goodGuyVotes = ref(0)
 const proudRatVotes = ref(0)
+const showConfirmDialog = ref(false)
+const pendingVote = ref<'good_guy' | 'proud_rat' | null>(null)
 
 const totalVotes = computed(() => goodGuyVotes.value + proudRatVotes.value)
 const goodGuyPercentage = computed(() =>
@@ -54,13 +56,18 @@ async function fetchPollData() {
   }
 }
 
-async function vote(choice: 'good_guy' | 'proud_rat') {
+function selectChoice(choice: 'good_guy' | 'proud_rat') {
   if (!currentUser) {
     showError('Please log in to vote')
     return
   }
 
-  if (voting.value) return
+  pendingVote.value = choice
+  showConfirmDialog.value = true
+}
+
+async function confirmVote() {
+  if (!pendingVote.value || !currentUser) return
 
   voting.value = true
   try {
@@ -68,14 +75,16 @@ async function vote(choice: 'good_guy' | 'proud_rat') {
       .from('role_poll_votes')
       .upsert({
         user_id: currentUser.id,
-        vote: choice,
+        vote: pendingVote.value,
         updated_at: new Date().toISOString()
       })
 
     if (voteError) throw voteError
 
-    userVote.value = choice
+    userVote.value = pendingVote.value
     success('Vote recorded!')
+    showConfirmDialog.value = false
+    pendingVote.value = null
     await fetchPollData()
   } catch (err: any) {
     showError('Failed to record vote')
@@ -83,6 +92,11 @@ async function vote(choice: 'good_guy' | 'proud_rat') {
   } finally {
     voting.value = false
   }
+}
+
+function cancelVote() {
+  showConfirmDialog.value = false
+  pendingVote.value = null
 }
 
 onMounted(() => {
@@ -98,7 +112,7 @@ onMounted(() => {
     <div class="poll-grid">
       <!-- Good Guy Option -->
       <button
-        @click="vote('good_guy')"
+        @click="selectChoice('good_guy')"
         :disabled="voting || !currentUser"
         :class="[
           'poll-option',
@@ -124,7 +138,7 @@ onMounted(() => {
 
       <!-- Proud Rat Option -->
       <button
-        @click="vote('proud_rat')"
+        @click="selectChoice('proud_rat')"
         :disabled="voting || !currentUser"
         :class="[
           'poll-option',
@@ -155,6 +169,27 @@ onMounted(() => {
 
     <div class="total-votes">
       Total Votes: {{ totalVotes.toLocaleString() }}
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div v-if="showConfirmDialog" class="dialog-overlay" @click="cancelVote">
+      <div class="dialog-content" @click.stop>
+        <h3 class="dialog-title">Confirm Your Choice</h3>
+        <p class="dialog-message">
+          Are you sure you want to vote for
+          <strong class="dialog-choice">{{ pendingVote === 'good_guy' ? 'The Good Guy' : 'The Proud Rat' }}</strong>?
+        </p>
+        <p class="dialog-note">You can change your vote later if you want.</p>
+
+        <div class="dialog-buttons">
+          <button @click="cancelVote" class="dialog-btn-cancel" :disabled="voting">
+            Cancel
+          </button>
+          <button @click="confirmVote" class="dialog-btn-confirm" :disabled="voting">
+            {{ voting ? 'Submitting...' : 'Confirm Vote' }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -244,5 +279,42 @@ onMounted(() => {
 
 .total-votes {
   @apply text-center text-gray-600 font-semibold;
+}
+
+/* Confirmation Dialog */
+.dialog-overlay {
+  @apply fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4;
+}
+
+.dialog-content {
+  @apply bg-white rounded-xl p-6 md:p-8 max-w-md w-full shadow-2xl border-2 border-arc-red;
+}
+
+.dialog-title {
+  @apply text-2xl font-bold text-gray-900 mb-4 text-center;
+}
+
+.dialog-message {
+  @apply text-gray-700 text-center mb-2 text-lg;
+}
+
+.dialog-choice {
+  @apply text-arc-red font-bold;
+}
+
+.dialog-note {
+  @apply text-gray-500 text-sm text-center mb-6;
+}
+
+.dialog-buttons {
+  @apply flex gap-4;
+}
+
+.dialog-btn-cancel {
+  @apply flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 font-bold py-3 rounded-lg transition-all;
+}
+
+.dialog-btn-confirm {
+  @apply flex-1 bg-arc-red hover:bg-arc-red/80 text-white font-bold py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed;
 }
 </style>
