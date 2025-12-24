@@ -187,6 +187,14 @@ onMounted(async () => {
   )
 })
 
+// Scroll to streamers section
+function scrollToStreamers() {
+  const element = document.getElementById('streamer-bounties')
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
 // Function to handle joining/leaving the hunt for streamers
 async function handleStreamerToggleHunt(streamerGamertag: string) {
   const currentUser = getCurrentUser()
@@ -340,6 +348,14 @@ async function refreshBountyValues() {
             Report Kill
           </TacticalButton>
         </RouterLink>
+        <button @click="scrollToStreamers" class="pulse-button">
+          <TacticalButton variant="primary" size="lg">
+            <template #icon>
+              <IconTarget :size="20" />
+            </template>
+            Streamer Bounty
+          </TacticalButton>
+        </button>
       </div>
     </div>
 
@@ -475,7 +491,7 @@ async function refreshBountyValues() {
     </div>
 
     <!-- Streamer Bounty List Section -->
-    <div class="streamer-bounty-section">
+    <div id="streamer-bounties" class="streamer-bounty-section">
       <div class="section-header">
         <h2 class="section-title">
           <IconTarget :size="40" className="text-arc-red" />
@@ -1222,5 +1238,25 @@ async function refreshBountyValues() {
 
 .streamer-leave-btn {
   @apply bg-arc-brown/30 hover:bg-arc-brown/50 text-gray-900 border border-arc-brown px-3 py-1.5 rounded-md font-semibold text-xs transition;
+}
+
+/* Pulse animation for Streamer Bounty button */
+.pulse-button {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+
+.pulse-button:hover {
+  animation: none;
 }
 </style>
