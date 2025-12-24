@@ -62,17 +62,22 @@ const faqSections: FAQSection[] = [
       {
         question: 'How do I create a bounty on another player?',
         answer:
-          'Navigate to "Create Bounty" in the menu. Enter the target player\'s gamertag, select their platform (Steam, Xbox, or PlayStation), and set your bounty amount. You can optionally add platform player IDs for verification. Click "Create Bounty" to publish it.',
+          'Navigate to "Create Bounty" in the menu. Select the platform (Steam, Xbox, or PlayStation), choose a kill type/betrayal category that describes how they betrayed you, enter the target player\'s gamertag, and click "Create Bounty". The bounty amount starts at a base value and increases dynamically as more hunters join.',
       },
       {
-        question: 'What is the minimum bounty amount?',
+        question: 'How does the dynamic bounty system work?',
         answer:
-          'The minimum bounty amount is typically 100 points. Bounty amounts are in platform points and determine how attractive your bounty is to hunters. Higher bounties attract more attention and competition.',
+          'Bounties use a dynamic reward system. The bounty value starts at a base amount and increases automatically as more hunters join the hunt. The more dangerous the target becomes (more hunters = more wanted), the higher the reward! This ensures popular targets have appropriately high bounties.',
       },
       {
-        question: 'How do I verify a player exists?',
+        question: 'What are kill types and betrayal categories?',
         answer:
-          'The system will attempt to verify the player exists based on the gamertag and platform you provide. If you have their platform player ID (Steam ID, Xbox Live ID, or PSN ID), including it will help with verification. Make sure to spell the gamertag correctly.',
+          'When creating a bounty, you must select a kill type that describes the betrayal: Friendly Fire Betrayal (killed after saying friendly/truce), Back Stabber (shot in the back), Loot Ambush (killed during looting), Exit Camper (killed at extraction), Spawn Kill (killed right after spawning), Team Kill (killed by teammate), or Other (with custom description). This helps hunters understand the context.',
+      },
+      {
+        question: 'Do I need to verify the player exists?',
+        answer:
+          'No! The system has been simplified - you can create a bounty on any gamertag without verification. Just make sure to spell the gamertag correctly and select the right platform so hunters can find them in-game.',
       },
       {
         question: 'What platforms are supported?',
@@ -82,12 +87,7 @@ const faqSections: FAQSection[] = [
       {
         question: 'How long do bounties last?',
         answer:
-          'Bounties remain active until they are successfully claimed and verified, or until you cancel them. Active bounties are displayed in the bounties list and contribute to the "Most Wanted" rankings.',
-      },
-      {
-        question: 'Can I extend my bounty duration?',
-        answer:
-          'Currently, bounties do not have a set expiration time. They remain active indefinitely until claimed. You can cancel your own bounties at any time from the bounty details page.',
+          'Bounties remain active until they are successfully claimed and verified by an admin. Active bounties are displayed in the bounties list and contribute to the "Most Wanted" rankings. Multiple hunters can compete to claim the same bounty.',
       },
     ],
   },
@@ -96,29 +96,34 @@ const faqSections: FAQSection[] = [
     icon: Trophy,
     questions: [
       {
-        question: 'How do I claim/hunt a bounty?',
+        question: 'How do I join a hunt?',
         answer:
-          'Browse the "Bounties" page to find active bounties. Click on a bounty to view details, then click "Hunt This Target" to join the hunt. Once you\'ve eliminated the target in-game, take a screenshot showing the kill and submit it as proof via the "Submit Claim" button.',
+          'Browse the "Bounties" page or "Streamer Bounties" section to find active bounties. Click "Join the Hunt" on any bounty to start hunting that target. You can hunt up to 3 targets at the same time. Once you\'ve eliminated the target in-game, submit proof via the "Claim Bounty" or "Submit Kill" page.',
       },
       {
-        question: 'What is the 3-hunt limit?',
+        question: 'What is the 3-target hunt limit?',
         answer:
-          'Each bounty has a maximum of 3 active hunters at a time. This ensures fair competition and prevents bounties from being overwhelmed. If a bounty already has 3 hunters, you\'ll need to wait until a slot opens up.',
+          'Each player can actively hunt a maximum of 3 targets at once. This prevents hunters from joining every bounty and ensures focused hunting. You can leave a hunt at any time to free up a slot, or wait until you successfully claim a bounty to open a slot.',
       },
       {
-        question: 'How do I join/leave a hunt?',
+        question: 'Can multiple hunters hunt the same target?',
         answer:
-          'To join a hunt, click "Join Hunt" on the bounty details page (if slots are available). To leave a hunt, go to "My Claims" and click "Leave Hunt" on the active hunt you want to abandon. Leaving a hunt opens up a slot for other players.',
+          'Yes! Unlike the old system, there is no limit to how many hunters can join a single bounty. Multiple players can compete to eliminate the same target. The first hunter to submit verified proof wins the bounty reward. More hunters = higher bounty value!',
+      },
+      {
+        question: 'How do I leave a hunt?',
+        answer:
+          'To leave a hunt, go to the bounty details page or "My Active Hunts" section and click "Leave Hunt". This will free up one of your 3 active hunt slots, allowing you to join a different bounty. You can rejoin the same hunt later if you change your mind.',
       },
       {
         question: 'How do I submit proof of elimination?',
         answer:
-          'After eliminating your target, take a clear screenshot showing the kill feed with the victim\'s gamertag. Go to "My Claims", find the bounty, and click "Submit Proof". Upload your screenshot and submit it for verification by admins.',
+          'After eliminating your target in-game, take a clear screenshot showing the kill feed with the victim\'s gamertag visible. Navigate to "Claim Bounty" or "Submit Kill", select the bounty, upload your screenshot, and submit it for admin verification.',
       },
       {
         question: 'What kind of proof is accepted?',
         answer:
-          'Valid proof includes clear screenshots showing the kill feed with the target\'s gamertag visible, the elimination message, or your kill confirmation. The screenshot must be unedited and clearly show you eliminated the correct target. Fake or doctored screenshots will result in claim rejection and potential account penalties.',
+          'Valid proof includes clear, unedited screenshots showing: the kill feed with the target\'s gamertag, the elimination message, or your kill confirmation. The screenshot must clearly show YOU eliminated the CORRECT target. Fake, edited, or unclear screenshots will be rejected and may result in account penalties.',
       },
     ],
   },
@@ -129,22 +134,27 @@ const faqSections: FAQSection[] = [
       {
         question: 'How do points work?',
         answer:
-          'Points are the currency of the bounty system. You earn points by successfully completing bounties and eliminating targets. Points are awarded based on the bounty amount. Your total points determine your rank on the leaderboard.',
+          'Points are the currency of the bounty system. You earn points by successfully completing bounties and eliminating targets. The bounty amount is calculated dynamically based on how many hunters are pursuing the target - more hunters means a higher reward! Your total points determine your rank on the leaderboard.',
       },
       {
         question: 'How do I earn points?',
         answer:
-          'Earn points by: 1) Successfully claiming bounties and having your proof verified, 2) Recording kills in the kill tracker system, 3) Unlocking achievements. The primary way to earn points is by hunting and eliminating bounty targets.',
+          'Earn points by: 1) Successfully claiming bounties and having your proof verified by admins, 2) Recording kills in the kill tracker system, 3) Unlocking achievements. The primary way to earn points is by hunting and eliminating bounty targets. High-value targets with many hunters offer the biggest rewards!',
       },
       {
-        question: 'Can I buy points?',
+        question: 'How is the bounty reward calculated?',
         answer:
-          'Currently, points cannot be purchased. All points must be earned through gameplay. This ensures fair competition and rewards skilled hunters. Future updates may introduce additional ways to earn points.',
+          'Bounty rewards are calculated dynamically: Base Amount + (Number of Hunters × Multiplier). The more hunters join a bounty, the higher the reward becomes. This creates natural market dynamics - popular targets become more valuable, attracting even more competition!',
       },
       {
         question: 'What happens to points when a bounty is completed?',
         answer:
-          'When a bounty claim is verified, the bounty amount is awarded to the successful hunter as points. The bounty is then marked as completed and removed from the active bounties list. The bounty creator\'s points are not affected.',
+          'When a bounty claim is verified by an admin, the calculated bounty amount is awarded to the successful hunter as points. The bounty is then marked as completed. Multiple bounties can exist on the same target, so completing one bounty doesn\'t remove all bounties on that player.',
+      },
+      {
+        question: 'Can I buy points?',
+        answer:
+          'No, points cannot be purchased. All points must be earned through gameplay. This ensures fair competition and rewards skilled hunters. The only way to get points is to hunt targets, submit verified kills, and unlock achievements.',
       },
     ],
   },
@@ -231,11 +241,6 @@ const faqSections: FAQSection[] = [
     icon: Settings,
     questions: [
       {
-        question: "Why isn't my player verification working?",
-        answer:
-          'Player verification issues can occur if: 1) The gamertag is spelled incorrectly, 2) The platform is wrong, 3) The player doesn\'t exist on that platform, 4) API services are temporarily down. Double-check the spelling and platform. If issues persist, try again later or contact support.',
-      },
-      {
         question: 'What browsers are supported?',
         answer:
           'The bounty system works best on modern browsers including: Chrome, Firefox, Edge, Safari, and Brave. Make sure your browser is up to date for the best experience. Mobile browsers are also supported.',
@@ -246,9 +251,19 @@ const faqSections: FAQSection[] = [
           'Currently, there is no dedicated mobile app. However, the website is fully responsive and works great on mobile browsers. You can add it to your home screen for a near-app experience. A mobile app may be developed in the future based on community demand.',
       },
       {
+        question: 'Why can\'t I join more hunts?',
+        answer:
+          'If you see a message that you\'ve reached the hunt limit, it means you\'re already actively hunting 3 targets. You can only hunt 3 targets at a time. To join a new hunt, you must first leave one of your active hunts or wait until you successfully claim a bounty.',
+      },
+      {
+        question: 'What are Streamer Bounties?',
+        answer:
+          'Streamer Bounties are permanent bounties on popular streamers and content creators. These are pre-created by the admins and appear in a special section on the home page. The top 5 most-hunted streamers are highlighted with a glowing red border. Anyone can join the hunt on these high-value targets!',
+      },
+      {
         question: 'How do I contact support?',
         answer:
-          'For support, you can: 1) Join the Discord community (link below), 2) Message the admin team directly, 3) Create an issue on the GitHub repository if it\'s a technical bug. We aim to respond to all support requests within 24-48 hours.',
+          'For support, you can: 1) Join the Discord community, 2) Message the admin team directly through the platform, 3) Create an issue on the GitHub repository if it\'s a technical bug. We aim to respond to all support requests within 24-48 hours.',
       },
     ],
   },
