@@ -63,7 +63,26 @@ onMounted(async () => {
     return
   }
 
-  // Check cookie consent
+  // Check Google Funding Choices consent status
+  // @ts-ignore
+  if (window.__tcfapi) {
+    // @ts-ignore
+    window.__tcfapi('addEventListener', 2, (tcData: any, success: boolean) => {
+      if (success && tcData.gdprApplies) {
+        // User is in GDPR region
+        if (tcData.eventStatus === 'useractioncomplete' || tcData.eventStatus === 'tcloaded') {
+          // Check if user consented to ads (Purpose 1: Store/access info, Purpose 3: Create personalized ads profile)
+          const hasConsent = tcData.purpose?.consents?.[1] && tcData.purpose?.consents?.[3]
+          if (!hasConsent) {
+            shouldShowAd.value = false
+            return
+          }
+        }
+      }
+    })
+  }
+
+  // Fallback: Check legacy cookie consent
   const adsEnabled = localStorage.getItem('ads_enabled')
   if (adsEnabled === 'false') {
     shouldShowAd.value = false
