@@ -20,14 +20,28 @@ const saving = ref(false)
 
 // Extract YouTube video ID from URL
 function extractVideoId(url: string): string | null {
+  // Clean the URL - remove whitespace and common trailing characters
+  const cleanUrl = url.trim()
+
   const patterns = [
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/,
-    /youtube\.com\/embed\/([^&\s]+)/,
-    /youtube\.com\/v\/([^&\s]+)/,
+    // YouTube Shorts: youtube.com/shorts/VIDEO_ID
+    /(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+    // Standard watch URL: youtube.com/watch?v=VIDEO_ID
+    /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
+    // Short URL: youtu.be/VIDEO_ID
+    /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+    // Embed URL: youtube.com/embed/VIDEO_ID
+    /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+    // Short URL with query params: youtu.be/VIDEO_ID?
+    /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})[?&]?/,
+    // Watch URL with additional params
+    /(?:youtube\.com\/watch\?.*v=)([a-zA-Z0-9_-]{11})/,
+    // Mobile URL: m.youtube.com
+    /(?:m\.youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
   ]
 
   for (const pattern of patterns) {
-    const match = url.match(pattern)
+    const match = cleanUrl.match(pattern)
     if (match && match[1]) {
       return match[1]
     }
