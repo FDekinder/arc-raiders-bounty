@@ -31,8 +31,11 @@ export function useSEO(config: SEOConfig) {
     updateMetaTag('property', 'og:description', config.description)
     updateMetaTag('property', 'og:url', config.canonical || `${baseUrl}${route.path}`)
     updateMetaTag('property', 'og:image', config.ogImage || `${baseUrl}/og-image.png`)
+    updateMetaTag('property', 'og:image:secure_url', config.ogImage || `${baseUrl}/og-image.png`)
+    updateMetaTag('property', 'og:image:type', 'image/png')
     updateMetaTag('property', 'og:image:width', '1200')
     updateMetaTag('property', 'og:image:height', '630')
+    updateMetaTag('property', 'og:image:alt', config.title)
 
     // Twitter tags
     updateMetaTag('property', 'twitter:card', 'summary_large_image')
