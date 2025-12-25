@@ -6,7 +6,7 @@ import type { Bounty, MostWanted } from '@/lib/supabase'
 import { Target, Clock, Search, Users, UserPlus, UserMinus, Share2 } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import { getTimeRemaining, getExpirationColor, extendBounty } from '@/lib/bountyExpiration'
-import { getCurrentUser } from '@/lib/auth'
+import { useAuth } from '@/composables/useAuth'
 import { useToast } from '@/composables/useToast'
 import { joinHunt, leaveHunt, getMyActiveHunts, getBatchHunterCounts, getBatchHuntingStatus } from '@/lib/hunters'
 import PageHeader from '@/components/PageHeader.vue'
@@ -17,6 +17,7 @@ import Card from '@/components/Card.vue'
 import ShareBountyModal from '@/components/ShareBountyModal.vue'
 import KillTypeBadge from '@/components/KillTypeBadge.vue'
 import AdUnit from '@/components/AdUnit.vue'
+import LoginPromptModal from '@/components/LoginPromptModal.vue'
 import type { BountyShareData } from '@/lib/shareUtils'
 
 const bounties = ref<Bounty[]>([])
@@ -34,7 +35,8 @@ const myActiveHunts = ref(0)
 const joiningHunt = ref<string | null>(null)
 
 const { success, error: showError } = useToast()
-const currentUser = getCurrentUser()
+const { currentUser } = useAuth()
+const showLoginPrompt = ref(false)
 
 // Ad configuration
 const adSlotBountyList = import.meta.env.VITE_AD_SLOT_BOUNTY_LIST || 'PLACEHOLDER_SLOT_1'
@@ -54,15 +56,15 @@ onMounted(async () => {
 })
 
 async function loadHunterData() {
-  if (!currentUser) return
+  if (!currentUser.value) return
 
   const bountyIds = bounties.value.map(b => b.id)
 
   // Load all data in parallel with batch functions
   const [activeHunts, counts, status] = await Promise.all([
-    getMyActiveHunts(currentUser.id),
+    getMyActiveHunts(currentUser.value.id),
     getBatchHunterCounts(bountyIds),
-    getBatchHuntingStatus(bountyIds, currentUser.id)
+    getBatchHuntingStatus(bountyIds, currentUser.value.id)
   ])
 
   myActiveHunts.value = activeHunts
@@ -71,14 +73,14 @@ async function loadHunterData() {
 }
 
 async function handleJoinHunt(bountyId: string) {
-  if (!currentUser) {
-    showError('Please login to join a hunt')
+  if (!currentUser.value) {
+    showLoginPrompt.value = true
     return
   }
 
   joiningHunt.value = bountyId
 
-  const result = await joinHunt(bountyId, currentUser.id)
+  const result = await joinHunt(bountyId, currentUser.value.id)
 
   if (result.success) {
     success('You are now hunting this target!')
@@ -93,11 +95,11 @@ async function handleJoinHunt(bountyId: string) {
 }
 
 async function handleLeaveHunt(bountyId: string) {
-  if (!currentUser) return
+  if (!currentUser.value) return
 
   joiningHunt.value = bountyId
 
-  const result = await leaveHunt(bountyId, currentUser.id)
+  const result = await leaveHunt(bountyId, currentUser.value.id)
 
   if (result.success) {
     success('You have stopped hunting this target')
@@ -112,7 +114,7 @@ async function handleLeaveHunt(bountyId: string) {
 }
 
 async function handleExtendBounty(bountyId: string) {
-  if (!currentUser) return
+  if (!currentUser.value) return
 
   try {
     const { error } = await extendBounty(bountyId, 7)
@@ -377,6 +379,9 @@ function closeShareModal() {
       :is-open="shareModalOpen"
       @close="closeShareModal"
     />
+
+    <!-- Login Prompt Modal -->
+    <LoginPromptModal :show="showLoginPrompt" @close="showLoginPrompt = false" />
   </div>
 </template>
 

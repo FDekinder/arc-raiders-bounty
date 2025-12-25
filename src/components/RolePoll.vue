@@ -2,11 +2,12 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '@/lib/supabase'
-import { getCurrentUser } from '@/lib/auth'
+import { useAuth } from '@/composables/useAuth'
 import { useToast } from '@/composables/useToast'
+import LoginPromptModal from './LoginPromptModal.vue'
 
 const { success, error: showError } = useToast()
-const currentUser = getCurrentUser()
+const { currentUser } = useAuth()
 
 const loading = ref(true)
 const voting = ref(false)
@@ -15,6 +16,7 @@ const goodGuyVotes = ref(0)
 const proudRatVotes = ref(0)
 const showConfirmDialog = ref(false)
 const pendingVote = ref<'good_guy' | 'proud_rat' | null>(null)
+const showLoginPrompt = ref(false)
 
 const totalVotes = computed(() => goodGuyVotes.value + proudRatVotes.value)
 const goodGuyPercentage = computed(() =>
@@ -38,11 +40,11 @@ async function fetchPollData() {
     proudRatVotes.value = votes?.filter(v => v.vote === 'proud_rat').length || 0
 
     // Get user's vote if logged in
-    if (currentUser) {
+    if (currentUser.value) {
       const { data: userVoteData, error: userVoteError } = await supabase
         .from('role_poll_votes')
         .select('vote')
-        .eq('user_id', currentUser.id)
+        .eq('user_id', currentUser.value.id)
         .single()
 
       if (!userVoteError && userVoteData) {
@@ -57,8 +59,8 @@ async function fetchPollData() {
 }
 
 function selectChoice(choice: 'good_guy' | 'proud_rat') {
-  if (!currentUser) {
-    showError('Please log in to vote')
+  if (!currentUser.value) {
+    showLoginPrompt.value = true
     return
   }
 
@@ -67,14 +69,14 @@ function selectChoice(choice: 'good_guy' | 'proud_rat') {
 }
 
 async function confirmVote() {
-  if (!pendingVote.value || !currentUser) return
+  if (!pendingVote.value || !currentUser.value) return
 
   voting.value = true
   try {
     const { error: voteError } = await supabase
       .from('role_poll_votes')
       .upsert({
-        user_id: currentUser.id,
+        user_id: currentUser.value.id,
         vote: pendingVote.value,
         updated_at: new Date().toISOString()
       })
@@ -113,11 +115,10 @@ onMounted(() => {
       <!-- Good Guy Option -->
       <button
         @click="selectChoice('good_guy')"
-        :disabled="voting || !currentUser"
+        :disabled="voting"
         :class="[
           'poll-option',
-          userVote === 'good_guy' ? 'poll-option-selected' : '',
-          !currentUser ? 'poll-option-disabled' : ''
+          userVote === 'good_guy' ? 'poll-option-selected' : ''
         ]"
       >
         <div class="image-container">
@@ -139,11 +140,10 @@ onMounted(() => {
       <!-- Proud Rat Option -->
       <button
         @click="selectChoice('proud_rat')"
-        :disabled="voting || !currentUser"
+        :disabled="voting"
         :class="[
           'poll-option',
-          userVote === 'proud_rat' ? 'poll-option-selected' : '',
-          !currentUser ? 'poll-option-disabled' : ''
+          userVote === 'proud_rat' ? 'poll-option-selected' : ''
         ]"
       >
         <div class="image-container">
@@ -161,10 +161,6 @@ onMounted(() => {
           </div>
         </div>
       </button>
-    </div>
-
-    <div v-if="!currentUser" class="login-notice">
-      <p>Log in to vote and see the results!</p>
     </div>
 
     <div class="total-votes">
@@ -191,6 +187,9 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- Login Prompt Modal -->
+    <LoginPromptModal :show="showLoginPrompt" @close="showLoginPrompt = false" />
   </div>
 </template>
 

@@ -139,19 +139,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/auth/steam/callback', '/auth/callback', '/register', '/email-login', '/select-role', '/forgot-password', '/reset-password', '/faq', '/privacy', '/design-demo', '/community-guidelines', '/report-bug']
-  const authRequired = !publicPages.includes(to.path)
   const currentUser = getCurrentUser()
 
-  // In development, skip authentication checks (except for admin routes)
-  const isDevelopment = import.meta.env.DEV
-
-  // Check authentication (skip in development)
-  if (authRequired && !currentUser && !isDevelopment) {
-    return next('/login')
-  }
-
-  // Check admin-only routes (always enforce, even in dev)
+  // Check admin-only routes (always enforce)
   const adminOnlyRoutes = ['/verify', '/admin/bug-reports']
   if (adminOnlyRoutes.includes(to.path)) {
     if (!currentUser || currentUser.role !== 'admin') {
@@ -160,6 +150,7 @@ router.beforeEach((to, from, next) => {
     }
   }
 
+  // Allow all other routes for guests (they can browse but not interact)
   next()
 })
 

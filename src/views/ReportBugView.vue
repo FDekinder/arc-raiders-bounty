@@ -4,14 +4,13 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Bug, Send, AlertCircle, Info } from 'lucide-vue-next'
 import { useToast } from '@/composables/useToast'
-import { getCurrentUser } from '@/lib/auth'
+import { useAuth } from '@/composables/useAuth'
 import PageHeader from '@/components/PageHeader.vue'
 import { supabase } from '@/lib/supabase'
 
 const router = useRouter()
 const { success, error: showError } = useToast()
-
-const currentUser = getCurrentUser()
+const { currentUser } = useAuth()
 
 const bugType = ref<'bug' | 'feature' | 'improvement' | 'other'>('bug')
 const title = ref('')
@@ -60,8 +59,8 @@ async function handleSubmit() {
   try {
     // Create bug report in database
     const { error: dbError } = await supabase.from('bug_reports').insert({
-      user_id: currentUser?.id || null,
-      username: currentUser?.username || 'Anonymous',
+      user_id: currentUser.value?.id || null,
+      username: currentUser.value?.username || 'Anonymous',
       bug_type: bugType.value,
       title: title.value.trim(),
       description: description.value.trim(),

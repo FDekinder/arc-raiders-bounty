@@ -44,6 +44,10 @@ function goToEmailLogin() {
 function goToRegister() {
   router.push('/register')
 }
+
+function continueAsGuest() {
+  router.push('/')
+}
 </script>
 
 <template>
@@ -92,6 +96,11 @@ function goToRegister() {
         <button @click="goToEmailLogin" class="email-btn">
           <Mail :size="32" />
           <span>Sign in with Email</span>
+        </button>
+
+        <!-- Continue as Guest Button -->
+        <button @click="continueAsGuest" class="guest-btn">
+          Continue as Guest
         </button>
 
         <!-- Register Link -->
@@ -182,6 +191,10 @@ function goToRegister() {
 
 .email-btn {
   @apply w-full bg-arc-cyan hover:bg-arc-cyan/80 text-black font-bold py-4 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-3 shadow-lg shadow-arc-cyan/30;
+}
+
+.guest-btn {
+  @apply w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition duration-200 mt-4;
 }
 
 .register-section {

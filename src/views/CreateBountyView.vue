@@ -5,12 +5,14 @@ import { createBounty, checkExistingBounty } from '@/lib/db'
 import { useRouter } from 'vue-router'
 import { Target } from 'lucide-vue-next'
 import { useToast } from '@/composables/useToast'
-import { getCurrentUser } from '@/lib/auth'
+import { useAuth } from '@/composables/useAuth'
+import LoginPromptModal from '@/components/LoginPromptModal.vue'
 import type { Platform } from '@/lib/platformVerification'
 import type { KillType } from '@/components/KillTypeBadge.vue'
 
 const router = useRouter()
 const { success, error: showError } = useToast()
+const { currentUser } = useAuth()
 
 const gamertag = ref('')
 const embarkId = ref('')
@@ -24,14 +26,8 @@ const otherDescription = ref('')
 const showExistingBountyModal = ref(false)
 const existingBounty = ref<any>(null)
 
-const currentUser = getCurrentUser()
-
-// Redirect to login if not authenticated
-if (!currentUser) {
-  router.push('/login')
-}
-
-const userId = currentUser?.id || ''
+// Login prompt for guests
+const showLoginPrompt = ref(false)
 
 const platforms = [
   { value: 'steam', label: 'Steam', icon: '🎮' },
@@ -94,9 +90,8 @@ async function handleSubmit() {
   error.value = ''
 
   // Check if user is logged in
-  if (!userId) {
-    showError('You must be logged in to create a bounty')
-    router.push('/login')
+  if (!currentUser.value) {
+    showLoginPrompt.value = true
     return
   }
 
@@ -136,7 +131,7 @@ async function handleSubmit() {
     await createBounty(
       targetGamertag,
       1, // Placeholder - actual amount calculated dynamically
-      userId,
+      currentUser.value.id,
       undefined, // No player ID verification
       selectedPlatform.value,
       selectedKillType.value as KillType,
@@ -352,6 +347,9 @@ function closeModal() {
       </div>
     </div>
   </div>
+
+  <!-- Login Prompt Modal -->
+  <LoginPromptModal :show="showLoginPrompt" @close="showLoginPrompt = false" />
 </template>
 
 <style scoped>

@@ -139,6 +139,16 @@ function closeMobileMenu() {
                 <LogOut :size="18" />
               </button>
             </div>
+
+            <!-- Login Button for Guests -->
+            <div v-else class="ml-4 pl-4 border-l border-arc-red/20">
+              <RouterLink
+                to="/login"
+                class="bg-arc-red hover:bg-arc-red/80 text-white font-bold px-4 py-2 rounded-lg transition"
+              >
+                Login
+              </RouterLink>
+            </div>
           </div>
 
           <!-- Mobile Menu Button -->
@@ -260,6 +270,17 @@ function closeMobileMenu() {
                 <LogOut :size="18" />
                 <span>Logout</span>
               </button>
+            </div>
+
+            <!-- Login Button for Guests Mobile -->
+            <div v-else class="border-t border-arc-red/20 pt-4 mt-4">
+              <RouterLink
+                to="/login"
+                class="mx-4 bg-arc-red hover:bg-arc-red/80 text-white font-bold px-4 py-3 rounded-lg transition block text-center"
+                @click="closeMobileMenu"
+              >
+                Login
+              </RouterLink>
             </div>
           </div>
         </div>
