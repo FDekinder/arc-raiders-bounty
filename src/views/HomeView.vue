@@ -908,9 +908,8 @@ async function refreshBountyValues() {
 
 .medal-glow {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -923,11 +922,11 @@ async function refreshBountyValues() {
 @keyframes pulse {
   0%,
   100% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
     opacity: 0.5;
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.1);
+    transform: scale(1.1);
     opacity: 0.8;
   }
 }
