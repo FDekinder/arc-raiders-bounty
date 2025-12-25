@@ -1,0 +1,135 @@
+/* Admin Users Tab Styles */
+.admin-users-tab {
+  max-width: 1400px;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.2s;
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(220, 202, 4, 0.3);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.users-icon { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+.new-icon { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+.week-icon { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+.admin-icon { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+.bh-icon { background: rgba(220, 202, 4, 0.15); color: #dcca04ff; }
+.pr-icon { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.premium-icon { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+
+.stat-content { flex: 1; }
+.stat-value { font-size: 1.75rem; font-weight: 700; color: white; line-height: 1; margin-bottom: 0.25rem; }
+.stat-label { font-size: 0.85rem; color: rgba(255, 255, 255, 0.5); font-weight: 500; }
+
+/* Filters */
+.filters-section {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.filter-label { font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); font-weight: 500; display: flex; align-items: center; gap: 0.5rem; }
+.filter-select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.625rem 0.875rem;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 150px;
+}
+
+.filter-select:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(220, 202, 4, 0.3); }
+.filter-select:focus { outline: none; border-color: #dcca04ff; background: rgba(255, 255, 255, 0.08); }
+
+.results-count { font-size: 0.9rem; color: rgba(255, 255, 255, 0.5); margin-bottom: 1rem; font-weight: 500; }
+
+/* Loading State */
+.loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 2rem; gap: 1rem; color: rgba(255, 255, 255, 0.4); }
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* Users Table */
+.users-table-container { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; }
+.users-table { width: 100%; border-collapse: collapse; }
+.users-table thead { background: rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.users-table th { padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; letter-spacing: 0.05em; }
+.user-row { border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: background 0.2s; }
+.user-row:hover { background: rgba(255, 255, 255, 0.03); }
+.user-row:last-child { border-bottom: none; }
+.users-table td { padding: 1rem; vertical-align: middle; }
+
+/* User Cell */
+.user-info { display: flex; align-items: center; gap: 0.75rem; }
+.user-avatar { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; border: 2px solid rgba(255, 255, 255, 0.1); }
+.user-avatar-placeholder { width: 40px; height: 40px; border-radius: 8px; background: rgba(220, 202, 4, 0.2); border: 2px solid rgba(220, 202, 4, 0.3); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; color: #dcca04ff; }
+.user-details { display: flex; flex-direction: column; gap: 0.25rem; }
+.user-name { display: flex; align-items: center; gap: 0.5rem; }
+.username { font-weight: 600; color: white; font-size: 0.95rem; }
+.clan-tag { font-size: 0.85rem; color: rgba(220, 202, 4, 0.8); font-weight: 500; }
+.admin-badge { color: #a78bfa; flex-shrink: 0; }
+.user-steam { font-size: 0.8rem; color: rgba(255, 255, 255, 0.4); font-family: 'Courier New', monospace; }
+
+/* Other Cells */
+.email { font-size: 0.9rem; color: rgba(255, 255, 255, 0.6); }
+.no-email { font-size: 0.9rem; color: rgba(255, 255, 255, 0.3); font-style: italic; }
+.platform-badge { display: inline-block; padding: 0.375rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.no-platform { color: rgba(255, 255, 255, 0.3); }
+.role-badge { display: inline-block; padding: 0.375rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
+.user-stats { display: flex; gap: 1rem; }
+.stat-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.875rem; color: rgba(255, 255, 255, 0.7); }
+.stat-item svg { color: rgba(220, 202, 4, 0.7); }
+.tier-badge { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
+.tier-badge.premium { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+.tier-badge.free { background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.5); }
+.date-info { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: rgba(255, 255, 255, 0.5); }
+.date-info svg { color: rgba(255, 255, 255, 0.3); }
+
+/* Empty State */
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 2rem; gap: 1rem; color: rgba(255, 255, 255, 0.3); }
+.empty-title { font-size: 1.25rem; font-weight: 600; color: rgba(255, 255, 255, 0.5); }
+.empty-subtitle { font-size: 0.95rem; color: rgba(255, 255, 255, 0.3); }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .filters-section { grid-template-columns: 1fr; }
+  .users-table-container { overflow-x: auto; }
+  .users-table { min-width: 900px; }
+}
+
+@media (max-width: 640px) {
+  .stats-grid { grid-template-columns: 1fr; }
+}

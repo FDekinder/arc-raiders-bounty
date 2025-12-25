@@ -4,19 +4,23 @@ import { ref, onMounted, computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { getMostWanted, getUserByUsername, getTopKillers, getHunterCount, isUserHunting, checkExistingBounty } from '@/lib/db'
 import { joinHunt, leaveHunt, getMyActiveHunts } from '@/lib/hunters'
-import type { MostWanted, TopKiller } from '@/lib/supabase'
+import type { MostWanted, TopKiller, RatOfTheDay } from '@/lib/supabase'
 import { getDefaultAvatar, getCurrentUser } from '@/lib/auth'
 import { useToast } from '@/composables/useToast'
 import { useSEO, seoConfigs } from '@/composables/useSEO'
+import { supabase } from '@/lib/supabase'
 import Card from '@/components/Card.vue'
 import TacticalButton from '@/components/TacticalButton.vue'
 import IconTarget from '@/components/icons/IconTarget.vue'
 import IconHunter from '@/components/icons/IconHunter.vue'
 import IconBounty from '@/components/icons/IconBounty.vue'
 import RolePoll from '@/components/RolePoll.vue'
+import RatOfTheDayPlayer from '@/components/RatOfTheDayPlayer.vue'
 
 // SEO
 useSEO(seoConfigs.home)
+
+const ratOfTheDay = ref<RatOfTheDay | null>(null)
 
 const router = useRouter()
 const { success, error: showError } = useToast()
@@ -102,6 +106,22 @@ const streamerList = computed(() => {
 
 onMounted(async () => {
   const currentUser = getCurrentUser()
+
+  // Load Rat of the Day
+  try {
+    const { data, error } = await supabase
+      .from('rat_of_the_day')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    if (!error && data) {
+      ratOfTheDay.value = data
+    }
+  } catch (err) {
+    console.error('Error loading Rat of the Day:', err)
+  }
 
   // Load Most Wanted
   try {
@@ -367,6 +387,13 @@ async function refreshBountyValues() {
             Streamer Bounty
           </TacticalButton>
         </button>
+      </div>
+    </div>
+
+    <!-- Rat of the Day Section -->
+    <div v-if="ratOfTheDay" class="rat-of-the-day-section">
+      <div class="container mx-auto px-4">
+        <RatOfTheDayPlayer :rat-of-the-day="ratOfTheDay" />
       </div>
     </div>
 
@@ -792,6 +819,11 @@ async function refreshBountyValues() {
 
 .btn-secondary {
   @apply bg-arc-card border-2 border-arc-red hover:bg-arc-red hover:text-black hover:shadow-lg hover:shadow-arc-red/30 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition transform hover:scale-105 min-w-[140px] sm:min-w-0 text-gray-900;
+}
+
+/* Rat of the Day Section */
+.rat-of-the-day-section {
+  @apply container mx-auto px-4 py-12 md:py-16;
 }
 
 /* Most Wanted & Top Killers Sections */

@@ -161,3 +161,13 @@ export interface TrophyStats {
   notorietyLevel: number
   notorietyTier: 'Rookie' | 'Known' | 'Notorious' | 'Infamous' | 'Legendary'
 }
+
+export interface RatOfTheDay {
+  id: string
+  youtube_url: string
+  youtube_video_id: string
+  creator_name: string
+  set_by?: string
+  created_at: string
+  updated_at: string
+}
