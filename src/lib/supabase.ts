@@ -54,6 +54,12 @@ export interface Bounty {
   expires_at: string
   kill_type?: KillType
   kill_type_description?: string
+  created_by_user?: {
+    id: string
+    username: string
+    avatar_url?: string
+    clan_tag?: string
+  }
 }
 
 export interface BountyClaim {

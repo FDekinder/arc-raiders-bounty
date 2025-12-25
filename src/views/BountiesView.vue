@@ -284,6 +284,21 @@ function closeShareModal() {
                 </button>
               </div>
 
+              <!-- Created By -->
+              <div v-if="bounty.created_by_user" class="created-by mb-2">
+                <span class="created-by-label">Created by</span>
+                <RouterLink :to="`/profile/${bounty.created_by_user.id}`" class="creator-link">
+                  <img
+                    v-if="bounty.created_by_user.avatar_url"
+                    :src="bounty.created_by_user.avatar_url"
+                    :alt="bounty.created_by_user.username"
+                    class="creator-avatar"
+                  />
+                  <span class="creator-name">{{ bounty.created_by_user.username }}</span>
+                  <span v-if="bounty.created_by_user.clan_tag" class="creator-clan">[{{ bounty.created_by_user.clan_tag }}]</span>
+                </RouterLink>
+              </div>
+
               <!-- Kill Type Badge -->
               <div v-if="bounty.kill_type" class="mb-2">
                 <KillTypeBadge :kill-type="bounty.kill_type" size="sm" />
@@ -521,5 +536,34 @@ function closeShareModal() {
 
 .claim-btn {
   @apply bg-arc-red hover:bg-arc-red/80 px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-semibold text-center transition flex-1 sm:flex-none whitespace-nowrap text-black;
+}
+
+/* Created By Section */
+.created-by {
+  @apply flex items-center gap-2 text-sm;
+}
+
+.created-by-label {
+  @apply text-arc-brown/70 text-xs;
+}
+
+.creator-link {
+  @apply flex items-center gap-1.5 transition-colors;
+}
+
+.creator-link:hover .creator-name {
+  @apply text-arc-yellow;
+}
+
+.creator-avatar {
+  @apply w-5 h-5 rounded-full border border-arc-yellow/30;
+}
+
+.creator-name {
+  @apply font-medium text-white/90 transition-colors;
+}
+
+.creator-clan {
+  @apply text-arc-yellow/70 text-xs font-medium;
 }
 </style>

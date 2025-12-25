@@ -82,7 +82,7 @@ export async function checkExistingBounty(targetGamertag: string) {
 export async function getActiveBounties() {
   const { data, error } = await supabase
     .from('bounties')
-    .select('*')
+    .select('*, created_by_user:users!bounties_created_by_fkey(id, username, avatar_url, clan_tag)')
     .eq('status', 'active')
 
   if (error) throw error
