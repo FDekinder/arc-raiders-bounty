@@ -12,6 +12,9 @@ import {
   MessageCircle,
 } from 'lucide-vue-next'
 import PageHeader from '@/components/PageHeader.vue'
+import { useSEO, seoConfigs } from '@/composables/useSEO'
+
+useSEO(seoConfigs.faq)
 
 interface FAQItem {
   question: string

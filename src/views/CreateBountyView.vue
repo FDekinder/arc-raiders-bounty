@@ -9,6 +9,9 @@ import { useAuth } from '@/composables/useAuth'
 import LoginPromptModal from '@/components/LoginPromptModal.vue'
 import type { Platform } from '@/lib/platformVerification'
 import type { KillType } from '@/components/KillTypeBadge.vue'
+import { useSEO, seoConfigs } from '@/composables/useSEO'
+
+useSEO(seoConfigs.createBounty)
 
 const router = useRouter()
 const { success, error: showError } = useToast()

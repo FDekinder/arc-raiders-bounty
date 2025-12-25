@@ -4,6 +4,9 @@ import { ref, onMounted } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { Target, Upload, CheckCircle, Clock } from 'lucide-vue-next'
 import { formatDistanceToNow } from 'date-fns'
+import { useSEO, seoConfigs } from '@/composables/useSEO'
+
+useSEO(seoConfigs.activity)
 
 interface Activity {
   id: string

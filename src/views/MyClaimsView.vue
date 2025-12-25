@@ -12,6 +12,9 @@ import LoadingState from '@/components/LoadingState.vue'
 import EmptyState from '@/components/EmptyState.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
 import Card from '@/components/Card.vue'
+import { useSEO, seoConfigs } from '@/composables/useSEO'
+
+useSEO(seoConfigs.myClaims)
 
 interface ClaimWithBounty extends BountyClaim {
   bounty?: Bounty
