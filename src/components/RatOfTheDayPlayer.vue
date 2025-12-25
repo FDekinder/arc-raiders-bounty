@@ -15,7 +15,7 @@ const props = defineProps<Props>()
     <div class="player-header">
       <div class="header-left">
         <Youtube :size="24" class="youtube-icon" />
-        <h2 class="player-title">Rat of the Day</h2>
+        <h2 class="player-title">RAT Moment of the Day</h2>
       </div>
     </div>
 
@@ -26,7 +26,7 @@ const props = defineProps<Props>()
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
         class="video-iframe"
-        :title="`Rat of the Day by ${ratOfTheDay.creator_name}`"
+        :title="`RAT Moment of the Day by ${ratOfTheDay.creator_name}`"
       ></iframe>
     </div>
 

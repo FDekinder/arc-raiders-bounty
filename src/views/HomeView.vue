@@ -2,7 +2,14 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-import { getMostWanted, getUserByUsername, getTopKillers, getHunterCount, isUserHunting, checkExistingBounty } from '@/lib/db'
+import {
+  getMostWanted,
+  getUserByUsername,
+  getTopKillers,
+  getHunterCount,
+  isUserHunting,
+  checkExistingBounty,
+} from '@/lib/db'
 import { joinHunt, leaveHunt, getMyActiveHunts } from '@/lib/hunters'
 import type { MostWanted, TopKiller, RatOfTheDay } from '@/lib/supabase'
 import { getDefaultAvatar, getCurrentUser } from '@/lib/auth'
@@ -154,7 +161,7 @@ onMounted(async () => {
         // Get hunter count
         const count = await getHunterCount(bounty.target_gamertag)
         hunterCounts.value[bounty.target_gamertag] = count
-      })
+      }),
     )
 
     // Fetch user hunting status for each target (if user is logged in)
@@ -163,7 +170,7 @@ onMounted(async () => {
         bountiesWithAvatars.map(async (bounty) => {
           const hunting = await isUserHunting(bounty.target_gamertag, currentUser.id)
           userHuntingStatus.value[bounty.target_gamertag] = hunting
-        })
+        }),
       )
     }
   } catch (error) {
@@ -207,7 +214,7 @@ onMounted(async () => {
           streamerHuntingStatus.value[streamer] = hunting
         }
       }
-    })
+    }),
   )
 })
 
@@ -334,8 +341,8 @@ async function refreshBountyValues() {
     const top10 = data.slice(0, 10)
 
     // Update only the total_bounty values for existing bounties
-    topBounties.value = topBounties.value.map(existing => {
-      const updated = top10.find(b => b.target_gamertag === existing.target_gamertag)
+    topBounties.value = topBounties.value.map((existing) => {
+      const updated = top10.find((b) => b.target_gamertag === existing.target_gamertag)
       return updated ? { ...existing, total_bounty: updated.total_bounty } : existing
     })
   } catch (error) {
@@ -358,7 +365,10 @@ async function refreshBountyValues() {
       <!-- SEO Content -->
       <div class="hero-description">
         <p>
-          Don't Shoot is the premier bounty tracking system for Arc Raiders players. Whether you're a seasoned bounty hunter or just starting out, our platform makes it easy to track the most wanted players, claim bounties, and earn rewards. Join thousands of players in the ultimate bounty hunting experience.
+          Don't Shoot is the premier bounty tracking system for Arc Raiders players. Whether you're
+          a seasoned bounty hunter or just starting out, our platform makes it easy to track the
+          most wanted players, claim bounties, and earn rewards. Join thousands of players in the
+          ultimate bounty hunting experience.
         </p>
       </div>
 
@@ -464,15 +474,23 @@ async function refreshBountyValues() {
                         <div class="stat-label">Total Bounty</div>
                       </div>
                       <div class="stat-box-compact">
-                        <div class="stat-value-medium">{{ hunterCounts[bounty.target_gamertag] || 0 }}</div>
+                        <div class="stat-value-medium">
+                          {{ hunterCounts[bounty.target_gamertag] || 0 }}
+                        </div>
                         <div class="stat-label">Hunters</div>
                       </div>
                     </div>
                     <button
                       @click.prevent="handleToggleHunt(bounty.target_gamertag)"
-                      :class="userHuntingStatus[bounty.target_gamertag] ? 'leave-hunt-btn' : 'join-hunt-btn'"
+                      :class="
+                        userHuntingStatus[bounty.target_gamertag]
+                          ? 'leave-hunt-btn'
+                          : 'join-hunt-btn'
+                      "
                     >
-                      {{ userHuntingStatus[bounty.target_gamertag] ? 'Leave Hunt' : 'Join the Hunt' }}
+                      {{
+                        userHuntingStatus[bounty.target_gamertag] ? 'Leave Hunt' : 'Join the Hunt'
+                      }}
                     </button>
                   </div>
                 </div>
@@ -502,7 +520,9 @@ async function refreshBountyValues() {
             </div>
             <div class="leaderboard-info">
               <div class="leaderboard-name">{{ bounty.target_gamertag }}</div>
-              <div class="leaderboard-subtext">{{ hunterCounts[bounty.target_gamertag] || 0 }} hunters</div>
+              <div class="leaderboard-subtext">
+                {{ hunterCounts[bounty.target_gamertag] || 0 }} hunters
+              </div>
             </div>
             <div class="leaderboard-value">{{ bounty.total_bounty }}</div>
           </RouterLink>
@@ -551,7 +571,9 @@ async function refreshBountyValues() {
           <div class="streamer-info">
             <div class="streamer-name">{{ streamer }}</div>
             <div class="streamer-subtext">
-              {{ streamerHunterCounts[streamer] || 0 }} hunter{{ streamerHunterCounts[streamer] === 1 ? '' : 's' }}
+              {{ streamerHunterCounts[streamer] || 0 }} hunter{{
+                streamerHunterCounts[streamer] === 1 ? '' : 's'
+              }}
             </div>
           </div>
           <button
@@ -575,7 +597,9 @@ async function refreshBountyValues() {
           <div class="streamer-info">
             <div class="streamer-name">{{ streamer }}</div>
             <div class="streamer-subtext">
-              {{ streamerHunterCounts[streamer] || 0 }} hunter{{ streamerHunterCounts[streamer] === 1 ? '' : 's' }}
+              {{ streamerHunterCounts[streamer] || 0 }} hunter{{
+                streamerHunterCounts[streamer] === 1 ? '' : 's'
+              }}
             </div>
           </div>
           <button
@@ -758,17 +782,14 @@ async function refreshBountyValues() {
           </p>
 
           <p class="modal-submessage">
-            You can only hunt 3 targets at a time. Leave one of your current hunts to join a new one.
+            You can only hunt 3 targets at a time. Leave one of your current hunts to join a new
+            one.
           </p>
         </div>
 
         <div class="modal-actions">
-          <button @click="showHuntLimitModal = false" class="btn-ok">
-            Got it
-          </button>
-          <RouterLink to="/bounties" class="btn-view-hunts">
-            View My Hunts
-          </RouterLink>
+          <button @click="showHuntLimitModal = false" class="btn-ok">Got it</button>
+          <RouterLink to="/bounties" class="btn-view-hunts"> View My Hunts </RouterLink>
         </div>
       </div>
     </div>
@@ -1182,7 +1203,16 @@ async function refreshBountyValues() {
 
 .modal-content {
   @apply bg-arc-card rounded-xl shadow-2xl max-w-lg w-full border-2 border-arc-brown/30;
-  clip-path: polygon(0 12px, 12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px));
+  clip-path: polygon(
+    0 12px,
+    12px 0,
+    calc(100% - 12px) 0,
+    100% 12px,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    12px 100%,
+    0 calc(100% - 12px)
+  );
 }
 
 .modal-header {
@@ -1247,12 +1277,18 @@ async function refreshBountyValues() {
 }
 
 @keyframes glow-red {
-  0%, 100% {
-    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), 0 0 20px rgba(239, 68, 68, 0.2);
+  0%,
+  100% {
+    box-shadow:
+      0 0 10px rgba(239, 68, 68, 0.3),
+      0 0 20px rgba(239, 68, 68, 0.2);
     border-color: #ef4444;
   }
   50% {
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5), 0 0 30px rgba(239, 68, 68, 0.3), 0 0 40px rgba(239, 68, 68, 0.2);
+    box-shadow:
+      0 0 20px rgba(239, 68, 68, 0.5),
+      0 0 30px rgba(239, 68, 68, 0.3),
+      0 0 40px rgba(239, 68, 68, 0.2);
     border-color: #f87171;
   }
 }
@@ -1286,23 +1322,127 @@ async function refreshBountyValues() {
   @apply bg-arc-brown/30 hover:bg-arc-brown/50 text-gray-900 border border-arc-brown px-3 py-1.5 rounded-md font-semibold text-xs transition;
 }
 
-/* Pulse animation for Streamer Bounty button */
+/* Futuristic Streamer Bounty button */
 .pulse-button {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  position: relative;
+  animation: floatPulse 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(220, 202, 4, 0.4));
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
+.pulse-button::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  background: linear-gradient(45deg, #00d4ff, #dcca04ff, #ff3355, #00d4ff);
+  background-size: 300% 300%;
+  border-radius: 12px;
+  z-index: -1;
+  opacity: 0.6;
+  animation:
+    gradientShift 3s ease infinite,
+    holographicGlow 2s ease-in-out infinite;
+  filter: blur(8px);
+}
+
+.pulse-button::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(220, 202, 4, 0.3) 25%,
+    rgba(0, 212, 255, 0.3) 50%,
+    rgba(255, 51, 85, 0.3) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  border-radius: 12px;
+  z-index: -1;
+  animation: scanLine 2s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes floatPulse {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 0 20px rgba(220, 202, 4, 0.4));
+  }
+  25% {
+    transform: translateY(-3px) scale(1.03);
+    filter: drop-shadow(0 5px 25px rgba(0, 212, 255, 0.5));
+  }
+  50% {
+    transform: translateY(0) scale(1.05);
+    filter: drop-shadow(0 0 30px rgba(255, 51, 85, 0.5));
+  }
+  75% {
+    transform: translateY(-3px) scale(1.03);
+    filter: drop-shadow(0 5px 25px rgba(220, 202, 4, 0.5));
+  }
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes holographicGlow {
+  0%,
+  100% {
+    opacity: 0.6;
+    filter: blur(8px) brightness(1);
   }
   50% {
     opacity: 0.9;
-    transform: scale(1.05);
+    filter: blur(12px) brightness(1.3);
+  }
+}
+
+@keyframes scanLine {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
 
 .pulse-button:hover {
-  animation: none;
+  animation: hoverFloat 0.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 35px rgba(220, 202, 4, 0.8));
+}
+
+.pulse-button:hover::before {
+  opacity: 1;
+  filter: blur(15px);
+  animation:
+    gradientShift 1.5s ease infinite,
+    holographicGlow 1s ease-in-out infinite;
+}
+
+.pulse-button:hover::after {
+  animation: scanLine 1s linear infinite;
+}
+
+@keyframes hoverFloat {
+  0%,
+  100% {
+    transform: translateY(-2px) scale(1.05);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.08);
+  }
+}
+
+.pulse-button:active {
+  transform: scale(0.98);
+  filter: drop-shadow(0 0 40px rgba(0, 212, 255, 1));
 }
 </style>
