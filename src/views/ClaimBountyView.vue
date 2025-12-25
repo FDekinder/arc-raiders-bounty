@@ -7,12 +7,13 @@ import { uploadScreenshot, submitClaim } from '@/lib/db'
 import type { Bounty } from '@/lib/supabase'
 import { Upload, AlertCircle } from 'lucide-vue-next'
 import { useToast } from '@/composables/useToast'
-
-import { getCurrentUser } from '@/lib/auth'
+import { useAuth } from '@/composables/useAuth'
+import LoginPromptModal from '@/components/LoginPromptModal.vue'
 
 const route = useRoute()
 const router = useRouter()
 const { success: showSuccess, error: showError } = useToast()
+const { currentUser } = useAuth()
 
 const bounty = ref<Bounty | null>(null)
 const loading = ref(true)
@@ -22,9 +23,7 @@ const success = ref(false)
 
 const selectedFile = ref<File | null>(null)
 const previewUrl = ref<string>('')
-
-const currentUser = getCurrentUser()
-const userId = currentUser?.id || ''
+const showLoginPrompt = ref(false)
 
 onMounted(async () => {
   try {
@@ -75,6 +74,12 @@ function handleFileSelect(event: Event) {
 }
 
 async function handleSubmit() {
+  // Check if user is logged in
+  if (!currentUser.value) {
+    showLoginPrompt.value = true
+    return
+  }
+
   if (!selectedFile.value) {
     error.value = 'Please select a screenshot'
     showError('Please select a screenshot')
@@ -87,11 +92,11 @@ async function handleSubmit() {
   error.value = ''
 
   try {
-    const screenshotUrl = await uploadScreenshot(selectedFile.value, userId)
-    await submitClaim(bounty.value.id, userId, screenshotUrl)
+    const screenshotUrl = await uploadScreenshot(selectedFile.value, currentUser.value.id)
+    await submitClaim(bounty.value.id, currentUser.value.id, screenshotUrl)
 
     success.value = true
-    showSuccess('Claim submitted successfully! Awaiting verification.') // Changed to showSuccess
+    showSuccess('Claim submitted successfully! Awaiting verification.')
 
     setTimeout(() => {
       router.push('/bounties')
@@ -222,6 +227,9 @@ async function handleSubmit() {
         </div>
       </div>
     </div>
+
+    <!-- Login Prompt Modal -->
+    <LoginPromptModal :show="showLoginPrompt" @close="showLoginPrompt = false" />
   </div>
 </template>
 
