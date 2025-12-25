@@ -86,6 +86,9 @@ function getDefaultAvatar(role: string | null | undefined): string {
             <IconHunter v-else className="text-arc-red" :size="48" />
             {{ selectedLeaderboard === 'hunters' ? 'Top Hunters' : 'Top Killers' }}
           </h1>
+          <p class="page-intro">
+            See who leads the hunt in Arc Raiders. Our leaderboard tracks the most successful bounty hunters and deadliest killers based on verified achievements and completed bounties.
+          </p>
           <p class="subtitle">
             {{ selectedLeaderboard === 'hunters'
               ? 'The most skilled bounty hunters in Arc Raiders'
@@ -275,6 +278,10 @@ function getDefaultAvatar(role: string | null | undefined): string {
 
 .title {
   @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 flex items-center justify-center md:justify-start gap-2 sm:gap-3 text-white;
+}
+
+.page-intro {
+  @apply text-arc-brown/90 text-sm sm:text-base px-4 md:px-0 mb-2 max-w-3xl leading-relaxed;
 }
 
 .subtitle {

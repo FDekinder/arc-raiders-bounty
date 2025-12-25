@@ -335,6 +335,13 @@ async function refreshBountyValues() {
       </h1>
       <p class="hero-subtitle">Place bounties. Hunt targets. Claim glory.</p>
 
+      <!-- SEO Content -->
+      <div class="hero-description">
+        <p>
+          Don't Shoot is the premier bounty tracking system for Arc Raiders players. Whether you're a seasoned bounty hunter or just starting out, our platform makes it easy to track the most wanted players, claim bounties, and earn rewards. Join thousands of players in the ultimate bounty hunting experience.
+        </p>
+      </div>
+
       <div class="hero-buttons">
         <RouterLink to="/create-bounty">
           <TacticalButton variant="primary" size="lg">
@@ -760,7 +767,11 @@ async function refreshBountyValues() {
 }
 
 .hero-subtitle {
-  @apply text-lg sm:text-xl md:text-2xl text-arc-brown mb-8 sm:mb-12 max-w-3xl mx-auto px-4;
+  @apply text-lg sm:text-xl md:text-2xl text-arc-brown mb-4 sm:mb-6 max-w-3xl mx-auto px-4;
+}
+
+.hero-description {
+  @apply text-sm sm:text-base text-arc-brown/80 mb-8 sm:mb-12 max-w-2xl mx-auto px-4 leading-relaxed;
 }
 
 .hero-buttons {

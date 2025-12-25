@@ -190,8 +190,11 @@ function closeShareModal() {
 
     <div v-else class="content-wrapper">
       <PageHeader title="Active Bounties">
-        <template v-if="currentUser && myActiveHunts > 0" #subtitle>
-          <p class="hunt-status">
+        <template #subtitle>
+          <div class="page-intro">
+            <p>Discover the most wanted players in Arc Raiders. Browse open bounties, check rewards, and join the hunt. Our community-verified system ensures fair gameplay and legitimate claims.</p>
+          </div>
+          <p v-if="currentUser && myActiveHunts > 0" class="hunt-status">
             You are hunting {{ myActiveHunts }}/3 targets
           </p>
         </template>
@@ -396,6 +399,10 @@ function closeShareModal() {
 
 .content-wrapper {
   @apply container mx-auto px-4 py-6 sm:py-8;
+}
+
+.page-intro {
+  @apply text-arc-brown/90 mb-3 text-sm sm:text-base max-w-3xl leading-relaxed;
 }
 
 .hunt-status {
