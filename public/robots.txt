@@ -1,0 +1,21 @@
+# robots.txt for Don't Shoot - Arc Raiders Bounty System
+
+User-agent: *
+Allow: /
+
+# Disallow admin and auth routes
+Disallow: /admin/
+Disallow: /verify
+Disallow: /auth/
+
+# Allow important pages
+Allow: /bounties
+Allow: /leaderboard
+Allow: /faq
+Allow: /activity
+
+# Sitemap location
+Sitemap: https://dontshoot.gg/sitemap.xml
+
+# Crawl delay (optional, helps prevent server overload)
+Crawl-delay: 1

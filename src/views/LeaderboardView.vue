@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { RouterLink } from 'vue-router'
 import { getTopAchievements } from '@/lib/achievements'
 import { getTopKillers } from '@/lib/db'
+import { useSEO, seoConfigs } from '@/composables/useSEO'
 import AchievementBadge from '@/components/AchievementBadge.vue'
 import RoleBadge from '@/components/RoleBadge.vue'
 import RankBadge from '@/components/RankBadge.vue'
@@ -12,6 +13,9 @@ import IconHunter from '@/components/icons/IconHunter.vue'
 import TacticalButton from '@/components/TacticalButton.vue'
 import AdUnit from '@/components/AdUnit.vue'
 import type { Achievement, TopKiller } from '@/lib/supabase'
+
+// SEO
+useSEO(seoConfigs.leaderboard)
 
 const hunters = ref<any[]>([])
 const killers = ref<TopKiller[]>([])

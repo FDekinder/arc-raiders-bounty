@@ -8,6 +8,7 @@ import { RouterLink } from 'vue-router'
 import { getTimeRemaining, getExpirationColor, extendBounty } from '@/lib/bountyExpiration'
 import { useAuth } from '@/composables/useAuth'
 import { useToast } from '@/composables/useToast'
+import { useSEO, seoConfigs } from '@/composables/useSEO'
 import { joinHunt, leaveHunt, getMyActiveHunts, getBatchHunterCounts, getBatchHuntingStatus } from '@/lib/hunters'
 import PageHeader from '@/components/PageHeader.vue'
 import IconInput from '@/components/IconInput.vue'
@@ -19,6 +20,9 @@ import KillTypeBadge from '@/components/KillTypeBadge.vue'
 import AdUnit from '@/components/AdUnit.vue'
 import LoginPromptModal from '@/components/LoginPromptModal.vue'
 import type { BountyShareData } from '@/lib/shareUtils'
+
+// SEO
+useSEO(seoConfigs.bounties)
 
 const bounties = ref<Bounty[]>([])
 const mostWanted = ref<MostWanted[]>([])

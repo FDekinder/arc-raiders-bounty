@@ -7,12 +7,16 @@ import { joinHunt, leaveHunt, getMyActiveHunts } from '@/lib/hunters'
 import type { MostWanted, TopKiller } from '@/lib/supabase'
 import { getDefaultAvatar, getCurrentUser } from '@/lib/auth'
 import { useToast } from '@/composables/useToast'
+import { useSEO, seoConfigs } from '@/composables/useSEO'
 import Card from '@/components/Card.vue'
 import TacticalButton from '@/components/TacticalButton.vue'
 import IconTarget from '@/components/icons/IconTarget.vue'
 import IconHunter from '@/components/icons/IconHunter.vue'
 import IconBounty from '@/components/icons/IconBounty.vue'
 import RolePoll from '@/components/RolePoll.vue'
+
+// SEO
+useSEO(seoConfigs.home)
 
 const router = useRouter()
 const { success, error: showError } = useToast()
