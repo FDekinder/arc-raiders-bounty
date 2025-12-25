@@ -114,11 +114,11 @@ function closeMobileMenu() {
             </RouterLink>
             <RouterLink
               v-if="currentUser?.role === 'admin'"
-              to="/admin/bug-reports"
+              to="/admin"
               class="text-arc-red hover:text-arc-red/80 transition font-semibold"
               active-class="!text-[#000080]"
             >
-              Bug Reports
+              Admin
             </RouterLink>
 
             <!-- User Info Desktop -->
@@ -244,12 +244,12 @@ function closeMobileMenu() {
             </RouterLink>
             <RouterLink
               v-if="currentUser?.role === 'admin'"
-              to="/admin/bug-reports"
+              to="/admin"
               class="px-4 py-3 text-arc-red hover:bg-arc-brown/10 rounded transition font-semibold"
               active-class="!bg-[#000080] !text-white"
               @click="closeMobileMenu"
             >
-              Bug Reports
+              Admin
             </RouterLink>
 
             <!-- User Info Mobile -->
