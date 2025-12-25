@@ -15,7 +15,7 @@ Allow: /faq
 Allow: /activity
 
 # Sitemap location
-Sitemap: https://dontshoot.gg/sitemap.xml
+Sitemap: https://dont-shoot.com/sitemap.xml
 
 # Crawl delay (optional, helps prevent server overload)
 Crawl-delay: 1

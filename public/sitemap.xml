@@ -6,7 +6,7 @@
 
   <!-- Home Page -->
   <url>
-    <loc>https://dontshoot.gg/</loc>
+    <loc>https://dont-shoot.com/</loc>
     <lastmod>2025-12-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -14,28 +14,28 @@
 
   <!-- Main Pages -->
   <url>
-    <loc>https://dontshoot.gg/bounties</loc>
+    <loc>https://dont-shoot.com/bounties</loc>
     <lastmod>2025-12-25</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://dontshoot.gg/leaderboard</loc>
+    <loc>https://dont-shoot.com/leaderboard</loc>
     <lastmod>2025-12-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://dontshoot.gg/activity</loc>
+    <loc>https://dont-shoot.com/activity</loc>
     <lastmod>2025-12-25</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://dontshoot.gg/faq</loc>
+    <loc>https://dont-shoot.com/faq</loc>
     <lastmod>2025-12-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -43,14 +43,14 @@
 
   <!-- User Features -->
   <url>
-    <loc>https://dontshoot.gg/create-bounty</loc>
+    <loc>https://dont-shoot.com/create-bounty</loc>
     <lastmod>2025-12-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://dontshoot.gg/my-claims</loc>
+    <loc>https://dont-shoot.com/my-claims</loc>
     <lastmod>2025-12-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -58,14 +58,14 @@
 
   <!-- Authentication -->
   <url>
-    <loc>https://dontshoot.gg/login</loc>
+    <loc>https://dont-shoot.com/login</loc>
     <lastmod>2025-12-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://dontshoot.gg/register</loc>
+    <loc>https://dont-shoot.com/register</loc>
     <lastmod>2025-12-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -73,21 +73,21 @@
 
   <!-- Information Pages -->
   <url>
-    <loc>https://dontshoot.gg/privacy</loc>
+    <loc>https://dont-shoot.com/privacy</loc>
     <lastmod>2025-12-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
-    <loc>https://dontshoot.gg/community-guidelines</loc>
+    <loc>https://dont-shoot.com/community-guidelines</loc>
     <lastmod>2025-12-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
-    <loc>https://dontshoot.gg/report-bug</loc>
+    <loc>https://dont-shoot.com/report-bug</loc>
     <lastmod>2025-12-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>

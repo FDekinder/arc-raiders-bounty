@@ -12,7 +12,7 @@ interface SEOConfig {
 
 export function useSEO(config: SEOConfig) {
   const route = useRoute()
-  const baseUrl = 'https://dontshoot.gg'
+  const baseUrl = 'https://dont-shoot.com'
 
   function updateMeta() {
     // Update title
@@ -85,42 +85,42 @@ export const seoConfigs = {
     title: 'Don\'t Shoot - Arc Raiders Bounty System | Track Most Wanted Players',
     description: 'Place bounties and track the most wanted players in Arc Raiders. Join the hunt, claim rewards, and become the ultimate bounty hunter. Community-driven bounty tracking system.',
     keywords: 'Arc Raiders, bounty system, gaming bounties, player tracking, most wanted, Arc Raiders community',
-    canonical: 'https://dontshoot.gg/'
+    canonical: 'https://dont-shoot.com/'
   },
   bounties: {
     title: 'Active Bounties - Arc Raiders Most Wanted | Don\'t Shoot',
     description: 'Browse and hunt active bounties in Arc Raiders. Track the most wanted players, join hunts, and claim rewards. Updated in real-time.',
     keywords: 'Arc Raiders bounties, active bounties, most wanted players, bounty hunting, Arc Raiders rewards',
-    canonical: 'https://dontshoot.gg/bounties'
+    canonical: 'https://dont-shoot.com/bounties'
   },
   leaderboard: {
     title: 'Leaderboard - Top Bounty Hunters | Don\'t Shoot',
     description: 'View the top bounty hunters and most wanted players in Arc Raiders. See who leads the hunt and who\'s being hunted the most.',
     keywords: 'Arc Raiders leaderboard, top hunters, most wanted, player rankings, bounty hunters',
-    canonical: 'https://dontshoot.gg/leaderboard'
+    canonical: 'https://dont-shoot.com/leaderboard'
   },
   activity: {
     title: 'Activity Feed - Latest Bounties & Claims | Don\'t Shoot',
     description: 'Stay updated with the latest bounty activity in Arc Raiders. See new bounties, recent claims, and community interactions in real-time.',
     keywords: 'Arc Raiders activity, bounty feed, recent claims, community activity',
-    canonical: 'https://dontshoot.gg/activity'
+    canonical: 'https://dont-shoot.com/activity'
   },
   createBounty: {
     title: 'Create a Bounty - Place a Hit | Don\'t Shoot',
     description: 'Create a bounty on a player in Arc Raiders. Place a hit, set rewards, and let the community hunt them down.',
     keywords: 'create bounty, place bounty, Arc Raiders bounty, player bounty',
-    canonical: 'https://dontshoot.gg/create-bounty'
+    canonical: 'https://dont-shoot.com/create-bounty'
   },
   faq: {
     title: 'FAQ - Frequently Asked Questions | Don\'t Shoot',
     description: 'Find answers to common questions about the Arc Raiders bounty system. Learn how to create bounties, claim rewards, and more.',
     keywords: 'Arc Raiders FAQ, bounty system help, how to create bounty',
-    canonical: 'https://dontshoot.gg/faq'
+    canonical: 'https://dont-shoot.com/faq'
   },
   myClaims: {
     title: 'My Claims - Track Your Bounty Progress | Don\'t Shoot',
     description: 'View and manage your bounty claims in Arc Raiders. Track pending verifications and completed hunts.',
     keywords: 'my claims, bounty claims, track bounties, Arc Raiders progress',
-    canonical: 'https://dontshoot.gg/my-claims'
+    canonical: 'https://dont-shoot.com/my-claims'
   }
 }
