@@ -21,6 +21,7 @@ import TacticalButton from '@/components/TacticalButton.vue'
 import IconTarget from '@/components/icons/IconTarget.vue'
 import IconHunter from '@/components/icons/IconHunter.vue'
 import IconBounty from '@/components/icons/IconBounty.vue'
+import IconRat from '@/components/icons/IconRat.vue'
 import RolePoll from '@/components/RolePoll.vue'
 import RatOfTheDayPlayer from '@/components/RatOfTheDayPlayer.vue'
 
@@ -41,6 +42,7 @@ const userHuntingStatus = ref<Record<string, boolean>>({})
 const bountyIds = ref<Record<string, string>>({}) // Map target_gamertag to bounty_id
 const showHuntLimitModal = ref(false)
 const huntLimitMessage = ref('')
+const showProudRatModal = ref(false)
 
 // Streamer bounty data
 const streamerHunterCounts = ref<Record<string, number>>({})
@@ -226,6 +228,26 @@ function scrollToStreamers() {
   }
 }
 
+// Handle kill report button click
+function handleKillReportClick() {
+  const currentUser = getCurrentUser()
+
+  // Check if user is logged in
+  if (!currentUser) {
+    router.push('/login')
+    return
+  }
+
+  // Check if user is a Proud Rat
+  if (currentUser.game_role !== 'PR') {
+    showProudRatModal.value = true
+    return
+  }
+
+  // If Proud Rat, navigate to submit kill page
+  router.push('/submit-kill')
+}
+
 // Function to handle joining/leaving the hunt for streamers
 async function handleStreamerToggleHunt(streamerGamertag: string) {
   const currentUser = getCurrentUser()
@@ -381,14 +403,12 @@ async function refreshBountyValues() {
             Create Bounty
           </TacticalButton>
         </RouterLink>
-        <RouterLink to="/submit-kill">
+        <button @click="handleKillReportClick">
           <TacticalButton variant="primary" size="lg">
-            <template #icon>
-              <IconHunter :size="20" />
-            </template>
-            Report Kill
+            Brag About Your Kills
+            <span class="button-subtitle">(Proud Rat Only)</span>
           </TacticalButton>
-        </RouterLink>
+        </button>
         <button @click="scrollToStreamers" class="pulse-button">
           <TacticalButton variant="primary" size="lg">
             <template #icon>
@@ -790,6 +810,54 @@ async function refreshBountyValues() {
         <div class="modal-actions">
           <button @click="showHuntLimitModal = false" class="btn-ok">Got it</button>
           <RouterLink to="/bounties" class="btn-view-hunts"> View My Hunts </RouterLink>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proud Rat Modal -->
+    <div v-if="showProudRatModal" class="modal-overlay" @click="showProudRatModal = false">
+      <div class="modal-content proud-rat-modal" @click.stop>
+        <div class="modal-header">
+          <div class="modal-icon">
+            <IconRat :size="48" class="text-arc-yellow" />
+          </div>
+          <h2 class="modal-title">🏆 Proud Rat Kills Contest</h2>
+        </div>
+
+        <div class="modal-body">
+          <p class="modal-message">
+            This feature is exclusively for <strong class="text-arc-yellow">Proud Rats</strong>!
+          </p>
+
+          <div class="modal-info-box">
+            <h3 class="info-title">What is the Kills Contest?</h3>
+            <p class="info-text">
+              Proud Rats compete to see who can eliminate the most players in a <strong>single run</strong>.
+              Each kill is verified with a screenshot and added to your personal leaderboard.
+            </p>
+          </div>
+
+          <div class="modal-info-box">
+            <h3 class="info-title">How it works:</h3>
+            <ul class="info-list">
+              <li>Only Proud Rats can submit kills</li>
+              <li>Upload a screenshot of each kill</li>
+              <li>All kills from one run count together</li>
+              <li>The player with the most kills in a single run tops the leaderboard</li>
+              <li>Brag about your dominance and claim glory!</li>
+            </ul>
+          </div>
+
+          <p class="modal-submessage">
+            Want to participate? Join the <strong class="text-arc-red">Proud Rats</strong> faction and start hunting!
+          </p>
+        </div>
+
+        <div class="modal-actions">
+          <button @click="showProudRatModal = false" class="btn-ok">Got it</button>
+          <RouterLink to="/profile" class="btn-view-hunts" @click="showProudRatModal = false">
+            View Profile
+          </RouterLink>
         </div>
       </div>
     </div>
@@ -1247,6 +1315,49 @@ async function refreshBountyValues() {
   @apply flex-1 bg-arc-brown/20 hover:bg-arc-brown/30 text-gray-900 font-semibold py-3 rounded-lg transition text-center;
 }
 
+/* Proud Rat Modal Styles */
+.proud-rat-modal {
+  @apply max-w-2xl;
+}
+
+.modal-icon {
+  @apply flex justify-center mb-3;
+}
+
+.text-arc-yellow {
+  color: #dcca04ff;
+}
+
+.modal-info-box {
+  @apply bg-arc-brown/10 border border-arc-brown/20 rounded-lg p-4 mb-4;
+}
+
+.info-title {
+  @apply text-lg font-bold text-gray-900 mb-2;
+}
+
+.info-text {
+  @apply text-sm text-arc-brown leading-relaxed;
+}
+
+.info-list {
+  @apply list-none pl-0 space-y-2;
+}
+
+.info-list li {
+  @apply text-sm text-arc-brown flex items-start gap-2;
+}
+
+.info-list li::before {
+  content: '🎯';
+  @apply flex-shrink-0;
+}
+
+/* Button subtitle */
+.button-subtitle {
+  @apply block text-xs opacity-70 mt-0.5;
+}
+
 /* Streamer Bounty Section */
 .streamer-bounty-section {
   @apply container mx-auto px-4 py-8 sm:py-12 md:py-16;
@@ -1444,5 +1555,88 @@ async function refreshBountyValues() {
 .pulse-button:active {
   transform: scale(0.98);
   filter: drop-shadow(0 0 40px rgba(0, 212, 255, 1));
+}
+
+/* Mobile optimizations for pulse-button */
+@media (max-width: 768px) {
+  .pulse-button {
+    animation: floatPulseMobile 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 12px rgba(220, 202, 4, 0.5));
+  }
+
+  .pulse-button::before {
+    inset: -2px;
+    filter: blur(5px);
+    opacity: 0.5;
+  }
+
+  .pulse-button::after {
+    opacity: 0.6;
+  }
+
+  @keyframes floatPulseMobile {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+      filter: drop-shadow(0 0 12px rgba(220, 202, 4, 0.5));
+    }
+    50% {
+      transform: translateY(0) scale(1.02);
+      filter: drop-shadow(0 0 15px rgba(220, 202, 4, 0.6));
+    }
+  }
+
+  .pulse-button:hover {
+    animation: floatPulseMobile 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 18px rgba(220, 202, 4, 0.7));
+  }
+
+  .pulse-button:hover::before {
+    opacity: 0.7;
+    filter: blur(8px);
+  }
+
+  .pulse-button:hover::after {
+    opacity: 0.8;
+  }
+
+  .pulse-button:active {
+    transform: scale(0.98);
+    filter: drop-shadow(0 0 20px rgba(220, 202, 4, 0.9));
+  }
+}
+
+@media (max-width: 480px) {
+  .pulse-button {
+    filter: drop-shadow(0 0 8px rgba(220, 202, 4, 0.4));
+  }
+
+  .pulse-button::before {
+    inset: -1px;
+    filter: blur(4px);
+    opacity: 0.4;
+  }
+
+  .pulse-button::after {
+    opacity: 0.5;
+  }
+
+  @keyframes floatPulseMobile {
+    0%, 100% {
+      transform: scale(1);
+      filter: drop-shadow(0 0 8px rgba(220, 202, 4, 0.4));
+    }
+    50% {
+      transform: scale(1.01);
+      filter: drop-shadow(0 0 12px rgba(220, 202, 4, 0.5));
+    }
+  }
+
+  .pulse-button:hover {
+    filter: drop-shadow(0 0 15px rgba(220, 202, 4, 0.6));
+  }
+
+  .pulse-button:active {
+    filter: drop-shadow(0 0 18px rgba(220, 202, 4, 0.8));
+  }
 }
 </style>
