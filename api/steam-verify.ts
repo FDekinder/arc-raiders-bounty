@@ -16,7 +16,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const { searchQuery } = req.query
-  const apiKey = process.env.VITE_STEAM_API_KEY || process.env.STEAM_API_KEY
+  const apiKey = process.env.STEAM_API_KEY
 
   if (!searchQuery || typeof searchQuery !== 'string') {
     return res.status(400).json({ error: 'Search query required' })
