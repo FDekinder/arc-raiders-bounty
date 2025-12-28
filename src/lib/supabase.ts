@@ -80,6 +80,7 @@ export interface MostWanted {
   total_bounty: number
   bounty_count: number
   avatar_url?: string
+  game_role?: UserRole
 }
 
 export interface Achievement {

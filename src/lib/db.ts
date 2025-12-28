@@ -110,13 +110,36 @@ export async function getMostWanted() {
 
   if (error) throw error
 
-  // Calculate dynamic bounty amounts for each target
+  // Get all unique target gamertags
+  const targetGamertags = [...new Set((data || []).map((b: any) => b.target_gamertag))]
+
+  // Fetch all user profiles in ONE query using IN clause
+  const { data: users, error: usersError } = await supabase
+    .from('users')
+    .select('username, avatar_url, game_role')
+    .in('username', targetGamertags)
+
+  if (usersError) console.error('Error fetching user profiles:', usersError)
+
+  // Create a map for quick lookup
+  const userMap = new Map(
+    (users || []).map(u => [u.username, u])
+  )
+
+  // Get top killers ONCE for all bounty calculations
+  const topKillers = await getTopKillers(10)
+  const topKillerIds = topKillers.map(k => k.killer_id)
+
+  // Calculate dynamic bounty amounts for each target (passing cached top killers)
   const dataWithDynamicBounties = await Promise.all(
     (data || []).map(async (bounty: any) => {
-      const dynamicAmount = await calculateBountyAmount(bounty.target_gamertag)
+      const dynamicAmount = await calculateBountyAmountCached(bounty.target_gamertag, topKillerIds)
+      const user = userMap.get(bounty.target_gamertag)
       return {
         ...bounty,
         total_bounty: dynamicAmount,
+        avatar_url: user?.avatar_url,
+        game_role: user?.game_role,
       }
     })
   )
@@ -410,6 +433,13 @@ export async function getTopKillers(limit: number = 3): Promise<TopKiller[]> {
 
 // Calculate dynamic bounty amount based on hunters who joined the hunt
 export async function calculateBountyAmount(targetGamertag: string): Promise<number> {
+  const topKillers = await getTopKillers(10)
+  const topKillerIds = topKillers.map(k => k.killer_id)
+  return calculateBountyAmountCached(targetGamertag, topKillerIds)
+}
+
+// Cached version that accepts pre-fetched top killer IDs (avoids redundant queries)
+export async function calculateBountyAmountCached(targetGamertag: string, topKillerIds: string[]): Promise<number> {
   try {
     // Get all active bounties for this target
     const { data: bounties, error: bountyError } = await supabase
@@ -436,10 +466,6 @@ export async function calculateBountyAmount(targetGamertag: string): Promise<num
     if (uniqueHunterIds.length === 0) {
       return 0 // No hunters yet
     }
-
-    // Get all top killers (top 10) to determine hunter rankings
-    const topKillers = await getTopKillers(10)
-    const topKillerIds = topKillers.map(k => k.killer_id)
 
     let totalBounty = 0
 
@@ -561,5 +587,86 @@ export async function isUserHunting(targetGamertag: string, userId: string): Pro
   } catch (error) {
     console.error('Error checking if user is hunting:', error)
     return false
+  }
+}
+
+// BATCH FUNCTIONS FOR MULTIPLE TARGETS (avoids N+1 queries)
+
+// Get bounty data for multiple targets in one optimized batch
+export async function getBatchBountyData(targetGamertags: string[], userId?: string) {
+  try {
+    // Get all active bounties for these targets in ONE query
+    const { data: bounties, error: bountyError } = await supabase
+      .from('bounties')
+      .select('id, target_gamertag')
+      .in('target_gamertag', targetGamertags)
+      .eq('status', 'active')
+
+    if (bountyError) throw bountyError
+
+    // Get all hunters for these bounties in ONE query
+    const bountyIds = (bounties || []).map(b => b.id)
+    const { data: hunters, error: huntersError } = bountyIds.length > 0 ? await supabase
+      .from('bounty_hunters')
+      .select('bounty_id, hunter_id')
+      .in('bounty_id', bountyIds)
+      : { data: [], error: null }
+
+    if (huntersError) throw huntersError
+
+    // Build maps for quick lookup
+    const bountyMap = new Map<string, string>() // target -> bounty_id
+    const hunterCountMap = new Map<string, number>() // target -> count
+    const huntingStatusMap = new Map<string, boolean>() // target -> is_hunting
+
+    // Initialize all targets
+    targetGamertags.forEach(target => {
+      hunterCountMap.set(target, 0)
+      huntingStatusMap.set(target, false)
+    })
+
+    // Map bounties to targets
+    ;(bounties || []).forEach(bounty => {
+      if (!bountyMap.has(bounty.target_gamertag)) {
+        bountyMap.set(bounty.target_gamertag, bounty.id)
+      }
+    })
+
+    // Count hunters per target and check hunting status
+    const huntersByBounty = new Map<string, Set<string>>()
+    ;(hunters || []).forEach(hunter => {
+      if (!huntersByBounty.has(hunter.bounty_id)) {
+        huntersByBounty.set(hunter.bounty_id, new Set())
+      }
+      huntersByBounty.get(hunter.bounty_id)!.add(hunter.hunter_id)
+
+      // Check if current user is hunting
+      if (userId && hunter.hunter_id === userId) {
+        const bounty = bounties?.find(b => b.id === hunter.bounty_id)
+        if (bounty) {
+          huntingStatusMap.set(bounty.target_gamertag, true)
+        }
+      }
+    })
+
+    // Calculate counts per target
+    ;(bounties || []).forEach(bounty => {
+      const huntersSet = huntersByBounty.get(bounty.id)
+      const currentCount = hunterCountMap.get(bounty.target_gamertag) || 0
+      hunterCountMap.set(bounty.target_gamertag, Math.max(currentCount, huntersSet?.size || 0))
+    })
+
+    return {
+      bountyIds: Object.fromEntries(bountyMap),
+      hunterCounts: Object.fromEntries(hunterCountMap),
+      huntingStatus: Object.fromEntries(huntingStatusMap),
+    }
+  } catch (error) {
+    console.error('Error fetching batch bounty data:', error)
+    return {
+      bountyIds: {},
+      hunterCounts: {},
+      huntingStatus: {},
+    }
   }
 }

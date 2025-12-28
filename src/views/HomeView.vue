@@ -4,11 +4,9 @@ import { ref, onMounted, computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import {
   getMostWanted,
-  getUserByUsername,
   getTopKillers,
   getHunterCount,
-  isUserHunting,
-  checkExistingBounty,
+  getBatchBountyData,
 } from '@/lib/db'
 import { joinHunt, leaveHunt, getMyActiveHunts } from '@/lib/hunters'
 import type { MostWanted, TopKiller, RatOfTheDay } from '@/lib/supabase'
@@ -137,44 +135,20 @@ onMounted(async () => {
     const data = await getMostWanted()
     const top10 = data.slice(0, 10) // Get top 10
 
-    // Fetch user profiles to get avatar URLs with fallback to default
-    const bountiesWithAvatars = await Promise.all(
-      top10.map(async (bounty: MostWanted) => {
-        const user = await getUserByUsername(bounty.target_gamertag)
-        const avatarUrl = user?.avatar_url || getDefaultAvatar(user?.game_role)
-        return {
-          ...bounty,
-          avatar_url: avatarUrl,
-        }
-      }),
-    )
+    // Apply default avatar fallback (user data already fetched in getMostWanted)
+    const bountiesWithAvatars = top10.map((bounty: MostWanted) => ({
+      ...bounty,
+      avatar_url: bounty.avatar_url || getDefaultAvatar(bounty.game_role),
+    }))
 
     topBounties.value = bountiesWithAvatars
 
-    // Fetch bounty IDs, hunter counts, and hunting status for each target
-    await Promise.all(
-      bountiesWithAvatars.map(async (bounty) => {
-        // Get bounty ID for this target
-        const existingBounty = await checkExistingBounty(bounty.target_gamertag)
-        if (existingBounty) {
-          bountyIds.value[bounty.target_gamertag] = existingBounty.id
-        }
-
-        // Get hunter count
-        const count = await getHunterCount(bounty.target_gamertag)
-        hunterCounts.value[bounty.target_gamertag] = count
-      }),
-    )
-
-    // Fetch user hunting status for each target (if user is logged in)
-    if (currentUser) {
-      await Promise.all(
-        bountiesWithAvatars.map(async (bounty) => {
-          const hunting = await isUserHunting(bounty.target_gamertag, currentUser.id)
-          userHuntingStatus.value[bounty.target_gamertag] = hunting
-        }),
-      )
-    }
+    // Fetch bounty IDs, hunter counts, and hunting status in ONE batch query
+    const targetGamertags = bountiesWithAvatars.map(b => b.target_gamertag)
+    const batchData = await getBatchBountyData(targetGamertags, currentUser?.id)
+    bountyIds.value = batchData.bountyIds
+    hunterCounts.value = batchData.hunterCounts
+    userHuntingStatus.value = batchData.huntingStatus
   } catch (error) {
     console.error('Error loading top bounties:', error)
   } finally {
@@ -198,26 +172,11 @@ onMounted(async () => {
     killersLoading.value = false
   }
 
-  // Load streamer bounty data
-  await Promise.all(
-    streamerListBase.map(async (streamer) => {
-      // Get bounty ID for this streamer
-      const existingBounty = await checkExistingBounty(streamer)
-      if (existingBounty) {
-        streamerBountyIds.value[streamer] = existingBounty.id
-
-        // Get hunter count
-        const count = await getHunterCount(streamer)
-        streamerHunterCounts.value[streamer] = count
-
-        // Get hunting status (only if user is logged in)
-        if (currentUser) {
-          const hunting = await isUserHunting(streamer, currentUser.id)
-          streamerHuntingStatus.value[streamer] = hunting
-        }
-      }
-    }),
-  )
+  // Load streamer bounty data in ONE batch query (no more N+1!)
+  const batchData = await getBatchBountyData(streamerListBase, currentUser?.id)
+  streamerBountyIds.value = batchData.bountyIds
+  streamerHunterCounts.value = batchData.hunterCounts
+  streamerHuntingStatus.value = batchData.huntingStatus
 })
 
 // Scroll to streamers section
