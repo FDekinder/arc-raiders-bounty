@@ -4,7 +4,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { supabase } from '@/lib/supabase'
 import type { User, Bounty, BountyClaim } from '@/lib/supabase'
-import { Target, Trophy, Award, TrendingUp, Clock, Upload, Camera } from 'lucide-vue-next'
+import { Target, Trophy, Award, TrendingUp, Clock, Upload, Camera, Crosshair } from 'lucide-vue-next'
 import { formatDistanceToNow } from 'date-fns'
 import AchievementGrid from '@/components/AchievementGrid.vue'
 import { getTopAchievements } from '@/lib/achievements'
@@ -21,6 +21,7 @@ import EmptyState from '@/components/EmptyState.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { useToast } from '@/composables/useToast'
 import { useAuth } from '@/composables/useAuth'
+import type { UserRole } from '@/lib/supabase'
 
 const route = useRoute()
 const { success, error: showError } = useToast()
@@ -33,6 +34,8 @@ const topAchievements = ref<Achievement[]>([])
 const showAllAchievements = ref(false)
 const uploadingAvatar = ref(false)
 const showAvatarSelector = ref(false)
+const showRoleChangeModal = ref(false)
+const changingRole = ref(false)
 
 const userId = route.params.id as string
 const isOwnProfile = computed(() => currentUser.value?.id === userId)
@@ -234,6 +237,43 @@ async function resetToDefaultAvatar() {
   }
 }
 
+// Change game role (BH <-> PR)
+async function changeRole(newRole: UserRole) {
+  if (!user.value) return
+
+  try {
+    changingRole.value = true
+
+    // Update user role in database
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ game_role: newRole })
+      .eq('id', userId)
+
+    if (updateError) throw updateError
+
+    // Update local state
+    user.value.game_role = newRole
+
+    // Update reactive user state if this is the current user's profile
+    if (currentUser.value?.id === userId) {
+      const updatedUser = { ...currentUser.value, game_role: newRole }
+      setAuthUser(updatedUser)
+    }
+
+    success(`Role changed to ${newRole === 'BH' ? 'Bounty Hunter' : 'Proud Rat'}!`)
+    showRoleChangeModal.value = false
+
+    // Reload profile to reflect any role-specific changes
+    await loadUserProfile()
+  } catch (err: any) {
+    console.error('Role change error:', err)
+    showError(err.message || 'Failed to change role')
+  } finally {
+    changingRole.value = false
+  }
+}
+
 const stats = computed(() => {
   if (!user.value) return null
 
@@ -375,6 +415,14 @@ function handleClanTagUpdate(clanTag: string | null) {
                 @updated="handleClanTagUpdate"
               />
               <RoleBadge v-if="user.game_role" :role="user.game_role" size="lg" :show-label="true" />
+              <button
+                v-if="isOwnProfile && user.game_role"
+                @click="showRoleChangeModal = true"
+                class="role-change-btn"
+                title="Change your role"
+              >
+                Switch Role
+              </button>
             </div>
             <p class="profile-member-since">
               Member since {{ new Date(user.created_at).toLocaleDateString() }}
@@ -613,6 +661,72 @@ function handleClanTagUpdate(clanTag: string | null) {
       </Card>
     </div>
   </div>
+
+  <!-- Role Change Modal -->
+  <Teleport to="body">
+    <div
+      v-if="showRoleChangeModal"
+      class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
+      @click.self="showRoleChangeModal = false"
+    >
+      <div class="role-change-modal bg-arc-card border-2 border-arc-red/30 rounded-lg p-8 max-w-2xl w-full">
+        <h2 class="text-3xl font-bold mb-4 text-arc-dark">Switch Your Role</h2>
+        <p class="text-arc-dark/80 mb-6">
+          Choose your new role. This will update your profile and change how you interact with the bounty system.
+        </p>
+
+        <div class="role-options grid grid-cols-2 gap-4 mb-6">
+          <!-- Bounty Hunter Option -->
+          <button
+            @click="changeRole('BH')"
+            :disabled="user?.game_role === 'BH' || changingRole"
+            class="role-option"
+            :class="{
+              'opacity-50 cursor-not-allowed': user?.game_role === 'BH',
+              'hover:scale-105': user?.game_role !== 'BH' && !changingRole,
+              'ring-4 ring-arc-green': user?.game_role === 'BH'
+            }"
+          >
+            <div class="role-icon-wrapper bg-arc-green/20 p-4 rounded-lg mb-3">
+              <Target :size="48" class="text-arc-green mx-auto" />
+            </div>
+            <h3 class="text-xl font-bold text-arc-dark mb-2">Bounty Hunter</h3>
+            <p class="text-sm text-arc-dark/70">Hunt down players with bounties</p>
+            <span v-if="user?.game_role === 'BH'" class="text-xs text-arc-green font-semibold mt-2 block">Current Role</span>
+          </button>
+
+          <!-- Proud Rat Option -->
+          <button
+            @click="changeRole('PR')"
+            :disabled="user?.game_role === 'PR' || changingRole"
+            class="role-option"
+            :class="{
+              'opacity-50 cursor-not-allowed': user?.game_role === 'PR',
+              'hover:scale-105': user?.game_role !== 'PR' && !changingRole,
+              'ring-4 ring-arc-red': user?.game_role === 'PR'
+            }"
+          >
+            <div class="role-icon-wrapper bg-arc-red/20 p-4 rounded-lg mb-3">
+              <Crosshair :size="48" class="text-arc-red mx-auto" />
+            </div>
+            <h3 class="text-xl font-bold text-arc-dark mb-2">Proud Rat</h3>
+            <p class="text-sm text-arc-dark/70">Player Killer - hunt other players</p>
+            <span v-if="user?.game_role === 'PR'" class="text-xs text-arc-red font-semibold mt-2 block">Current Role</span>
+          </button>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button
+            @click="showRoleChangeModal = false"
+            :disabled="changingRole"
+            class="px-6 py-2 rounded-lg bg-arc-brown/40 text-arc-dark hover:bg-arc-brown/60 transition"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -804,5 +918,34 @@ function handleClanTagUpdate(clanTag: string | null) {
 
 .upload-custom-button {
   @apply flex items-center justify-center gap-2 bg-arc-red text-white px-4 py-3 rounded-lg cursor-pointer hover:bg-arc-red/80 transition-all font-medium w-full;
+}
+
+/* Role Change Button */
+.role-change-btn {
+  @apply px-3 py-1 text-sm rounded-lg bg-arc-brown/30 text-arc-dark hover:bg-arc-brown/50 transition-all border border-arc-brown/50 hover:border-arc-brown font-medium;
+}
+
+/* Role Change Modal */
+.role-change-modal {
+  animation: fadeInScale 0.2s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.role-option {
+  @apply bg-white border-2 border-arc-brown/30 rounded-lg p-6 transition-all cursor-pointer text-center;
+}
+
+.role-option:not(:disabled):hover {
+  @apply border-arc-red/50 shadow-lg;
 }
 </style>

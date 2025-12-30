@@ -25,19 +25,17 @@ function extractVideoId(url: string): string | null {
 
   const patterns = [
     // YouTube Shorts: youtube.com/shorts/VIDEO_ID
-    /(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+    /(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})(?:[?&].*)?/,
     // Standard watch URL: youtube.com/watch?v=VIDEO_ID
-    /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
-    // Short URL: youtu.be/VIDEO_ID
-    /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+    /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})(?:[&?].*)?/,
+    // Short URL: youtu.be/VIDEO_ID (with or without query params)
+    /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[?&].*)?/,
     // Embed URL: youtube.com/embed/VIDEO_ID
-    /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
-    // Short URL with query params: youtu.be/VIDEO_ID?
-    /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})[?&]?/,
-    // Watch URL with additional params
-    /(?:youtube\.com\/watch\?.*v=)([a-zA-Z0-9_-]{11})/,
+    /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})(?:[?&].*)?/,
+    // Watch URL with additional params (catch-all)
+    /(?:youtube\.com\/watch\?.*[?&]?v=)([a-zA-Z0-9_-]{11})(?:[&?].*)?/,
     // Mobile URL: m.youtube.com
-    /(?:m\.youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
+    /(?:m\.youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})(?:[&?].*)?/,
   ]
 
   for (const pattern of patterns) {
