@@ -96,19 +96,19 @@ const formattedDate = computed(() => {
     <div
       class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10"
     >
-      <div :class="['px-3 py-2 rounded-lg border whitespace-nowrap', colors.bg, colors.border]">
+      <div :class="['px-3 py-2 rounded-lg border whitespace-nowrap bg-arc-card shadow-xl', colors.border]">
         <p :class="['font-semibold text-sm', colors.text]">{{ achievement.name }}</p>
-        <p v-if="showDescription || !showName" class="text-xs text-gray-600 mt-1 max-w-xs whitespace-normal">
+        <p v-if="showDescription || !showName" class="text-xs text-arc-dark mt-1 max-w-xs whitespace-normal">
           {{ achievement.description }}
         </p>
-        <p class="text-xs mt-1 text-arc-brown">
+        <p class="text-xs mt-1 text-arc-dark">
           <span :class="['font-medium', colors.text]">{{ achievement.rarity.toUpperCase() }}</span>
           • +{{ achievement.points_reward }} pts
         </p>
-        <p v-if="earnedAt" class="text-xs text-arc-green mt-1">
+        <p v-if="earnedAt" class="text-xs text-arc-green mt-1 font-semibold">
           ✓ Earned {{ formattedDate }}
         </p>
-        <p v-else class="text-xs text-gray-600 mt-1">
+        <p v-else class="text-xs text-arc-dark/70 mt-1">
           🔒 Not earned yet
         </p>
       </div>
