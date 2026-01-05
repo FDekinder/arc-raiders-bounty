@@ -43,3 +43,6 @@ tests_output/
 .env*.local
 .vercel
 .env*.local
+
+# Claude Code
+.claude/
