@@ -1,4 +1,3 @@
-// src/lib/platformVerification.ts
 
 export type Platform = 'steam' | 'xbox' | 'playstation'
 

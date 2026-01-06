@@ -1,4 +1,3 @@
-// src/lib/auth.ts - SECURE VERSION
 // This file replaces the insecure localStorage-based authentication
 // with proper Supabase Auth session management
 

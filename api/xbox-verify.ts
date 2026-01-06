@@ -1,4 +1,3 @@
-// api/xbox-verify.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 /**

@@ -1,4 +1,3 @@
-// src/lib/hunters.ts
 import { supabase } from './supabase'
 import { checkAndAwardAchievements } from './achievements'
 

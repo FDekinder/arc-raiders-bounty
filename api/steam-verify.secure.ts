@@ -1,4 +1,3 @@
-// api/steam-verify.ts - SECURE VERSION
 // This replaces the insecure version with proper CORS, rate limiting, and key protection
 
 import type { VercelRequest, VercelResponse } from '@vercel/node'

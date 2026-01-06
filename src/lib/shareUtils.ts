@@ -1,4 +1,3 @@
-// src/lib/shareUtils.ts
 
 export type SharePlatform = 'twitter' | 'facebook' | 'discord' | 'instagram' | 'clipboard'
 

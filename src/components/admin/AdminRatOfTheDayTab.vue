@@ -1,4 +1,3 @@
-<!-- src/components/admin/AdminRatOfTheDayTab.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Youtube, Save, Eye, Trash2 } from 'lucide-vue-next'

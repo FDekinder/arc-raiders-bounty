@@ -1,4 +1,3 @@
-// src/lib/clanTagValidator.ts
 
 /**
  * List of prohibited words and patterns for clan tags

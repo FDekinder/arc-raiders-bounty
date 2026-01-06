@@ -1,4 +1,3 @@
-// src/lib/authHelpers.ts
 import { supabase } from './supabase'
 import type { User as SupabaseAuthUser } from '@supabase/supabase-js'
 

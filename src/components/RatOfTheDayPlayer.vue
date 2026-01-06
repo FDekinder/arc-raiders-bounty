@@ -1,4 +1,3 @@
-<!-- src/components/RatOfTheDayPlayer.vue -->
 <script setup lang="ts">
 import { Youtube } from 'lucide-vue-next'
 import type { RatOfTheDay } from '@/lib/supabase'

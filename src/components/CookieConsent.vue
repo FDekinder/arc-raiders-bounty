@@ -1,4 +1,3 @@
-<!-- src/components/CookieConsent.vue -->
 <template>
   <Transition name="slide-up">
     <div v-if="showBanner" class="cookie-banner">

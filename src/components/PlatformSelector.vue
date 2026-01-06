@@ -1,4 +1,3 @@
-<!-- src/components/PlatformSelector.vue -->
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Platform } from '@/lib/supabase'

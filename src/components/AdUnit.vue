@@ -1,4 +1,3 @@
-<!-- src/components/AdUnit.vue -->
 <template>
   <div v-if="shouldShowAd" class="ad-container">
     <div class="ad-label">Sponsored</div>

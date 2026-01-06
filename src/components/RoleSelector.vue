@@ -1,4 +1,3 @@
-<!-- src/components/RoleSelector.vue -->
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { UserRole } from '@/lib/supabase'

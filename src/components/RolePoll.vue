@@ -1,4 +1,3 @@
-<!-- src/components/RolePoll.vue -->
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '@/lib/supabase'

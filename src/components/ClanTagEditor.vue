@@ -1,4 +1,3 @@
-<!-- src/components/ClanTagEditor.vue -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { Edit2, Check, X, AlertCircle } from 'lucide-vue-next'

@@ -1,4 +1,3 @@
-<!-- src/components/admin/AdminBugReportsTab.vue -->
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Bug } from 'lucide-vue-next'

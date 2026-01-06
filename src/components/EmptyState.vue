@@ -1,4 +1,3 @@
-<!-- src/components/EmptyState.vue -->
 <script setup lang="ts">
 import type { Component } from 'vue'
 

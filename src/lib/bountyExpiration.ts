@@ -1,4 +1,3 @@
-// src/lib/bountyExpiration.ts
 import { supabase } from './supabase'
 
 export async function checkAndExpireBounties() {

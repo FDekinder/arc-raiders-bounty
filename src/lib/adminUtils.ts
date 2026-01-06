@@ -1,4 +1,3 @@
-// src/lib/adminUtils.ts
 import { supabase } from './supabase'
 import { checkAndAwardAchievements, checkStreak24h, calculateCompletionTime } from './achievements'
 

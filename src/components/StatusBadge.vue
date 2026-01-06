@@ -1,4 +1,3 @@
-<!-- src/components/StatusBadge.vue -->
 <script setup lang="ts">
 import { CheckCircle, XCircle, Clock, AlertCircle } from 'lucide-vue-next'
 import { computed } from 'vue'

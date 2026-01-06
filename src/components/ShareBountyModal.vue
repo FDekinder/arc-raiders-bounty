@@ -1,4 +1,3 @@
-<!-- src/components/ShareBountyModal.vue -->
 <script setup lang="ts">
 import { X, Share2, Copy, Check } from 'lucide-vue-next'
 import { ref } from 'vue'

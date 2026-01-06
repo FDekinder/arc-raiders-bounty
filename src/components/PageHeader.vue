@@ -1,4 +1,3 @@
-<!-- src/components/PageHeader.vue -->
 <script setup lang="ts">
 import type { Component } from 'vue'
 

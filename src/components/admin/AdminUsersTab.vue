@@ -1,4 +1,3 @@
-<!-- src/components/admin/AdminUsersTab.vue -->
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { Users, UserPlus, Clock, Filter, Search, Shield, Crown, Calendar, Trophy, Target, Skull } from 'lucide-vue-next'

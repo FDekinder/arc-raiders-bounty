@@ -1,4 +1,3 @@
-<!-- src/components/AlertMessage.vue -->
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Component } from 'vue'

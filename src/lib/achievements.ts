@@ -1,4 +1,3 @@
-// src/lib/achievements.ts
 import { supabase, type Achievement, type UserAchievement } from './supabase'
 
 // Achievement event types

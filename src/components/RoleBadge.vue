@@ -1,4 +1,3 @@
-<!-- src/components/RoleBadge.vue -->
 <script setup lang="ts">
 import type { UserRole } from '@/lib/supabase'
 import { Target, Crosshair } from 'lucide-vue-next'

@@ -1,4 +1,3 @@
-<!-- src/components/icons/IconRat.vue -->
 <template>
   <svg
     :width="size"

@@ -1,4 +1,3 @@
-<!-- src/components/ExpirationChecker.vue -->
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
 import { checkAndExpireBounties } from '@/lib/bountyExpiration'

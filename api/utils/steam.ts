@@ -1,4 +1,3 @@
-// api/utils/steam.ts
 const STEAM_API_URL = 'https://api.steampowered.com'
 
 export async function validateSteamAuth(

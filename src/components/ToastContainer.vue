@@ -1,4 +1,3 @@
-<!-- src/components/ToastContainer.vue -->
 <script setup lang="ts">
 import { useToast } from '@/composables/useToast'
 import { CheckCircle, XCircle, Info, AlertTriangle, X } from 'lucide-vue-next'

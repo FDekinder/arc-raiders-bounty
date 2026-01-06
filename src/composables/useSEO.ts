@@ -1,4 +1,3 @@
-// src/composables/useSEO.ts
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
 

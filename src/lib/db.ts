@@ -1,9 +1,7 @@
-// src/lib/db.ts
 import { supabase } from './supabase'
 import type { TrophyStats, TopKiller, KillType } from './supabase'
 import { checkAndAwardAchievements, getUserAchievements } from './achievements'
 
-// Create a new user
 export async function createUser(username: string, steamId?: string) {
   const { data, error } = await supabase
     .from('users')
@@ -15,7 +13,6 @@ export async function createUser(username: string, steamId?: string) {
   return data
 }
 
-// Create a bounty
 export async function createBounty(
   targetGamertag: string,
   bountyAmount: number,

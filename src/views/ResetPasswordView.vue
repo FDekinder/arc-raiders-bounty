@@ -1,4 +1,3 @@
-<!-- src/views/ResetPasswordView.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'

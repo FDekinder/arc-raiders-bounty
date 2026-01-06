@@ -1,4 +1,3 @@
-// src/lib/auth.ts
 import type { User, UserRole } from './supabase'
 import { supabase } from './supabase'
 

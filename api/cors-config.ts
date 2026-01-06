@@ -1,4 +1,3 @@
-// api/cors-config.ts
 // Secure CORS configuration for all API endpoints
 
 import type { VercelRequest, VercelResponse } from '@vercel/node'

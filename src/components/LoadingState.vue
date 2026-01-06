@@ -1,4 +1,3 @@
-<!-- src/components/LoadingState.vue -->
 <script setup lang="ts">
 import { Loader } from 'lucide-vue-next'
 

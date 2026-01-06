@@ -1,4 +1,3 @@
-<!-- src/views/CreateBountyView.vue -->
 <script setup lang="ts">
 import { ref } from 'vue'
 import { createBounty, checkExistingBounty } from '@/lib/db'
