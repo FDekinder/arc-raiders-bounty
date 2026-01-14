@@ -163,34 +163,45 @@ BEGIN
 END $$;
 
 -- ============================================
--- PART 4: Add Hunters Joining the Hunt
+-- PART 4: Add Bounty Claims (Hunters Joining)
 -- ============================================
 
--- Add hunters to bounties (makes them appear more active)
+-- Add bounty claims to show hunters are actively hunting
 DO $$
 DECLARE
   bounty_rec RECORD;
   hunter_id UUID;
-  num_hunters INT;
+  num_claims INT;
   i INT;
 BEGIN
-  -- For each bounty, add 1-5 hunters
+  -- For each bounty, add 1-3 claims
   FOR bounty_rec IN (SELECT id FROM bounties WHERE status = 'active')
   LOOP
-    num_hunters := floor(random() * 5 + 1)::INT; -- Random 1-5 hunters
+    num_claims := floor(random() * 3 + 1)::INT; -- Random 1-3 claims
 
-    FOR i IN 1..num_hunters LOOP
+    FOR i IN 1..num_claims LOOP
       -- Get a random Bounty Hunter user ID
       SELECT id INTO hunter_id FROM users WHERE game_role = 'BH' ORDER BY RANDOM() LIMIT 1;
 
       IF hunter_id IS NOT NULL THEN
-        INSERT INTO hunters (bounty_id, user_id, joined_at)
-        VALUES (bounty_rec.id, hunter_id, NOW() - (random() * INTERVAL '7 days'))
-        ON CONFLICT (bounty_id, user_id) DO NOTHING;
+        INSERT INTO bounty_claims (id, bounty_id, hunter_id, screenshot_url, verification_status, claimed_at)
+        VALUES (
+          gen_random_uuid(),
+          bounty_rec.id,
+          hunter_id,
+          'https://placeholder.com/claim-proof-' || bounty_rec.id || '-' || i || '.png',
+          CASE
+            WHEN random() < 0.7 THEN 'pending'
+            WHEN random() < 0.9 THEN 'approved'
+            ELSE 'rejected'
+          END,
+          NOW() - (random() * INTERVAL '7 days')
+        )
+        ON CONFLICT DO NOTHING;
       END IF;
     END LOOP;
 
-    RAISE NOTICE 'Added % hunters to bounty %', num_hunters, bounty_rec.id;
+    RAISE NOTICE 'Added % claims to bounty %', num_claims, bounty_rec.id;
   END LOOP;
 END $$;
 
@@ -269,15 +280,15 @@ GROUP BY target_gamertag
 ORDER BY total_bounty DESC
 LIMIT 10;
 
--- Show hunter counts per bounty
+-- Show claim counts per bounty
 SELECT
   b.target_gamertag,
-  COUNT(h.id) as hunter_count
+  COUNT(bc.id) as claim_count
 FROM bounties b
-LEFT JOIN hunters h ON b.id = h.bounty_id
+LEFT JOIN bounty_claims bc ON b.id = bc.bounty_id
 WHERE b.status = 'active'
 GROUP BY b.target_gamertag
-ORDER BY hunter_count DESC
+ORDER BY claim_count DESC
 LIMIT 10;
 
 -- Show kill counts
@@ -298,7 +309,7 @@ RAISE NOTICE '====================================';
 RAISE NOTICE 'You should now see:';
 RAISE NOTICE '- 20+ fake users (BH and PR)';
 RAISE NOTICE '- 25+ active bounties';
-RAISE NOTICE '- Hunters on each bounty';
+RAISE NOTICE '- Bounty claims from hunters';
 RAISE NOTICE '- Kill records for top Proud Rats';
 RAISE NOTICE '';
 RAISE NOTICE 'Visit your homepage to see the Most Wanted Top 3!';
