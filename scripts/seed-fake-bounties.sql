@@ -78,19 +78,19 @@ BEGIN
         created_by,
         target_gamertag,
         bounty_amount,
-        reason,
         status,
         expires_at,
-        created_at
+        created_at,
+        platform
       )
       VALUES (
         bh_user_id,
         target_name,
         bounty_amount,
-        'Notorious player causing havoc in the wasteland',
         'active',
         NOW() + INTERVAL '30 days',
-        NOW() - (random() * INTERVAL '7 days') -- Random creation time within last 7 days
+        NOW() - (random() * INTERVAL '7 days'), -- Random creation time within last 7 days
+        'steam'
       )
       ON CONFLICT DO NOTHING;
 
@@ -137,23 +137,23 @@ BEGIN
         created_by,
         target_gamertag,
         bounty_amount,
-        reason,
         status,
         expires_at,
-        created_at
+        created_at,
+        platform
       )
       VALUES (
         bh_user_id,
         target_name,
         bounty_amount,
-        CASE
-          WHEN random() < 0.3 THEN 'Killed me repeatedly in spawn'
-          WHEN random() < 0.6 THEN 'Toxic player, needs to be taught a lesson'
-          ELSE 'Camping and griefing new players'
-        END,
         'active',
         NOW() + INTERVAL '30 days',
-        NOW() - (random() * INTERVAL '7 days')
+        NOW() - (random() * INTERVAL '7 days'),
+        CASE
+          WHEN random() < 0.33 THEN 'steam'
+          WHEN random() < 0.66 THEN 'xbox'
+          ELSE 'playstation'
+        END
       )
       ON CONFLICT DO NOTHING;
 
@@ -204,6 +204,7 @@ DECLARE
   pr_user_id UUID;
   pr_username TEXT;
   bh_user_id UUID;
+  bh_username TEXT;
   kill_count INT;
   i INT;
 BEGIN
@@ -225,25 +226,25 @@ BEGIN
         SELECT id INTO bh_user_id FROM users WHERE game_role = 'BH' ORDER BY RANDOM() LIMIT 1;
 
         IF bh_user_id IS NOT NULL THEN
-          INSERT INTO kills (
-            killer_id,
-            victim_id,
-            kill_type,
-            proof_url,
-            created_at
-          )
-          VALUES (
-            pr_user_id,
-            bh_user_id,
-            CASE
-              WHEN random() < 0.4 THEN 'standard'
-              WHEN random() < 0.7 THEN 'headshot'
-              WHEN random() < 0.9 THEN 'stealth'
-              ELSE 'explosive'
-            END,
-            'https://placeholder.com/proof' || i || '.png',
-            NOW() - (random() * INTERVAL '14 days')
-          );
+          -- Get BH username
+          SELECT username INTO bh_username FROM users WHERE id = bh_user_id;
+
+          IF bh_username IS NOT NULL THEN
+            INSERT INTO kills (
+              killer_id,
+              victim_gamertag,
+              screenshot_url,
+              verification_status,
+              killed_at
+            )
+            VALUES (
+              pr_user_id,
+              bh_username,
+              'https://placeholder.com/proof' || i || '.png',
+              'approved',
+              NOW() - (random() * INTERVAL '14 days')
+            );
+          END IF;
         END IF;
       END LOOP;
 
