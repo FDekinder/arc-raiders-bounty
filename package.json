@@ -20,7 +20,8 @@
     "db:migrate": "tsx scripts/run-migration.ts",
     "db:seed-achievements": "tsx scripts/seed-achievements.ts",
     "db:grant-achievements": "tsx scripts/grant-all-achievements.ts",
-    "db:list-users": "tsx scripts/list-users.ts"
+    "db:list-users": "tsx scripts/list-users.ts",
+    "db:seed-bounties": "tsx scripts/run-seed-bounties.ts"
   },
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.15.0",
