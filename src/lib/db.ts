@@ -96,7 +96,7 @@ export async function getOrCreateStreamerBounty(streamerGamertag: string, create
     .from('bounties')
     .insert({
       target_gamertag: streamerGamertag,
-      bounty_amount: 0, // Streamer bounties use dynamic calculation
+      bounty_amount: 1, // Base amount (actual value calculated dynamically)
       created_by: createdBy,
       status: 'active',
     })
