@@ -33,7 +33,7 @@ export async function joinHunt(
       .select('id')
       .eq('bounty_id', bountyId)
       .eq('hunter_id', hunterId)
-      .single()
+      .maybeSingle()
 
     if (existing) {
       return {
