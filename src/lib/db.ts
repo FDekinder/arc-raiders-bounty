@@ -75,6 +75,39 @@ export async function checkExistingBounty(targetGamertag: string) {
   return data
 }
 
+// Get or create a streamer bounty (auto-creates if doesn't exist)
+export async function getOrCreateStreamerBounty(streamerGamertag: string, createdBy: string): Promise<string> {
+  // First check if bounty exists
+  const { data: existing, error: checkError } = await supabase
+    .from('bounties')
+    .select('id')
+    .eq('target_gamertag', streamerGamertag)
+    .eq('status', 'active')
+    .maybeSingle()
+
+  if (checkError) throw checkError
+
+  if (existing) {
+    return existing.id
+  }
+
+  // Create new bounty for streamer
+  const { data: newBounty, error: createError } = await supabase
+    .from('bounties')
+    .insert({
+      target_gamertag: streamerGamertag,
+      bounty_amount: 0, // Streamer bounties use dynamic calculation
+      created_by: createdBy,
+      status: 'active',
+    })
+    .select('id')
+    .single()
+
+  if (createError) throw createError
+
+  return newBounty.id
+}
+
 // Get active bounties with dynamically calculated amounts
 export async function getActiveBounties() {
   const { data, error } = await supabase

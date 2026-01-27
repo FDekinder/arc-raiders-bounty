@@ -6,6 +6,7 @@ import {
   getTopKillers,
   getHunterCount,
   getBatchBountyData,
+  getOrCreateStreamerBounty,
 } from '@/lib/db'
 import { joinHunt, leaveHunt, getMyActiveHunts } from '@/lib/hunters'
 import type { MostWanted, TopKiller, RatOfTheDay } from '@/lib/supabase'
@@ -214,10 +215,17 @@ async function handleStreamerToggleHunt(streamerGamertag: string) {
     return
   }
 
-  const bountyId = streamerBountyIds.value[streamerGamertag]
+  // Get or create bounty for this streamer
+  let bountyId = streamerBountyIds.value[streamerGamertag]
   if (!bountyId) {
-    showError('Bounty not found for this streamer')
-    return
+    try {
+      bountyId = await getOrCreateStreamerBounty(streamerGamertag, currentUser.id)
+      streamerBountyIds.value[streamerGamertag] = bountyId
+    } catch (err) {
+      console.error('Failed to create streamer bounty:', err)
+      showError('Failed to create bounty for this streamer')
+      return
+    }
   }
 
   const isHunting = streamerHuntingStatus.value[streamerGamertag]
