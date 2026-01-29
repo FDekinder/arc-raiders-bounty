@@ -98,9 +98,48 @@ export async function getUserProfile(userId: string) {
 }
 
 /**
- * Update user profile data
+ * Safe user update type - only fields users are allowed to update themselves
  */
-export async function updateUserProfile(userId: string, updates: Partial<any>) {
+type SafeUserUpdate = Partial<{
+  avatar_url: string | null
+  clan_tag: string | null
+  username: string
+}>
+
+/**
+ * Update user profile data
+ * Only allows specific fields to be updated to prevent privilege escalation
+ */
+export async function updateUserProfile(userId: string, updates: SafeUserUpdate) {
+  // Explicitly pick only allowed fields to prevent privilege escalation
+  const safeUpdates: SafeUserUpdate = {}
+  if (updates.avatar_url !== undefined) safeUpdates.avatar_url = updates.avatar_url
+  if (updates.clan_tag !== undefined) safeUpdates.clan_tag = updates.clan_tag
+  if (updates.username !== undefined) safeUpdates.username = updates.username
+
+  const { data, error } = await supabase
+    .from('users')
+    .update(safeUpdates)
+    .eq('id', userId)
+    .select()
+    .single()
+
+  return { data, error }
+}
+
+/**
+ * Internal system update type - for server-side operations only
+ * This should NOT be exposed to client-side user input
+ */
+type SystemUserUpdate = Partial<{
+  platform: string
+}>
+
+/**
+ * Internal function to update user system fields
+ * Only for server-side operations (e.g., linking auth providers)
+ */
+async function updateUserSystemFields(userId: string, updates: SystemUserUpdate) {
   const { data, error } = await supabase
     .from('users')
     .update(updates)
@@ -118,5 +157,5 @@ export async function updateUserProfile(userId: string, updates: Partial<any>) {
 export async function linkAuthProvider(userId: string, provider: string, providerId: string) {
   // This would require custom logic depending on your use case
   // For now, we just track the platform in the users table
-  return updateUserProfile(userId, { platform: provider })
+  return updateUserSystemFields(userId, { platform: provider })
 }

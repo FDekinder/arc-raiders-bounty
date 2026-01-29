@@ -208,9 +208,29 @@ export async function submitClaim(bountyId: string, hunterId: string, screenshot
   return data
 }
 
+// File upload validation constants
+const ALLOWED_MIMES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif']
+const ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp', 'gif']
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+
 // Upload screenshot
 export async function uploadScreenshot(file: File, userId: string) {
-  const fileExt = file.name.split('.').pop()
+  // Validate file type
+  if (!ALLOWED_MIMES.includes(file.type)) {
+    throw new Error('Invalid file type. Only images (PNG, JPG, WebP, GIF) are allowed.')
+  }
+
+  // Validate extension
+  const fileExt = file.name.split('.').pop()?.toLowerCase()
+  if (!fileExt || !ALLOWED_EXTENSIONS.includes(fileExt)) {
+    throw new Error('Invalid file extension.')
+  }
+
+  // Validate size
+  if (file.size > MAX_FILE_SIZE) {
+    throw new Error('File too large. Maximum size is 5MB.')
+  }
+
   const fileName = `${userId}-${Date.now()}.${fileExt}`
   const filePath = `${fileName}`
 
@@ -291,7 +311,7 @@ export async function getTrophyStats(userId: string): Promise<TrophyStats | null
     // Get all bounties placed on this user
     const { data: bountiesOnUser } = await supabase
       .from('bounties')
-      .select('bounty_amount, status')
+      .select('id, bounty_amount, status')
       .eq('target_gamertag', user.username)
 
     // Calculate bounties survived (active bounties they haven't been claimed for)
@@ -311,7 +331,7 @@ export async function getTrophyStats(userId: string): Promise<TrophyStats | null
       .from('bounty_claims')
       .select('verification_status')
       .in('bounty_id',
-        bountiesOnUser?.map(b => b.bounty_amount.toString()) || []
+        bountiesOnUser?.map(b => b.id) || []
       )
 
     // Count rejected claims as "bounty hunters defeated"

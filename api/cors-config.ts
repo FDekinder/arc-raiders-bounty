@@ -9,8 +9,8 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 const ALLOWED_ORIGINS = [
   'http://localhost:5173', // Local development
   'http://localhost:3000', // Alternative local port
-  'https://your-production-domain.com', // TODO: Replace with your actual domain
-  'https://your-app.vercel.app', // TODO: Replace with your Vercel domain
+  'https://dont-shoot.com',
+  'https://www.dont-shoot.com',
 ]
 
 /**

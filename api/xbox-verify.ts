@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { handlePreflight, setCorsHeaders, applyRateLimit, sendSecureError } from './cors-config'
 
 /**
  * Xbox gamertag validation endpoint
@@ -6,13 +7,16 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
  */
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+  // Handle CORS preflight
+  if (handlePreflight(req, res)) return
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end()
+  // Set CORS headers (validates origin)
+  if (!setCorsHeaders(req, res)) {
+    return sendSecureError(res, 403, 'Origin not allowed')
   }
+
+  // Apply rate limiting
+  if (!applyRateLimit(req, res)) return
 
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -28,14 +32,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Basic validation: Xbox gamertags are 3-15 characters
   if (trimmedGamertag.length < 3 || trimmedGamertag.length > 15) {
-    return res.status(404).json({
+    return res.status(400).json({
       error: 'Invalid gamertag format (must be 3-15 characters)',
     })
   }
 
   // Check for invalid characters (only letters, numbers, and spaces allowed)
   if (!/^[a-zA-Z0-9\s]+$/.test(trimmedGamertag)) {
-    return res.status(404).json({
+    return res.status(400).json({
       error: 'Invalid gamertag format (only letters, numbers, and spaces allowed)',
     })
   }
